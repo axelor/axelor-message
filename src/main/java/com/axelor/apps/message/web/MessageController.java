@@ -21,7 +21,7 @@ import com.axelor.apps.message.db.Message;
 import com.axelor.apps.message.db.repo.MessageRepository;
 import com.axelor.apps.message.exception.MessageExceptionMessage;
 import com.axelor.apps.message.service.MessageService;
-import com.axelor.apps.tool.ModelTool;
+import com.axelor.apps.utils.ModelTool;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
