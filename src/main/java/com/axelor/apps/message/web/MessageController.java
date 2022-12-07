@@ -22,15 +22,13 @@ import com.axelor.apps.message.db.repo.MessageRepository;
 import com.axelor.apps.message.exception.MessageExceptionMessage;
 import com.axelor.apps.message.service.MessageService;
 import com.axelor.apps.tool.ModelTool;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.db.repo.TraceBackRepository;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Singleton;
 import java.util.List;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class MessageController {
@@ -44,7 +42,7 @@ public class MessageController {
       response.setReload(true);
       response.setInfo(I18n.get(MessageExceptionMessage.MESSAGE_4));
     } catch (Exception e) {
-      TraceBackService.trace(response, e);
+      LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
     }
   }
 
@@ -53,8 +51,7 @@ public class MessageController {
     List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
     try {
       if (idList == null) {
-        throw new AxelorException(
-            TraceBackRepository.CATEGORY_MISSING_FIELD,
+        throw new IllegalStateException(
             I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
       }
       ModelTool.apply(
@@ -65,8 +62,8 @@ public class MessageController {
           String.format(
               I18n.get(MessageExceptionMessage.MESSAGES_SEND_IN_PROGRESS), idList.size()));
       response.setReload(true);
-    } catch (AxelorException e) {
-      TraceBackService.trace(response, e);
+    } catch (Exception e) {
+      LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
     }
   }
 
@@ -75,8 +72,7 @@ public class MessageController {
     List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
     try {
       if (idList == null) {
-        throw new AxelorException(
-            TraceBackRepository.CATEGORY_MISSING_FIELD,
+        throw new IllegalStateException(
             I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
       }
       int error =
@@ -90,8 +86,8 @@ public class MessageController {
               idList.size() - error,
               error));
       response.setReload(true);
-    } catch (AxelorException e) {
-      TraceBackService.trace(response, e);
+    } catch (Exception e) {
+      LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
     }
   }
 

@@ -25,7 +25,6 @@ import com.axelor.auth.db.repo.UserRepository;
 import com.axelor.db.JpaSupport;
 import com.axelor.event.Observes;
 import com.axelor.events.ShutdownEvent;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.mail.MailBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -99,8 +98,7 @@ public class SendMailQueueService extends JpaSupport {
               throw persistenceException;
             }
           } catch (Exception e) {
-            log.debug("Exception when sending email", e);
-            TraceBackService.trace(e);
+            log.error("Exception when sending email: {}", e.getMessage(), e);
           }
           return true;
         });

@@ -22,8 +22,6 @@ import com.axelor.apps.message.db.Template;
 import com.axelor.apps.message.db.repo.TemplateRepository;
 import com.axelor.apps.message.service.TemplateService;
 import com.axelor.apps.message.translation.ITranslation;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.meta.db.MetaModel;
@@ -32,11 +30,11 @@ import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
+import org.slf4j.LoggerFactory;
 
 public class TemplateController {
 
   public void generateDraftMessage(ActionRequest request, ActionResponse response) {
-
     Context context = request.getContext();
     Template template = context.asType(Template.class);
     template = Beans.get(TemplateRepository.class).find(template.getId());
@@ -58,8 +56,8 @@ public class TemplateController {
               .param("forceTitle", "true")
               .context("_message", message)
               .map());
-    } catch (NumberFormatException | ClassNotFoundException | AxelorException e) {
-      TraceBackService.trace(response, e);
+    } catch (Exception e) {
+      LoggerFactory.getLogger(TemplateController.class).error(e.getMessage(), e);
     }
   }
 }

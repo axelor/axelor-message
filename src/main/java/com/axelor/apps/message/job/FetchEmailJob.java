@@ -20,9 +20,9 @@ package com.axelor.apps.message.job;
 import com.axelor.apps.message.db.EmailAccount;
 import com.axelor.apps.message.db.repo.EmailAccountRepository;
 import com.axelor.apps.message.service.MailAccountService;
-import com.axelor.exception.service.TraceBackService;
 import com.google.inject.Inject;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import javax.mail.MessagingException;
 import org.quartz.Job;
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 /** An example {@link Job} class that prints a some messages to the stderr. */
 public class FetchEmailJob implements Job {
 
-  private final Logger log = LoggerFactory.getLogger(FetchEmailJob.class);
+  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   @Inject private MailAccountService mailAccountService;
 
@@ -51,7 +51,7 @@ public class FetchEmailJob implements Job {
         Integer total = mailAccountService.fetchEmails(account, true);
         log.debug("Email fetched for account: {}, total: {} ", account.getName(), total);
       } catch (MessagingException | IOException e) {
-        TraceBackService.trace(e);
+        log.error(e.getMessage(), e);
       }
     }
   }

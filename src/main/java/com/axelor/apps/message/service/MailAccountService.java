@@ -18,21 +18,19 @@
 package com.axelor.apps.message.service;
 
 import com.axelor.apps.message.db.EmailAccount;
-import com.axelor.exception.AxelorException;
 import com.axelor.mail.MailAccount;
 import java.io.IOException;
 import javax.mail.MessagingException;
 
 public interface MailAccountService {
 
-  public void checkDefaultMailAccount(EmailAccount mailAccount) throws AxelorException;
+  public void checkDefaultMailAccount(EmailAccount mailAccount);
 
   public EmailAccount getDefaultSender();
 
   public EmailAccount getDefaultReader();
 
-  public void checkMailAccountConfiguration(EmailAccount mailAccount)
-      throws AxelorException, MessagingException;
+  public void checkMailAccountConfiguration(EmailAccount mailAccount) throws MessagingException;
 
   public String getSecurity(EmailAccount mailAccount);
 

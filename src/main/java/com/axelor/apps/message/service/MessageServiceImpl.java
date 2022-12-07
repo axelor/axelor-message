@@ -32,9 +32,6 @@ import com.axelor.db.JPA;
 import com.axelor.db.JpaSupport;
 import com.axelor.db.Model;
 import com.axelor.db.Query;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.db.repo.TraceBackRepository;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.mail.MailBuilder;
@@ -275,18 +272,18 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   }
 
   @Override
-  public Message sendMessage(Message message) throws AxelorException, JSONException, IOException {
+  public Message sendMessage(Message message) throws JSONException, IOException {
     try {
       sendMessage(message, false);
     } catch (MessagingException e) {
-      TraceBackService.trace(e);
+      log.error(e.getMessage(), e);
     }
     return message;
   }
 
   @Override
   public Message sendMessage(Message message, Boolean isTemporaryEmail)
-      throws AxelorException, MessagingException, JSONException, IOException {
+      throws MessagingException, JSONException, IOException {
 
     if (!isTemporaryEmail) {
       if (message.getMediaTypeSelect() == MessageRepository.MEDIA_TYPE_MAIL) {
@@ -300,8 +297,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
       }
     } else {
       if (message.getMediaTypeSelect() != MessageRepository.MEDIA_TYPE_EMAIL) {
-        throw new AxelorException(
-            TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
+        throw new IllegalStateException(
             I18n.get(MessageExceptionMessage.TEMPORARY_EMAIL_MEDIA_TYPE_ERROR));
       }
       message = sendByEmail(message, isTemporaryEmail);
@@ -339,14 +335,13 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   }
 
   @Override
-  public Message sendByEmail(Message message) throws MessagingException, AxelorException {
+  public Message sendByEmail(Message message) throws MessagingException {
     return sendByEmail(message, false);
   }
 
   @Override
   @Transactional(rollbackOn = {Exception.class})
-  public Message sendByEmail(Message message, Boolean isTemporaryEmail)
-      throws MessagingException, AxelorException {
+  public Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException {
 
     EmailAccount mailAccount = message.getMailAccount();
 
@@ -370,10 +365,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     List<String> bccRecipients = this.getEmailAddresses(message.getBccEmailAddressSet());
 
     if (toRecipients.isEmpty() && ccRecipients.isEmpty() && bccRecipients.isEmpty()) {
-      throw new AxelorException(
-          message,
-          TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-          I18n.get(MessageExceptionMessage.MESSAGE_6));
+      throw new IllegalStateException(I18n.get(MessageExceptionMessage.MESSAGE_6));
     }
 
     MailSender sender = new MailSender(account);
@@ -392,10 +384,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
               "Override from :::  {}", this.getFullEmailAddress(message.getFromEmailAddress()));
           mailBuilder.from(this.getFullEmailAddress(message.getFromEmailAddress()));
         } else {
-          throw new AxelorException(
-              message,
-              TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-              MessageExceptionMessage.MESSAGE_5);
+          throw new IllegalStateException(I18n.get(MessageExceptionMessage.MESSAGE_5));
         }
       }
       mailBuilder.from(fromAddress);
@@ -416,7 +405,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
       mailBuilder.html(message.getContent());
     }
 
-    if (!isTemporaryEmail) {
+    if (!Boolean.TRUE.equals(isTemporaryEmail)) {
       for (MetaAttachment metaAttachment : getMetaAttachments(message)) {
         MetaFile metaFile = metaAttachment.getMetaFile();
         mailBuilder.attach(metaFile.getFileName(), MetaFiles.getPath(metaFile).toString());
@@ -434,8 +423,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
       try {
         mailBuilder.send();
       } catch (IOException e) {
-        log.debug("Exception when sending email", e);
-        TraceBackService.trace(e);
+        log.error("Exception when sending email: {}", e.getMessage(), e);
       }
 
       log.debug("Email sent.");
@@ -447,17 +435,15 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   @Override
   @SuppressWarnings("deprecation")
   @Transactional(rollbackOn = {Exception.class})
-  public Message sendSMS(Message message) throws AxelorException, IOException, JSONException {
+  public Message sendSMS(Message message) throws IOException, JSONException {
 
     if (message.getMailAccount() == null
         || Strings.isNullOrEmpty(message.getMailAccount().getSendingblueApiKey())) {
       return message;
     }
     if (Strings.isNullOrEmpty(message.getToMobilePhone())) {
-      throw new AxelorException(
-          message,
-          TraceBackRepository.CATEGORY_MISSING_FIELD,
-          MessageExceptionMessage.SMS_ERROR_MISSING_MOBILE_NUMBER);
+      throw new IllegalStateException(
+          I18n.get(MessageExceptionMessage.SMS_ERROR_MISSING_MOBILE_NUMBER));
     }
 
     OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -483,10 +469,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     Response response = client.newCall(request).execute();
 
     if (!response.isSuccessful() || response.code() != 201) {
-      throw new AxelorException(
-          message,
-          TraceBackRepository.CATEGORY_INCONSISTENCY,
-          String.format("%d %s", response.code(), response.message()));
+      throw new IllegalStateException(String.format("%d %s", response.code(), response.message()));
     }
 
     message.setStatusSelect(MessageRepository.STATUS_SENT);
@@ -529,7 +512,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   }
 
   @Override
-  public String printMessage(Message message) throws AxelorException {
+  public String printMessage(Message message) {
     return null;
   }
 
@@ -541,9 +524,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
         I18n.get("Cannot regenerate message without template associated to message."));
 
     if (ObjectUtils.isEmpty(message.getMultiRelatedList())) {
-      throw new AxelorException(
-          TraceBackRepository.CATEGORY_NO_VALUE,
-          I18n.get("Cannot regenerate message without related model."));
+      throw new IllegalStateException(I18n.get("Cannot regenerate message without related model."));
     }
 
     MultiRelated multiRelated = message.getMultiRelatedList().get(0);

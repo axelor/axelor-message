@@ -33,7 +33,6 @@ import com.axelor.mail.MailReader;
 import com.axelor.mail.MailSender;
 import com.axelor.mail.db.MailMessage;
 import com.axelor.mail.db.repo.MailMessageRepository;
-import com.axelor.mail.service.MailService;
 import com.axelor.mail.service.MailServiceImpl;
 import com.axelor.meta.MetaFiles;
 import com.axelor.meta.db.MetaAttachment;
@@ -42,6 +41,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class MailServiceMessageImpl extends MailServiceImpl {
 
-  private Logger log = LoggerFactory.getLogger(MailService.class);
+  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   private ExecutorService executor = Executors.newCachedThreadPool();
 

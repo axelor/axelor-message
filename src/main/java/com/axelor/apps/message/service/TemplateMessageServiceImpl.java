@@ -32,9 +32,6 @@ import com.axelor.db.Model;
 import com.axelor.db.Query;
 import com.axelor.db.mapper.Mapper;
 import com.axelor.dms.db.DMSFile;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.db.repo.TraceBackRepository;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.meta.db.MetaFile;
@@ -83,15 +80,13 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateMessage(Model model, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException {
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
     return generateMessage(model, template, false);
   }
 
   @Override
   public Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException {
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
 
     this.modelObject = model;
     Class<?> klass = EntityHelper.getEntityClass(model);
@@ -105,8 +100,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateMessage(Long objectId, String model, String tag, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException {
+      throws ClassNotFoundException, IOException {
 
     return generateMessage(objectId, model, tag, template, false);
   }
@@ -115,8 +109,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   @Transactional(rollbackOn = {Exception.class})
   public Message generateMessage(
       Long objectId, String model, String tag, Template template, Boolean isForTemporaryEmail)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException {
+      throws ClassNotFoundException {
 
     Templates templates;
     Map<String, Object> templatesContext = Maps.newHashMap();
@@ -136,8 +129,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
               : ((MetaModel) modelObj).getFullName();
 
       if (!model.equals(modelName)) {
-        throw new AxelorException(
-            TraceBackRepository.CATEGORY_INCONSISTENCY,
+        throw new IllegalStateException(
             String.format(
                 I18n.get(MessageExceptionMessage.INVALID_MODEL_TEMPLATE_EMAIL), modelName, model));
       }
@@ -245,39 +237,35 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
     EmailAccount mailAccount = getMailAccount();
     EmailAddress fromAddress = null;
     if (mailAccount == null) {
-      TraceBackService.trace(
-          new AxelorException(
-              TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-              I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_6)));
+      IllegalStateException illegalStateException =
+          new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_6));
+      log.error(illegalStateException.getMessage(), illegalStateException);
     } else {
       fromAddress = getEmailAddress(mailAccount.getFromAddress());
     }
 
-    Message message =
-        messageService.createMessage(
-            model,
-            Math.toIntExact(objectId),
-            subject,
-            content,
-            fromAddress,
-            getEmailAddresses(replyToRecipients),
-            getEmailAddresses(toRecipients),
-            getEmailAddresses(ccRecipients),
-            getEmailAddresses(bccRecipients),
-            null,
-            addressBlock,
-            mediaTypeSelect,
-            mailAccount,
-            signature,
-            isForTemporaryEmail);
-
-    return message;
+    return messageService.createMessage(
+        model,
+        Math.toIntExact(objectId),
+        subject,
+        content,
+        fromAddress,
+        getEmailAddresses(replyToRecipients),
+        getEmailAddresses(toRecipients),
+        getEmailAddresses(ccRecipients),
+        getEmailAddresses(bccRecipients),
+        null,
+        addressBlock,
+        mediaTypeSelect,
+        mailAccount,
+        signature,
+        isForTemporaryEmail);
   }
 
   @Override
   public Message generateAndSendMessage(Model model, Template template)
-      throws MessagingException, IOException, AxelorException, ClassNotFoundException,
-          InstantiationException, IllegalAccessException, JSONException {
+      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
+          IllegalAccessException, JSONException {
 
     Message message = this.generateMessage(model, template);
     messageService.sendMessage(message);
@@ -287,8 +275,8 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateAndSendTemporaryMessage(Model model, Template template)
-      throws MessagingException, IOException, AxelorException, ClassNotFoundException,
-          InstantiationException, IllegalAccessException, JSONException {
+      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
+          IllegalAccessException, JSONException {
 
     Message message = this.generateMessage(model, template, true);
     messageService.sendMessage(message, true);
@@ -298,8 +286,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Set<MetaFile> getMetaFiles(
-      Template template, Templates templates, Map<String, Object> templatesContext)
-      throws AxelorException, IOException {
+      Template template, Templates templates, Map<String, Object> templatesContext) {
 
     List<DMSFile> metaAttachments =
         Query.of(DMSFile.class)
@@ -310,7 +297,9 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
             .fetch();
     Set<MetaFile> metaFiles = Sets.newHashSet();
     for (DMSFile metaAttachment : metaAttachments) {
-      if (!metaAttachment.getIsDirectory()) metaFiles.add(metaAttachment.getMetaFile());
+      if (!Boolean.TRUE.equals(metaAttachment.getIsDirectory())) {
+        metaFiles.add(metaAttachment.getMetaFile());
+      }
     }
 
     log.debug("Metafile to attach: {}", metaFiles);

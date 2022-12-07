@@ -21,8 +21,6 @@ import com.axelor.apps.message.db.EmailAccount;
 import com.axelor.apps.message.db.repo.EmailAccountRepository;
 import com.axelor.apps.message.exception.MessageExceptionMessage;
 import com.axelor.apps.message.service.MailAccountService;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
@@ -30,6 +28,7 @@ import com.axelor.rpc.ActionResponse;
 import com.google.inject.Singleton;
 import java.io.IOException;
 import javax.mail.MessagingException;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class MailAccountController {
@@ -48,19 +47,19 @@ public class MailAccountController {
       response.setInfo(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_3));
 
     } catch (Exception e) {
-
-      TraceBackService.trace(response, e);
+      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
       response.setValue("isValid", Boolean.FALSE);
     }
   }
 
-  public void checkDefaultMailAccount(ActionRequest request, ActionResponse response)
-      throws AxelorException {
+  public void checkDefaultMailAccount(ActionRequest request, ActionResponse response) {
 
     EmailAccount account = request.getContext().asType(EmailAccount.class);
+
     try {
       Beans.get(MailAccountService.class).checkDefaultMailAccount(account);
-    } catch (AxelorException e) {
+    } catch (Exception e) {
+      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
       response.setAttr("isDefault", "value", false);
       response.setInfo(e.getMessage());
     }

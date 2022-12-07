@@ -20,7 +20,6 @@ package com.axelor.apps.message.service;
 import com.axelor.apps.message.db.EmailAccount;
 import com.axelor.apps.message.db.EmailAddress;
 import com.axelor.apps.message.db.Message;
-import com.axelor.exception.AxelorException;
 import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
 import com.google.inject.persist.Transactional;
@@ -99,9 +98,8 @@ public interface MessageService {
    *
    * @param message
    * @return
-   * @throws AxelorException
    */
-  public Message sendMessage(Message message) throws AxelorException, JSONException, IOException;
+  public Message sendMessage(Message message) throws JSONException, IOException;
 
   /**
    * Send {@link Message}.
@@ -113,11 +111,10 @@ public interface MessageService {
    * @param message
    * @param isTemporaryEmail
    * @return
-   * @throws AxelorException
    * @throws MessagingException
    */
   public Message sendMessage(Message message, Boolean isTemporaryEmail)
-      throws AxelorException, MessagingException, JSONException, IOException;
+      throws MessagingException, JSONException, IOException;
 
   /**
    * Send {@link Message} as Email.
@@ -125,9 +122,8 @@ public interface MessageService {
    * @param message
    * @return
    * @throws MessagingException
-   * @throws AxelorException
    */
-  public Message sendByEmail(Message message) throws MessagingException, AxelorException;
+  public Message sendByEmail(Message message) throws MessagingException;
 
   @Transactional(rollbackOn = {Exception.class})
   /**
@@ -143,8 +139,7 @@ public interface MessageService {
    * @throws MessagingException
    * @throws AxelorException
    */
-  public Message sendByEmail(Message message, Boolean isTemporaryEmail)
-      throws MessagingException, AxelorException;
+  public Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
 
   @Transactional
   public Message sendToUser(Message message);
@@ -153,9 +148,9 @@ public interface MessageService {
   public Message sendByMail(Message message);
 
   @Transactional(rollbackOn = {Exception.class})
-  public Message sendSMS(Message message) throws AxelorException, IOException, JSONException;
+  public Message sendSMS(Message message) throws IOException, JSONException;
 
-  public String printMessage(Message message) throws AxelorException;
+  public String printMessage(Message message);
 
   /**
    * Regenerate message with template attached it.

@@ -27,8 +27,6 @@ import com.axelor.apps.message.service.MessageService;
 import com.axelor.apps.message.service.TemplateMessageService;
 import com.axelor.db.Model;
 import com.axelor.db.Query;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.meta.schema.actions.ActionView;
@@ -97,7 +95,7 @@ public class GenerateMessageController {
       }
 
     } catch (Exception e) {
-      TraceBackService.trace(response, e);
+      LOG.error(e.getMessage(), e);
     }
   }
 
@@ -120,14 +118,13 @@ public class GenerateMessageController {
       response.setView(generateMessage(objectId, model, tag, template));
       response.setCanClose(true);
     } catch (Exception e) {
-      TraceBackService.trace(response, e);
+      LOG.error(e.getMessage(), e);
     }
   }
 
   public Map<String, Object> generateMessage(
       long objectId, String model, String tag, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException {
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
 
     LOG.debug("template : {} ", template);
     LOG.debug("object id : {} ", objectId);

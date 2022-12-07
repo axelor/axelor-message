@@ -26,9 +26,6 @@ import com.axelor.apps.message.db.repo.MessageRepository;
 import com.axelor.apps.message.exception.MessageExceptionMessage;
 import com.axelor.apps.tool.date.DateTool;
 import com.axelor.apps.tool.service.CipherService;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.db.repo.TraceBackRepository;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.mail.ImapAccount;
 import com.axelor.mail.MailConstants;
@@ -42,6 +39,7 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -65,22 +63,23 @@ import org.slf4j.LoggerFactory;
 
 public class MailAccountServiceImpl implements MailAccountService {
 
-  private final Logger log = LoggerFactory.getLogger(MailAccountServiceImpl.class);
-
+  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   static final int CHECK_CONF_TIMEOUT = 5000;
+  protected EmailAccountRepository mailAccountRepo;
+  protected CipherService cipherService;
+  protected EmailAddressRepository emailAddressRepo;
+  protected MessageRepository messageRepo;
+  protected MetaFiles metaFiles;
 
-  @Inject protected EmailAccountRepository mailAccountRepo;
-
-  @Inject private CipherService cipherService;
-
-  @Inject protected EmailAddressRepository emailAddressRepo;
-
-  @Inject private MessageRepository messageRepo;
-
-  @Inject private MetaFiles metaFiles;
+  @Inject
+  public MailAccountServiceImpl(
+      EmailAccountRepository mailAccountRepo, EmailAddressRepository emailAddressRepo) {
+    this.mailAccountRepo = mailAccountRepo;
+    this.emailAddressRepo = emailAddressRepo;
+  }
 
   @Override
-  public void checkDefaultMailAccount(EmailAccount mailAccount) throws AxelorException {
+  public void checkDefaultMailAccount(EmailAccount mailAccount) {
 
     if (mailAccount.getIsDefault()) {
       String query = "self.isDefault = true";
@@ -104,11 +103,9 @@ public class MailAccountServiceImpl implements MailAccountService {
                 + ") ";
       }
 
-      Long count = mailAccountRepo.all().filter(query, params.toArray()).count();
+      long count = mailAccountRepo.all().filter(query, params.toArray()).count();
       if (count > 0) {
-        throw new AxelorException(
-            TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-            I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_5));
+        throw new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_5));
       }
     }
   }
@@ -138,8 +135,7 @@ public class MailAccountServiceImpl implements MailAccountService {
   }
 
   @Override
-  public void checkMailAccountConfiguration(EmailAccount mailAccount)
-      throws AxelorException, MessagingException {
+  public void checkMailAccountConfiguration(EmailAccount mailAccount) throws MessagingException {
 
     com.axelor.mail.MailAccount account = getMailAccount(mailAccount);
 
@@ -160,17 +156,9 @@ public class MailAccountServiceImpl implements MailAccountService {
       }
 
     } catch (AuthenticationFailedException e) {
-      throw new AxelorException(
-          e,
-          mailAccount,
-          TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-          I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_1));
+      throw new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_1), e);
     } catch (NoSuchProviderException e) {
-      throw new AxelorException(
-          e,
-          mailAccount,
-          TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-          I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_2));
+      throw new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_2), e);
     }
   }
 
@@ -397,7 +385,7 @@ public class MailAccountServiceImpl implements MailAccountService {
         InputStream stream = source.getInputStream();
         metaFiles.attach(stream, source.getName(), message);
       } catch (IOException e) {
-        TraceBackService.trace(e);
+        log.error(e.getMessage(), e);
       }
     }
   }

@@ -28,9 +28,6 @@ import com.axelor.db.mapper.Mapper;
 import com.axelor.db.mapper.Property;
 import com.axelor.event.Observes;
 import com.axelor.events.StartupEvent;
-import com.axelor.exception.AxelorException;
-import com.axelor.exception.db.repo.TraceBackRepository;
-import com.axelor.exception.service.TraceBackService;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.meta.db.MetaModel;
@@ -48,13 +45,14 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class TemplateService {
 
   public static final String ALL_MODEL_SELECT = "all.model.reference.select";
 
-  public void checkTargetReceptor(Template template) throws AxelorException {
+  public void checkTargetReceptor(Template template) {
     String target = template.getTarget();
     MetaModel metaModel = template.getMetaModel();
 
@@ -62,18 +60,13 @@ public class TemplateService {
       return;
     }
     if (metaModel == null) {
-      throw new AxelorException(
-          TraceBackRepository.CATEGORY_MISSING_FIELD,
-          I18n.get(MessageExceptionMessage.TEMPLATE_SERVICE_1));
+      throw new IllegalStateException(I18n.get(MessageExceptionMessage.TEMPLATE_SERVICE_1));
     }
 
     try {
       this.validTarget(target, metaModel);
     } catch (Exception e) {
-      throw new AxelorException(
-          e.getCause(),
-          TraceBackRepository.CATEGORY_INCONSISTENCY,
-          I18n.get(MessageExceptionMessage.TEMPLATE_SERVICE_2));
+      throw new IllegalStateException(I18n.get(MessageExceptionMessage.TEMPLATE_SERVICE_2), e);
     }
   }
 
@@ -167,7 +160,7 @@ public class TemplateService {
 
   @SuppressWarnings("unchecked")
   public Message generateDraftMessage(Template template, MetaModel metaModel, String referenceId)
-      throws ClassNotFoundException, AxelorException {
+      throws ClassNotFoundException {
 
     if (metaModel == null) {
       return null;
@@ -182,7 +175,7 @@ public class TemplateService {
     try {
       return Beans.get(TemplateMessageService.class).generateMessage(modelObject, template, true);
     } catch (InstantiationException | IllegalAccessException | IOException e) {
-      TraceBackService.trace(e);
+      LoggerFactory.getLogger(TemplateService.class).error(e.getMessage(), e);
     }
     return null;
   }

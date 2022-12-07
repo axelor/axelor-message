@@ -21,7 +21,6 @@ import com.axelor.apps.message.db.Message;
 import com.axelor.apps.message.db.Template;
 import com.axelor.apps.message.db.TemplateContext;
 import com.axelor.db.Model;
-import com.axelor.exception.AxelorException;
 import com.axelor.meta.db.MetaFile;
 import com.axelor.text.Templates;
 import java.io.IOException;
@@ -42,12 +41,10 @@ public interface TemplateMessageService {
    * @throws ClassNotFoundException
    * @throws InstantiationException
    * @throws IllegalAccessException
-   * @throws AxelorException
    * @throws IOException
    */
   public Message generateMessage(Model model, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException;
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
 
   /**
    * Generate message from Model and Template.
@@ -63,12 +60,10 @@ public interface TemplateMessageService {
    * @throws ClassNotFoundException
    * @throws InstantiationException
    * @throws IllegalAccessException
-   * @throws AxelorException
    * @throws IOException
    */
   public Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException;
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
 
   /**
    * Generate message.
@@ -81,12 +76,10 @@ public interface TemplateMessageService {
    * @throws ClassNotFoundException
    * @throws InstantiationException
    * @throws IllegalAccessException
-   * @throws AxelorException
    * @throws IOException
    */
   public Message generateMessage(Long objectId, String model, String tag, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException;
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
 
   /**
    * Generate message.
@@ -104,13 +97,11 @@ public interface TemplateMessageService {
    * @throws ClassNotFoundException
    * @throws InstantiationException
    * @throws IllegalAccessException
-   * @throws AxelorException
    * @throws IOException
    */
   public Message generateMessage(
       Long objectId, String model, String tag, Template template, Boolean isForTemporaryMessage)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-          AxelorException, IOException;
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
 
   /**
    * Generate and Send the {@link Message}.
@@ -120,14 +111,13 @@ public interface TemplateMessageService {
    * @return
    * @throws MessagingException
    * @throws IOException
-   * @throws AxelorException
    * @throws ClassNotFoundException
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
   public Message generateAndSendMessage(Model model, Template template)
-      throws MessagingException, IOException, AxelorException, ClassNotFoundException,
-          InstantiationException, IllegalAccessException, JSONException;
+      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
+          IllegalAccessException, JSONException;
 
   /**
    * Send the transient {@link Message} generated from the template and model.<br>
@@ -138,18 +128,17 @@ public interface TemplateMessageService {
    * @return
    * @throws MessagingException
    * @throws IOException
-   * @throws AxelorException
    * @throws ClassNotFoundException
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
   public Message generateAndSendTemporaryMessage(Model model, Template template)
-      throws MessagingException, IOException, AxelorException, ClassNotFoundException,
-          InstantiationException, IllegalAccessException, JSONException;
+      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
+          IllegalAccessException, JSONException;
 
   public Set<MetaFile> getMetaFiles(
       Template template, Templates templates, Map<String, Object> templatesContext)
-      throws AxelorException, IOException;
+      throws IOException;
 
   public Map<String, Object> initMaker(
       long objectId, String model, String tag, boolean isJson, Map<String, Object> templatesContext)
