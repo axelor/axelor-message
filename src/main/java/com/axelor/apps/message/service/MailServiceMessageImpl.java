@@ -17,11 +17,12 @@
  */
 package com.axelor.apps.message.service;
 
+import static com.axelor.common.StringUtils.isBlank;
+
 import com.axelor.apps.message.db.EmailAccount;
 import com.axelor.apps.message.db.EmailAddress;
 import com.axelor.apps.message.db.repo.EmailAddressRepository;
 import com.axelor.auth.AuditableRunner;
-import static com.axelor.common.StringUtils.isBlank;
 import com.axelor.db.Model;
 import com.axelor.db.Query;
 import com.axelor.inject.Beans;

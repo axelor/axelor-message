@@ -48,13 +48,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import wslite.json.JSONException;
-import wslite.json.JSONObject;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
@@ -63,8 +56,15 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.mail.MessagingException;
 import javax.persistence.LockModeType;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import wslite.json.JSONException;
+import wslite.json.JSONObject;
 
 public class MessageServiceImpl extends JpaSupport implements MessageService {
 

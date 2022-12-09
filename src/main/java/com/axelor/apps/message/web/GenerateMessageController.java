@@ -123,6 +123,4 @@ public class GenerateMessageController {
       LOG.error(e.getMessage(), e);
     }
   }
-
-
 }

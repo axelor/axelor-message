@@ -23,11 +23,11 @@ import com.axelor.apps.message.db.Message;
 import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
 import com.google.inject.persist.Transactional;
-import wslite.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import javax.mail.MessagingException;
+import wslite.json.JSONException;
 
 public interface MessageService {
 

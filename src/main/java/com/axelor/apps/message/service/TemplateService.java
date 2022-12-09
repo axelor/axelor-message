@@ -41,11 +41,9 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 public class TemplateService {
@@ -172,11 +170,6 @@ public class TemplateService {
       Class<? extends Model> modelClass = (Class<? extends Model>) Class.forName(model);
       modelObject = JPA.find(modelClass, Long.valueOf(referenceId));
     }
-    try {
-      return Beans.get(TemplateMessageService.class).generateMessage(modelObject, template, true);
-    } catch (InstantiationException | IllegalAccessException | IOException e) {
-      LoggerFactory.getLogger(TemplateService.class).error(e.getMessage(), e);
-    }
-    return null;
+    return Beans.get(TemplateMessageService.class).generateMessage(modelObject, template, true);
   }
 }

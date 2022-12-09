@@ -79,8 +79,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   }
 
   @Override
-  public Message generateMessage(Model model, Template template)
-      throws ClassNotFoundException {
+  public Message generateMessage(Model model, Template template) throws ClassNotFoundException {
     return generateMessage(model, template, false);
   }
 
