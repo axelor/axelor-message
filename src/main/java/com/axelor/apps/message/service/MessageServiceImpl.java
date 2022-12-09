@@ -48,6 +48,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import wslite.json.JSONException;
+import wslite.json.JSONObject;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
@@ -56,15 +63,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.mail.MessagingException;
 import javax.persistence.LockModeType;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wslite.json.JSONException;
-import wslite.json.JSONObject;
 
 public class MessageServiceImpl extends JpaSupport implements MessageService {
 
@@ -517,8 +517,10 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   @Transactional(rollbackOn = {Exception.class})
-  public Message regenerateMessage(Message message) throws Exception {
+  public Message regenerateMessage(Message message)
+      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
     Preconditions.checkNotNull(
         message.getTemplate(),
         I18n.get("Cannot regenerate message without template associated to message."));
@@ -529,8 +531,10 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
 
     MultiRelated multiRelated = message.getMultiRelatedList().get(0);
 
-    Class m = Class.forName(multiRelated.getRelatedToSelect());
-    Model model = JPA.all(m).filter("self.id = ?", multiRelated.getRelatedToSelectId()).fetchOne();
+    Model model =
+        JPA.all((Class<? extends Model>) Class.forName(multiRelated.getRelatedToSelect()))
+            .filter("self.id = ?", multiRelated.getRelatedToSelectId())
+            .fetchOne();
     Message newMessage =
         Beans.get(TemplateMessageService.class).generateMessage(model, message.getTemplate());
     newMessage.setMultiRelatedList(message.getMultiRelatedList());

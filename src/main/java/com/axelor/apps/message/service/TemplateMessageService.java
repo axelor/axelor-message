@@ -43,8 +43,7 @@ public interface TemplateMessageService {
    * @throws IllegalAccessException
    * @throws IOException
    */
-  public Message generateMessage(Model model, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
+  public Message generateMessage(Model model, Template template) throws ClassNotFoundException;
 
   /**
    * Generate message from Model and Template.
@@ -63,7 +62,7 @@ public interface TemplateMessageService {
    * @throws IOException
    */
   public Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
+      throws ClassNotFoundException;
 
   /**
    * Generate message.
@@ -79,7 +78,7 @@ public interface TemplateMessageService {
    * @throws IOException
    */
   public Message generateMessage(Long objectId, String model, String tag, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
+      throws ClassNotFoundException;
 
   /**
    * Generate message.
@@ -101,7 +100,7 @@ public interface TemplateMessageService {
    */
   public Message generateMessage(
       Long objectId, String model, String tag, Template template, Boolean isForTemporaryMessage)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException;
+      throws ClassNotFoundException;
 
   /**
    * Generate and Send the {@link Message}.
@@ -116,8 +115,7 @@ public interface TemplateMessageService {
    * @throws IllegalAccessException
    */
   public Message generateAndSendMessage(Model model, Template template)
-      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
-          IllegalAccessException, JSONException;
+      throws IOException, ClassNotFoundException, JSONException;
 
   /**
    * Send the transient {@link Message} generated from the template and model.<br>
@@ -133,15 +131,14 @@ public interface TemplateMessageService {
    * @throws IllegalAccessException
    */
   public Message generateAndSendTemporaryMessage(Model model, Template template)
-      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
-          IllegalAccessException, JSONException;
+      throws MessagingException, IOException, ClassNotFoundException, JSONException;
 
   public Set<MetaFile> getMetaFiles(
       Template template, Templates templates, Map<String, Object> templatesContext);
 
   public Map<String, Object> initMaker(
       long objectId, String model, String tag, boolean isJson, Map<String, Object> templatesContext)
-      throws InstantiationException, IllegalAccessException, ClassNotFoundException;
+      throws ClassNotFoundException;
 
   public Map<String, Object> computeTemplateContexts(
       List<TemplateContext> templateContextList,

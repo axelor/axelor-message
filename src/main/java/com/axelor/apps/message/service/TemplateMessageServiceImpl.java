@@ -80,13 +80,13 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateMessage(Model model, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+      throws ClassNotFoundException {
     return generateMessage(model, template, false);
   }
 
   @Override
   public Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+      throws ClassNotFoundException {
 
     this.modelObject = model;
     Class<?> klass = EntityHelper.getEntityClass(model);
@@ -100,7 +100,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateMessage(Long objectId, String model, String tag, Template template)
-      throws ClassNotFoundException, IOException {
+      throws ClassNotFoundException {
 
     return generateMessage(objectId, model, tag, template, false);
   }
@@ -264,8 +264,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateAndSendMessage(Model model, Template template)
-      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
-          IllegalAccessException, JSONException {
+      throws IOException, ClassNotFoundException, JSONException {
 
     Message message = this.generateMessage(model, template);
     messageService.sendMessage(message);
@@ -275,8 +274,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateAndSendTemporaryMessage(Model model, Template template)
-      throws MessagingException, IOException, ClassNotFoundException, InstantiationException,
-          IllegalAccessException, JSONException {
+      throws MessagingException, IOException, ClassNotFoundException, JSONException {
 
     Message message = this.generateMessage(model, template, true);
     messageService.sendMessage(message, true);

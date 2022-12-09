@@ -32,18 +32,18 @@ public interface MailAccountService {
 
   public void checkMailAccountConfiguration(EmailAccount mailAccount) throws MessagingException;
 
+  public MailAccount getMailAccount(EmailAccount mailAccount);
+
   public String getSecurity(EmailAccount mailAccount);
 
   public String getProtocol(EmailAccount mailAccount);
 
   public String getSignature(EmailAccount mailAccount);
 
-  public String getEncryptPassword(String password);
-
-  public String getDecryptPassword(String password);
-
   public int fetchEmails(EmailAccount mailAccount, boolean unseenOnly)
       throws MessagingException, IOException;
 
-  public MailAccount getMailAccount(EmailAccount mailAccount);
+  public String getEncryptPassword(String password);
+
+  public String getDecryptPassword(String password);
 }

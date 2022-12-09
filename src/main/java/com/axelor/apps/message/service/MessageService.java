@@ -23,11 +23,11 @@ import com.axelor.apps.message.db.Message;
 import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
 import com.google.inject.persist.Transactional;
+import wslite.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import javax.mail.MessagingException;
-import wslite.json.JSONException;
 
 public interface MessageService {
 
@@ -159,7 +159,8 @@ public interface MessageService {
    * @return The new message regenerated.
    * @throws Exception If a error append during generation.
    */
-  Message regenerateMessage(Message message) throws Exception;
+  Message regenerateMessage(Message message)
+      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException;
 
   public String getFullEmailAddress(EmailAddress emailAddress);
 
