@@ -63,19 +63,26 @@ import org.slf4j.LoggerFactory;
 
 public class MailAccountServiceImpl implements MailAccountService {
 
-  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-  static final int CHECK_CONF_TIMEOUT = 5000;
-  protected EmailAccountRepository mailAccountRepo;
-  protected CipherService cipherService;
-  protected EmailAddressRepository emailAddressRepo;
-  protected MessageRepository messageRepo;
-  protected MetaFiles metaFiles;
+  protected final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  protected static final int CHECK_CONF_TIMEOUT = 5000;
+  protected final EmailAccountRepository mailAccountRepo;
+  protected final CipherService cipherService;
+  protected final EmailAddressRepository emailAddressRepo;
+  protected final MessageRepository messageRepo;
+  protected final MetaFiles metaFiles;
 
   @Inject
   public MailAccountServiceImpl(
-      EmailAccountRepository mailAccountRepo, EmailAddressRepository emailAddressRepo) {
+      EmailAccountRepository mailAccountRepo,
+      CipherService cipherService,
+      EmailAddressRepository emailAddressRepo,
+      MessageRepository messageRepo,
+      MetaFiles metaFiles) {
     this.mailAccountRepo = mailAccountRepo;
+    this.cipherService = cipherService;
     this.emailAddressRepo = emailAddressRepo;
+    this.messageRepo = messageRepo;
+    this.metaFiles = metaFiles;
   }
 
   @Override

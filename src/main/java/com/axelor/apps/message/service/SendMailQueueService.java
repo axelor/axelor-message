@@ -43,8 +43,8 @@ public class SendMailQueueService extends JpaSupport {
 
   private static final int ENTITY_FIND_TIMEOUT = 10000;
   private static final int ENTITY_FIND_INTERVAL = 200;
-  protected MessageRepository messageRepository;
-  protected UserRepository userRepository;
+  protected final MessageRepository messageRepository;
+  protected final UserRepository userRepository;
 
   @Inject
   public SendMailQueueService(MessageRepository messageRepository, UserRepository userRepository) {

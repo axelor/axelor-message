@@ -31,8 +31,8 @@ import com.google.inject.persist.Transactional;
 
 public class MailMessageServiceImpl implements MailMessageService {
 
-  protected MailMessageRepository mailMessageRepository;
-  protected MailFollowerRepository mailFollowerRepository;
+  protected final MailMessageRepository mailMessageRepository;
+  protected final MailFollowerRepository mailFollowerRepository;
 
   @Inject
   public MailMessageServiceImpl(

@@ -17,12 +17,11 @@
  */
 package com.axelor.apps.message.service;
 
-import static com.axelor.common.StringUtils.isBlank;
-
 import com.axelor.apps.message.db.EmailAccount;
 import com.axelor.apps.message.db.EmailAddress;
 import com.axelor.apps.message.db.repo.EmailAddressRepository;
 import com.axelor.auth.AuditableRunner;
+import static com.axelor.common.StringUtils.isBlank;
 import com.axelor.db.Model;
 import com.axelor.db.Query;
 import com.axelor.inject.Beans;
@@ -63,9 +62,9 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class MailServiceMessageImpl extends MailServiceImpl {
 
-  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  protected final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-  private ExecutorService executor = Executors.newCachedThreadPool();
+  private final ExecutorService executor = Executors.newCachedThreadPool();
 
   private MailSender sender = null;
 
@@ -75,7 +74,12 @@ public class MailServiceMessageImpl extends MailServiceImpl {
 
   private EmailAccount readerAccount = null;
 
-  @Inject protected MailAccountService mailAccountService;
+  protected final MailAccountService mailAccountService;
+
+  @Inject
+  public MailServiceMessageImpl(MailAccountService mailAccountService) {
+    this.mailAccountService = mailAccountService;
+  }
 
   @Override
   public Model resolve(String email) {

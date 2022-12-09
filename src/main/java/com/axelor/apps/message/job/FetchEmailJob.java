@@ -33,11 +33,18 @@ import org.slf4j.LoggerFactory;
 /** An example {@link Job} class that prints a some messages to the stderr. */
 public class FetchEmailJob implements Job {
 
-  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  protected final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-  @Inject private MailAccountService mailAccountService;
+  protected final MailAccountService mailAccountService;
 
-  @Inject private EmailAccountRepository mailAccountRepo;
+  protected final EmailAccountRepository mailAccountRepo;
+
+  @Inject
+  public FetchEmailJob(
+      MailAccountService mailAccountService, EmailAccountRepository mailAccountRepo) {
+    this.mailAccountService = mailAccountService;
+    this.mailAccountRepo = mailAccountRepo;
+  }
 
   @Override
   public void execute(JobExecutionContext context) {

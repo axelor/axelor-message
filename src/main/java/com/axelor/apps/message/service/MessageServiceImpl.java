@@ -68,12 +68,12 @@ import wslite.json.JSONObject;
 
 public class MessageServiceImpl extends JpaSupport implements MessageService {
 
-  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  protected final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private static final String CONFIG_SENDINGBLUE_URL_SENDSMS = "bondici.sendinblue.url.sendsms";
 
-  private MetaAttachmentRepository metaAttachmentRepository;
-  protected MessageRepository messageRepository;
-  protected SendMailQueueService sendMailQueueService;
+  protected final MetaAttachmentRepository metaAttachmentRepository;
+  protected final MessageRepository messageRepository;
+  protected final SendMailQueueService sendMailQueueService;
 
   @Inject
   public MessageServiceImpl(

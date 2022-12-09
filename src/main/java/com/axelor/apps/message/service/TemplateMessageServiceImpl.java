@@ -65,11 +65,11 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   private static final String RECIPIENT_SEPARATOR = ";|,";
   private static final char TEMPLATE_DELIMITER = '$';
 
-  private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  protected final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private Model modelObject;
 
-  protected MessageService messageService;
-  protected TemplateContextService templateContextService;
+  protected final MessageService messageService;
+  protected final TemplateContextService templateContextService;
 
   @Inject
   public TemplateMessageServiceImpl(
