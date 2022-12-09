@@ -23,8 +23,7 @@ import com.axelor.apps.message.db.Template;
 import com.axelor.apps.message.db.repo.MessageRepository;
 import com.axelor.apps.message.db.repo.TemplateRepository;
 import com.axelor.apps.message.exception.MessageExceptionMessage;
-import com.axelor.apps.message.service.MessageService;
-import com.axelor.apps.message.service.TemplateMessageService;
+import com.axelor.apps.message.service.GenerateMessageService;
 import com.axelor.db.Model;
 import com.axelor.db.Query;
 import com.axelor.i18n.I18n;
@@ -34,7 +33,6 @@ import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
 import com.google.inject.Singleton;
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -91,10 +89,12 @@ public class GenerateMessageController {
 
       } else {
         response.setView(
-            generateMessage(context.getId(), model, simpleModel, templateQuery.fetchOne()));
+            Beans.get(GenerateMessageService.class)
+                .generateMessage(context.getId(), model, simpleModel, templateQuery.fetchOne()));
       }
 
     } catch (Exception e) {
+      response.setException(e);
       LOG.error(e.getMessage(), e);
     }
   }
@@ -115,50 +115,14 @@ public class GenerateMessageController {
     String tag = (String) context.get("_tag");
 
     try {
-      response.setView(generateMessage(objectId, model, tag, template));
+      response.setView(
+          Beans.get(GenerateMessageService.class).generateMessage(objectId, model, tag, template));
       response.setCanClose(true);
     } catch (Exception e) {
+      response.setException(e);
       LOG.error(e.getMessage(), e);
     }
   }
 
-  public Map<String, Object> generateMessage(
-      long objectId, String model, String tag, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
 
-    LOG.debug("template : {} ", template);
-    LOG.debug("object id : {} ", objectId);
-    LOG.debug("model : {} ", model);
-    LOG.debug("tag : {} ", tag);
-    Message message = null;
-    if (template != null) {
-      message =
-          Beans.get(TemplateMessageService.class).generateMessage(objectId, model, tag, template);
-    } else {
-      message =
-          Beans.get(MessageService.class)
-              .createMessage(
-                  model,
-                  Math.toIntExact(objectId),
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  MessageRepository.MEDIA_TYPE_EMAIL,
-                  null,
-                  null);
-    }
-
-    return ActionView.define(I18n.get(MessageExceptionMessage.MESSAGE_3))
-        .model(Message.class.getName())
-        .add("form", "message-form")
-        .param("forceEdit", "true")
-        .context("_showRecord", message.getId().toString())
-        .map();
-  }
 }

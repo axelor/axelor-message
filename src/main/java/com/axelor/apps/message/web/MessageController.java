@@ -43,6 +43,7 @@ public class MessageController {
       response.setInfo(I18n.get(MessageExceptionMessage.MESSAGE_4));
     } catch (Exception e) {
       LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
+      response.setException(e);
     }
   }
 
@@ -64,6 +65,7 @@ public class MessageController {
       response.setReload(true);
     } catch (Exception e) {
       LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
+      response.setException(e);
     }
   }
 
@@ -88,6 +90,7 @@ public class MessageController {
       response.setReload(true);
     } catch (Exception e) {
       LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
+      response.setException(e);
     }
   }
 

@@ -58,6 +58,7 @@ public class TemplateController {
               .map());
     } catch (Exception e) {
       LoggerFactory.getLogger(TemplateController.class).error(e.getMessage(), e);
+      response.setException(e);
     }
   }
 }

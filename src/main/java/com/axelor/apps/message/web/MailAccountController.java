@@ -26,19 +26,14 @@ import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Singleton;
-import java.io.IOException;
-import javax.mail.MessagingException;
 import org.slf4j.LoggerFactory;
 
 @Singleton
 public class MailAccountController {
 
   public void validateSmtpAccount(ActionRequest request, ActionResponse response) {
-
-    EmailAccount account = request.getContext().asType(EmailAccount.class);
-
     try {
-
+      EmailAccount account = request.getContext().asType(EmailAccount.class);
       Beans.get(MailAccountService.class).checkMailAccountConfiguration(account);
 
       response.setValue("isValid", Boolean.TRUE);
@@ -53,10 +48,8 @@ public class MailAccountController {
   }
 
   public void checkDefaultMailAccount(ActionRequest request, ActionResponse response) {
-
-    EmailAccount account = request.getContext().asType(EmailAccount.class);
-
     try {
+      EmailAccount account = request.getContext().asType(EmailAccount.class);
       Beans.get(MailAccountService.class).checkDefaultMailAccount(account);
     } catch (Exception e) {
       LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
@@ -65,22 +58,30 @@ public class MailAccountController {
     }
   }
 
-  public void fetchEmails(ActionRequest request, ActionResponse response)
-      throws MessagingException, IOException {
+  public void fetchEmails(ActionRequest request, ActionResponse response) {
+    try {
+      EmailAccount account = request.getContext().asType(EmailAccount.class);
+      account = Beans.get(EmailAccountRepository.class).find(account.getId());
 
-    EmailAccount account = request.getContext().asType(EmailAccount.class);
-    account = Beans.get(EmailAccountRepository.class).find(account.getId());
+      int totalFetched = Beans.get(MailAccountService.class).fetchEmails(account, true);
 
-    int totalFetched = Beans.get(MailAccountService.class).fetchEmails(account, true);
-
-    response.setInfo(I18n.get(String.format("Total email fetched: %s", totalFetched)));
+      response.setInfo(I18n.get(String.format("Total email fetched: %s", totalFetched)));
+    } catch (Exception e) {
+      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
+      response.setException(e);
+    }
   }
 
   public void validate(ActionRequest request, ActionResponse response) {
-    if (request.getContext().get("newPassword") != null)
-      response.setValue(
-          "password",
-          Beans.get(MailAccountService.class)
-              .getEncryptPassword(request.getContext().get("newPassword").toString()));
+    try {
+      if (request.getContext().get("newPassword") != null)
+        response.setValue(
+            "password",
+            Beans.get(MailAccountService.class)
+                .getEncryptPassword(request.getContext().get("newPassword").toString()));
+    } catch (Exception e) {
+      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
+      response.setException(e);
+    }
   }
 }

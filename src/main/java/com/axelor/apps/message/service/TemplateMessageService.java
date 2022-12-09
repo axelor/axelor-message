@@ -23,12 +23,12 @@ import com.axelor.apps.message.db.TemplateContext;
 import com.axelor.db.Model;
 import com.axelor.meta.db.MetaFile;
 import com.axelor.text.Templates;
+import wslite.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.mail.MessagingException;
-import wslite.json.JSONException;
 
 public interface TemplateMessageService {
 
@@ -137,8 +137,7 @@ public interface TemplateMessageService {
           IllegalAccessException, JSONException;
 
   public Set<MetaFile> getMetaFiles(
-      Template template, Templates templates, Map<String, Object> templatesContext)
-      throws IOException;
+      Template template, Templates templates, Map<String, Object> templatesContext);
 
   public Map<String, Object> initMaker(
       long objectId, String model, String tag, boolean isJson, Map<String, Object> templatesContext)
