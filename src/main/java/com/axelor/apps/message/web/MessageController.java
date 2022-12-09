@@ -55,10 +55,8 @@ public class MessageController {
         throw new IllegalStateException(
             I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
       }
-      ModelTool.apply(
-          Message.class,
-          idList,
-          model -> Beans.get(MessageService.class).sendMessage((Message) model));
+      MessageService messageService = Beans.get(MessageService.class);
+      ModelTool.apply(Message.class, idList, messageService::sendMessage);
       response.setInfo(
           String.format(
               I18n.get(MessageExceptionMessage.MESSAGES_SEND_IN_PROGRESS), idList.size()));
@@ -77,11 +75,8 @@ public class MessageController {
         throw new IllegalStateException(
             I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
       }
-      int error =
-          ModelTool.apply(
-              Message.class,
-              idList,
-              model -> Beans.get(MessageService.class).regenerateMessage((Message) model));
+      MessageService messageService = Beans.get(MessageService.class);
+      int error = ModelTool.apply(Message.class, idList, messageService::regenerateMessage);
       response.setInfo(
           String.format(
               I18n.get(MessageExceptionMessage.MESSAGES_REGENERATED),
