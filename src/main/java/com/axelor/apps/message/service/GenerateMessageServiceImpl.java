@@ -8,7 +8,6 @@ import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.meta.schema.actions.ActionView;
 import com.google.inject.Inject;
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -24,8 +23,7 @@ public class GenerateMessageServiceImpl implements GenerateMessageService {
   }
 
   public Map<String, Object> generateMessage(
-      long objectId, String model, String tag, Template template)
-      throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+      long objectId, String model, String tag, Template template) throws ClassNotFoundException {
 
     LOG.debug("template : {} ", template);
     LOG.debug("object id : {} ", objectId);
