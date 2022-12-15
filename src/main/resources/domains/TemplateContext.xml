@@ -3,13 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_6.0.xsd">
 
-  <module name="base" package="com.axelor.apps.message.db"/>
+  <module name="message" package="com.axelor.message.db"/>
 
   <entity name="TemplateContext">
 
     <string name="name" title="Name"/>
     <string name="value" title="Expr. value" large="true"/>
-    <many-to-one name="template" ref="com.axelor.apps.message.db.Template"/>
+    <many-to-one name="template" ref="com.axelor.message.db.Template"/>
 
   </entity>
 

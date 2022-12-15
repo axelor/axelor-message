@@ -9,7 +9,7 @@
     action="admin.root.templating.template" order="5"/>
 
   <action-view name="admin.root.templating.template" title="Template"
-    model="com.axelor.apps.message.db.Template">
+    model="com.axelor.message.db.Template">
     <view type="grid" name="template-grid"/>
     <view type="form" name="template-form"/>
   </action-view>
@@ -27,7 +27,7 @@
     title="Email Accounts" action="mail.root.email.conf.mail.account" order="15"/>
 
   <action-view name="mail.root.email.conf.mail.account" title="Email Accounts"
-    model="com.axelor.apps.message.db.EmailAccount">
+    model="com.axelor.message.db.EmailAccount">
     <view type="grid"/>
     <view type="form"/>
   </action-view>
@@ -36,7 +36,7 @@
     title="Email addresses" action="mail.root.email.conf.email.address" order="20"/>
 
   <action-view name="mail.root.email.conf.email.address" title="Email addresses"
-    model="com.axelor.apps.message.db.EmailAddress">
+    model="com.axelor.message.db.EmailAddress">
     <view type="grid" name="email-address-grid"/>
     <view type="form" name="email-address-form"/>
     <context name="_duplicateFinderFields" expr="address"/>
@@ -46,7 +46,7 @@
     action="mail.root.messages" order="25"/>
 
   <action-view name="mail.root.messages" title="All messages"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <view type="grid" name="message-grid"/>
     <view type="form" name="message-form"/>
   </action-view>
@@ -55,7 +55,7 @@
     order="26" action="mail.root.messages.not.send"/>
 
   <action-view name="mail.root.messages.not.send" title="Messages not sent"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <view type="grid" name="message-not-sent-grid"/>
     <view type="form" name="message-form"/>
     <domain>(self.statusSelect = 1 AND self.sentDateT = null) OR self.statusSelect = 2</domain>

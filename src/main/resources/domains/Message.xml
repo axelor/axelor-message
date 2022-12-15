@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_6.0.xsd">
 
-  <module name="message" package="com.axelor.apps.message.db"/>
+  <module name="message" package="com.axelor.message.db"/>
 
   <entity name="Message">
 
@@ -22,28 +22,27 @@
       initParam="true"/>
 
     <!-- Email -->
-    <many-to-one name="fromEmailAddress" ref="com.axelor.apps.message.db.EmailAddress"
+    <many-to-one name="fromEmailAddress" ref="com.axelor.message.db.EmailAddress"
       title="From" initParam="true"/>
     <many-to-many name="replyToEmailAddressSet"
-      ref="com.axelor.apps.message.db.EmailAddress" title="Reply to" initParam="true"/>
-    <many-to-many name="toEmailAddressSet"
-      ref="com.axelor.apps.message.db.EmailAddress" title="To" initParam="true"/>
-    <many-to-many name="ccEmailAddressSet"
-      ref="com.axelor.apps.message.db.EmailAddress" title="Cc" initParam="true"/>
-    <many-to-many name="bccEmailAddressSet"
-      ref="com.axelor.apps.message.db.EmailAddress" title="Bcc" initParam="true"/>
+      ref="com.axelor.message.db.EmailAddress" title="Reply to" initParam="true"/>
+    <many-to-many name="toEmailAddressSet" ref="com.axelor.message.db.EmailAddress"
+      title="To" initParam="true"/>
+    <many-to-many name="ccEmailAddressSet" ref="com.axelor.message.db.EmailAddress"
+      title="Cc" initParam="true"/>
+    <many-to-many name="bccEmailAddressSet" ref="com.axelor.message.db.EmailAddress"
+      title="Bcc" initParam="true"/>
     <boolean name="sentByEmail" title="Sent by email" initParam="true"/>
-    <many-to-one name="mailAccount" ref="com.axelor.apps.message.db.EmailAccount"
+    <many-to-one name="mailAccount" ref="com.axelor.message.db.EmailAccount"
       title="Mail account" initParam="true"/>
-    <one-to-many name="multiRelatedList" ref="com.axelor.apps.message.db.MultiRelated"
+    <one-to-many name="multiRelatedList" ref="com.axelor.message.db.MultiRelated"
       title="Related to" mappedBy="message"/>
 
     <!-- Intern message -->
     <many-to-one name="senderUser" ref="com.axelor.auth.db.User" title="Sender (User)"
       readonly="true"/>
     <many-to-one name="recipientUser" ref="com.axelor.auth.db.User" title="Recipient"/>
-    <many-to-one name="template" ref="com.axelor.apps.message.db.Template"
-      readonly="true"/>
+    <many-to-one name="template" ref="com.axelor.message.db.Template" readonly="true"/>
 
     <string name="emailThreadId" title="Thread ID" hidden="true"/>
 
