@@ -3,14 +3,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
 
-  <grid name="template-grid" title="Templates" model="com.axelor.apps.message.db.Template">
+  <grid name="template-grid" title="Templates" model="com.axelor.message.db.Template">
     <field name="name"/>
     <field name="subject"/>
     <field name="metaModel" form-view="meta-model-form" grid-view="meta-model-grid"/>
     <field name="mediaTypeSelect"/>
   </grid>
 
-  <form name="template-form" title="Template" model="com.axelor.apps.message.db.Template"
+  <form name="template-form" title="Template" model="com.axelor.message.db.Template"
     onNew="action-template-record-new" width="large">
     <toolbar>
       <button name="testTemplateBtn" title="Test template"
@@ -71,7 +71,7 @@
   </form>
 
   <form name="template-test-wizard-form" title="Test template"
-    model="com.axelor.apps.base.db.Wizard" onLoad="action-template-test-attrs-onload">
+    model="com.axelor.message.db.Wizard" onLoad="action-template-test-attrs-onload">
     <panel name="mainPanel">
       <field name="$reference" colSpan="8" title="Reference" widget="RefSelect"
         selection="all.model.reference.select" x-related="$referenceId"/>
@@ -82,7 +82,7 @@
   </form>
 
   <action-view name="action-template-view-test-template" title="Test template"
-    model="com.axelor.apps.message.db.Template">
+    model="com.axelor.message.db.Template">
     <view type="form" name="template-test-wizard-form"/>
     <view-param name="popup" value="reload"/>
     <view-param name="popup-save" value="true"/>
@@ -100,11 +100,11 @@
   </action-attrs>
 
   <action-method name="action-template-method-generate-message">
-    <call class="com.axelor.apps.message.web.TemplateController" method="generateDraftMessage"/>
+    <call class="com.axelor.message.web.TemplateController" method="generateDraftMessage"/>
   </action-method>
 
   <action-record name="action-template-record-new"
-    model="com.axelor.apps.message.db.Template">
+    model="com.axelor.message.db.Template">
     <field name="metaModel"
       expr="eval: __parent__?.targetSelect == 1 ? __repo__(MetaModel).all().filter('self.name = \'Partner\'').fetchOne() : (__parent__?.targetSelect == 2 ? __repo__(MetaModel).all().filter('self.name = \'Lead\'').fetchOne() : null)"
       if="__parent__?.targetSelect"/>
@@ -115,13 +115,13 @@
   </action-record>
 
   <action-record name="action-template-record-is-json-change"
-    model="com.axelor.apps.message.db.Template">
+    model="com.axelor.message.db.Template">
     <field name="metaModel" expr="eval:null"/>
     <field name="metaJsonModel" expr="eval:null"/>
   </action-record>
 
   <action-view name="template.messages.by.template" title="All messages"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <view type="grid" name="message-grid"/>
     <view type="form" name="message-form"/>
     <domain>self.template.id = :template</domain>

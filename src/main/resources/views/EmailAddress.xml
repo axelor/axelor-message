@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
 
   <grid name="email-address-grid" title="Email addresses"
-    model="com.axelor.apps.message.db.EmailAddress">
+    model="com.axelor.message.db.EmailAddress">
     <toolbar>
       <button name="checkDuplicateBtn" title="Check Duplicate"
         onClick="action-base-method-show-duplicate"/>
@@ -13,7 +13,7 @@
   </grid>
 
   <form name="email-address-form" title="Email address"
-    model="com.axelor.apps.message.db.EmailAddress">
+    model="com.axelor.message.db.EmailAddress">
     <panel name="mainPanel">
       <field name="address"
         pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
@@ -24,7 +24,7 @@
   </form>
 
   <form name="email-address-simple-form" title="Email address"
-    model="com.axelor.apps.message.db.EmailAddress">
+    model="com.axelor.message.db.EmailAddress">
     <panel name="mainPanel">
       <field name="address"
         pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"

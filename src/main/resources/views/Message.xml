@@ -3,14 +3,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
 
-  <grid name="message-grid" title="Emails" model="com.axelor.apps.message.db.Message"
+  <grid name="message-grid" title="Emails" model="com.axelor.message.db.Message"
     orderBy="-sentDateT">
     <field name="sentDateT"/>
     <field name="senderUser" form-view="user-form" grid-view="user-grid"/>
     <field name="subject"/>
   </grid>
 
-  <grid name="message-not-sent-grid" title="Emails" model="com.axelor.apps.message.db.Message"
+  <grid name="message-not-sent-grid" title="Emails" model="com.axelor.message.db.Message"
     orderBy="-sentDateT" canNew="false" canDelete="false" canArchive="false">
     <toolbar>
       <button name="regenerateMessageBtn" title="Regenerate messages"
@@ -23,7 +23,7 @@
     <field name="subject"/>
   </grid>
 
-  <form name="message-form" title="Email" model="com.axelor.apps.message.db.Message"
+  <form name="message-form" title="Email" model="com.axelor.message.db.Message"
     onNew="action-group-message-message-onnew">
     <toolbar>
       <button name="printBtn" title="Print" icon="fa-print"
@@ -124,17 +124,17 @@
   </action-group>
 
   <action-record name="action-message-record-default-media-type"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <field name="mediaTypeSelect" expr="eval: _mediaTypeSelect" if="_mediaTypeSelect"/>
   </action-record>
 
   <action-record name="action-message-record-default"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <field name="senderUser" expr="eval:__user__"/>
   </action-record>
 
   <action-record name="action-message-record-mail-account"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <field name="mailAccount"
       expr="eval: __repo__(EmailAccount).all().filter('self.isDefault = true and self.user = ?1',senderUser).fetchOne()"
       if="__config__.app.getApp('base')?.getEmailAccountByUser()"/>
@@ -144,36 +144,35 @@
   </action-record>
 
   <action-record name="action-message-record-get-signature"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <field name="content"
       expr="eval: '&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;' + mailAccount?.signature"
       if="content == null &amp;&amp; mailAccount?.signature != null"/>
   </action-record>
 
   <action-record name="action-message-record-delete-status"
-    model="com.axelor.apps.message.db.Message">
+    model="com.axelor.message.db.Message">
     <field name="statusSelect" expr="4"/>
   </action-record>
 
 
   <!-- ACTION METHOD -->
   <action-method name="action-message-method-send-message">
-    <call class="com.axelor.apps.message.web.MessageController" method="sendMessage"/>
+    <call class="com.axelor.message.web.MessageController" method="sendMessage"/>
   </action-method>
 
   <action-method name="action-message-method-send-messages">
-    <call class="com.axelor.apps.message.web.MessageController" method="sendMessages"/>
+    <call class="com.axelor.message.web.MessageController" method="sendMessages"/>
   </action-method>
 
   <action-method name="action-message-method-regenerate-messages">
-    <call class="com.axelor.apps.message.web.MessageController" method="regenerateMessages"/>
+    <call class="com.axelor.message.web.MessageController" method="regenerateMessages"/>
   </action-method>
 
   <!-- Common action for all messages sent by email using a template and the context -->
 
   <action-method name="action-send-by-email-with-template">
-    <call class="com.axelor.apps.message.web.GenerateMessageController"
-      method="callMessageWizard"/>
+    <call class="com.axelor.message.web.GenerateMessageController" method="callMessageWizard"/>
   </action-method>
 
   <action-validate name="action-validate-message-content-onsave">
@@ -181,8 +180,8 @@
       if="mediaTypeSelect == 1 &amp;&amp; content== null"/>
   </action-validate>
 
-  <action-view name="action.message.view.messages"
-    model="com.axelor.apps.message.db.Message" title="Mail">
+  <action-view name="action.message.view.messages" model="com.axelor.message.db.Message"
+    title="Mail">
     <view name="message-grid" type="grid"/>
     <view name="message-form" type="form"/>
     <domain>self.id IN (SELECT message.id FROM MultiRelated as related WHERE related.relatedToSelect
@@ -192,7 +191,7 @@
   </action-view>
 
   <action-method name="action-message-method-display-generate-message">
-    <call class="com.axelor.apps.message.web.MessageController" method="setContextValues"/>
+    <call class="com.axelor.message.web.MessageController" method="setContextValues"/>
   </action-method>
 
 </object-views>
