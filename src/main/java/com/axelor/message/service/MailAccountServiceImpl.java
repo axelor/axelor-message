@@ -32,6 +32,7 @@ import com.axelor.message.db.repo.EmailAddressRepository;
 import com.axelor.message.db.repo.MessageRepository;
 import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.meta.MetaFiles;
+import com.axelor.utils.ExceptionTool;
 import com.axelor.utils.date.DateTool;
 import com.axelor.utils.service.CipherService;
 import com.google.common.collect.Lists;
@@ -392,7 +393,7 @@ public class MailAccountServiceImpl implements MailAccountService {
         InputStream stream = source.getInputStream();
         metaFiles.attach(stream, source.getName(), message);
       } catch (IOException e) {
-        log.error(e.getMessage(), e);
+        ExceptionTool.trace(e);
       }
     }
   }

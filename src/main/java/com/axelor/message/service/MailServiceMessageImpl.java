@@ -36,6 +36,7 @@ import com.axelor.message.db.EmailAddress;
 import com.axelor.message.db.repo.EmailAddressRepository;
 import com.axelor.meta.MetaFiles;
 import com.axelor.meta.db.MetaAttachment;
+import com.axelor.utils.ExceptionTool;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -143,7 +144,7 @@ public class MailServiceMessageImpl extends MailServiceImpl {
             try {
               fetch(reader);
             } catch (Exception e) {
-              log.error("Unable to fetch messages", e);
+              ExceptionTool.trace("Unable to fetch messages", e);
             }
           });
     }

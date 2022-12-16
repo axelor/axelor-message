@@ -25,35 +25,36 @@ import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.message.service.MessageService;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
+import com.axelor.utils.ExceptionTool;
 import com.axelor.utils.ModelTool;
 import com.google.inject.Singleton;
 import java.util.List;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 public class MessageController {
 
   public void sendMessage(ActionRequest request, ActionResponse response) {
-    Message message = request.getContext().asType(Message.class);
-
     try {
+      Message message = request.getContext().asType(Message.class);
+
       Beans.get(MessageService.class)
           .sendMessage(Beans.get(MessageRepository.class).find(message.getId()));
       response.setReload(true);
       response.setInfo(I18n.get(MessageExceptionMessage.MESSAGE_4));
     } catch (Exception e) {
-      LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
-      response.setException(e);
+      ExceptionTool.trace(response, e);
     }
   }
 
   @SuppressWarnings("unchecked")
   public void sendMessages(ActionRequest request, ActionResponse response) {
-    List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
     try {
+      List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
+
       if (idList == null) {
-        throw new IllegalStateException(
-            I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
+        ExceptionTool.trace(
+            response, I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
+        return;
       }
       MessageService messageService = Beans.get(MessageService.class);
       ModelTool.apply(Message.class, idList, messageService::sendMessage);
@@ -62,18 +63,19 @@ public class MessageController {
               I18n.get(MessageExceptionMessage.MESSAGES_SEND_IN_PROGRESS), idList.size()));
       response.setReload(true);
     } catch (Exception e) {
-      LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
-      response.setException(e);
+      ExceptionTool.trace(response, e);
     }
   }
 
   @SuppressWarnings("unchecked")
   public void regenerateMessages(ActionRequest request, ActionResponse response) {
-    List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
     try {
+      List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
+
       if (idList == null) {
-        throw new IllegalStateException(
-            I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
+        ExceptionTool.trace(
+            response, I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
+        return;
       }
       MessageService messageService = Beans.get(MessageService.class);
       int error = ModelTool.apply(Message.class, idList, messageService::regenerateMessage);
@@ -84,12 +86,15 @@ public class MessageController {
               error));
       response.setReload(true);
     } catch (Exception e) {
-      LoggerFactory.getLogger(MessageController.class).error(e.getMessage(), e);
-      response.setException(e);
+      ExceptionTool.trace(response, e);
     }
   }
 
   public void setContextValues(ActionRequest request, ActionResponse response) {
-    response.setValues(request.getContext().get("_message"));
+    try {
+      response.setValues(request.getContext().get("_message"));
+    } catch (Exception e) {
+      ExceptionTool.trace(response, e);
+    }
   }
 }

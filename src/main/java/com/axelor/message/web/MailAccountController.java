@@ -25,8 +25,8 @@ import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.message.service.MailAccountService;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
+import com.axelor.utils.ExceptionTool;
 import com.google.inject.Singleton;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 public class MailAccountController {
@@ -42,8 +42,8 @@ public class MailAccountController {
       response.setInfo(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_3));
 
     } catch (Exception e) {
-      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
       response.setValue("isValid", Boolean.FALSE);
+      ExceptionTool.trace(response, e);
     }
   }
 
@@ -52,9 +52,8 @@ public class MailAccountController {
       EmailAccount account = request.getContext().asType(EmailAccount.class);
       Beans.get(MailAccountService.class).checkDefaultMailAccount(account);
     } catch (Exception e) {
-      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
       response.setAttr("isDefault", "value", false);
-      response.setInfo(e.getMessage());
+      ExceptionTool.trace(response, e);
     }
   }
 
@@ -67,8 +66,7 @@ public class MailAccountController {
 
       response.setInfo(I18n.get(String.format("Total email fetched: %s", totalFetched)));
     } catch (Exception e) {
-      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
-      response.setException(e);
+      ExceptionTool.trace(response, e);
     }
   }
 
@@ -80,8 +78,7 @@ public class MailAccountController {
             Beans.get(MailAccountService.class)
                 .getEncryptPassword(request.getContext().get("newPassword").toString()));
     } catch (Exception e) {
-      LoggerFactory.getLogger(MailAccountController.class).error(e.getMessage(), e);
-      response.setException(e);
+      ExceptionTool.trace(response, e);
     }
   }
 }

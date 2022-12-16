@@ -32,6 +32,7 @@ import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
+import com.axelor.utils.ExceptionTool;
 import com.google.inject.Singleton;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
@@ -44,20 +45,18 @@ public class GenerateMessageController {
   private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   public void callMessageWizard(ActionRequest request, ActionResponse response) {
-
-    Model context = request.getContext().asType(Model.class);
-    String model = request.getModel();
-
-    LOG.debug("Call message wizard for model : {} ", model);
-
-    String[] decomposeModel = model.split("\\.");
-    String simpleModel = decomposeModel[decomposeModel.length - 1];
-    Query<? extends Template> templateQuery =
-        Beans.get(TemplateRepository.class)
-            .all()
-            .filter("self.metaModel.fullName = ?1 AND self.isSystem != true", model);
-
     try {
+      Model context = request.getContext().asType(Model.class);
+      String model = request.getModel();
+
+      LOG.debug("Call message wizard for model : {} ", model);
+
+      String[] decomposeModel = model.split("\\.");
+      String simpleModel = decomposeModel[decomposeModel.length - 1];
+      Query<? extends Template> templateQuery =
+          Beans.get(TemplateRepository.class)
+              .all()
+              .filter("self.metaModel.fullName = ?1 AND self.isSystem != true", model);
 
       long templateNumber = templateQuery.count();
 
@@ -94,33 +93,30 @@ public class GenerateMessageController {
       }
 
     } catch (Exception e) {
-      response.setException(e);
-      LOG.error(e.getMessage(), e);
+      ExceptionTool.trace(response, e);
     }
   }
 
   public void generateMessage(ActionRequest request, ActionResponse response) {
-
-    Context context = request.getContext();
-    Map<?, ?> templateContext = (Map<?, ?>) context.get("_xTemplate");
-    Template template = null;
-    if (templateContext != null) {
-      template =
-          Beans.get(TemplateRepository.class)
-              .find(Long.parseLong(templateContext.get("id").toString()));
-    }
-
-    Long objectId = Long.parseLong(context.get("_objectId").toString());
-    String model = (String) context.get("_templateContextModel");
-    String tag = (String) context.get("_tag");
-
     try {
+      Context context = request.getContext();
+      Map<?, ?> templateContext = (Map<?, ?>) context.get("_xTemplate");
+      Template template = null;
+      if (templateContext != null) {
+        template =
+            Beans.get(TemplateRepository.class)
+                .find(Long.parseLong(templateContext.get("id").toString()));
+      }
+
+      Long objectId = Long.parseLong(context.get("_objectId").toString());
+      String model = (String) context.get("_templateContextModel");
+      String tag = (String) context.get("_tag");
+
       response.setView(
           Beans.get(GenerateMessageService.class).generateMessage(objectId, model, tag, template));
       response.setCanClose(true);
     } catch (Exception e) {
-      response.setException(e);
-      LOG.error(e.getMessage(), e);
+      ExceptionTool.trace(response, e);
     }
   }
 }

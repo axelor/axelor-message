@@ -41,6 +41,7 @@ import com.axelor.meta.MetaFiles;
 import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
 import com.axelor.meta.db.repo.MetaAttachmentRepository;
+import com.axelor.utils.ExceptionTool;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -276,7 +277,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     try {
       sendMessage(message, false);
     } catch (MessagingException e) {
-      log.error(e.getMessage(), e);
+      ExceptionTool.trace(e);
     }
     return message;
   }

@@ -30,21 +30,21 @@ import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
-import org.slf4j.LoggerFactory;
+import com.axelor.utils.ExceptionTool;
 
 public class TemplateController {
 
   public void generateDraftMessage(ActionRequest request, ActionResponse response) {
-    Context context = request.getContext();
-    Template template = context.asType(Template.class);
-    template = Beans.get(TemplateRepository.class).find(template.getId());
-    MetaModel metaModel =
-        Beans.get(MetaModelRepository.class)
-            .all()
-            .filter("self.fullName = ?", context.get("reference").toString())
-            .fetchOne();
-
     try {
+      Context context = request.getContext();
+      Template template = context.asType(Template.class);
+      template = Beans.get(TemplateRepository.class).find(template.getId());
+      MetaModel metaModel =
+          Beans.get(MetaModelRepository.class)
+              .all()
+              .filter("self.fullName = ?", context.get("reference").toString())
+              .fetchOne();
+
       Message message =
           Beans.get(TemplateService.class)
               .generateDraftMessage(template, metaModel, context.get("referenceId").toString());
@@ -57,8 +57,7 @@ public class TemplateController {
               .context("_message", message)
               .map());
     } catch (Exception e) {
-      LoggerFactory.getLogger(TemplateController.class).error(e.getMessage(), e);
-      response.setException(e);
+      ExceptionTool.trace(response, e);
     }
   }
 }

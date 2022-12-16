@@ -20,6 +20,7 @@ package com.axelor.message.job;
 import com.axelor.message.db.EmailAccount;
 import com.axelor.message.db.repo.EmailAccountRepository;
 import com.axelor.message.service.MailAccountService;
+import com.axelor.utils.ExceptionTool;
 import com.google.inject.Inject;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -58,7 +59,7 @@ public class FetchEmailJob implements Job {
         Integer total = mailAccountService.fetchEmails(account, true);
         log.debug("Email fetched for account: {}, total: {} ", account.getName(), total);
       } catch (MessagingException | IOException e) {
-        log.error(e.getMessage(), e);
+        ExceptionTool.trace(e);
       }
     }
   }
