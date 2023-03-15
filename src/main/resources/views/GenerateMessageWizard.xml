@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_6.0.xsd">
 
 
-  <form name="generate-message-wizard-form" model="com.axelor.message.db.Wizard"
+  <form name="generate-message-wizard-form" model="com.axelor.utils.db.Wizard"
     title="Generate message" onNew="action-generate-message-group-on-new">
     <panel name="mainPanel">
       <field name="language" title="Language" widget="SuggestBox" type="MANY_TO_ONE"
@@ -25,7 +25,7 @@
   </action-group>
 
   <action-record name="action-generate-message-record-on-new"
-    model="com.axelor.message.db.Wizard">
+    model="com.axelor.utils.db.Wizard">
     <field name="_xTemplate"
       expr="eval:__repo__(Template).all().filter('self.metaModel.fullName = ?1 and self.isDefault = true and self.isSystem != true',_templateContextModel).fetchOne()"/>
     <field name="language"
