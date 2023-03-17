@@ -17,7 +17,6 @@
  */
 package com.axelor.message.service;
 
-import com.axelor.app.AppSettings;
 import com.axelor.auth.AuthUtils;
 import com.axelor.common.ObjectUtils;
 import com.axelor.db.JPA;
@@ -70,20 +69,22 @@ import wslite.json.JSONObject;
 public class MessageServiceImpl extends JpaSupport implements MessageService {
 
   protected final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-  private static final String CONFIG_SENDINGBLUE_URL_SENDSMS = "bondici.sendinblue.url.sendsms";
 
   protected final MetaAttachmentRepository metaAttachmentRepository;
   protected final MessageRepository messageRepository;
   protected final SendMailQueueService sendMailQueueService;
+  protected final AppSettingsMessageService appSettingsMessageService;
 
   @Inject
   public MessageServiceImpl(
       MetaAttachmentRepository metaAttachmentRepository,
       MessageRepository messageRepository,
-      SendMailQueueService sendMailQueueService) {
+      SendMailQueueService sendMailQueueService,
+      AppSettingsMessageService appSettingsMessageService) {
     this.metaAttachmentRepository = metaAttachmentRepository;
     this.messageRepository = messageRepository;
     this.sendMailQueueService = sendMailQueueService;
+    this.appSettingsMessageService = appSettingsMessageService;
   }
 
   @Override
@@ -463,7 +464,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     RequestBody body = RequestBody.create(mediaType, datas);
     Request request =
         new Request.Builder()
-            .url(AppSettings.get().get(CONFIG_SENDINGBLUE_URL_SENDSMS))
+            .url(appSettingsMessageService.sendingblueUrlSendsms())
             .header("api-key", message.getMailAccount().getSendingblueApiKey())
             .post(body)
             .build();
