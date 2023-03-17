@@ -7,8 +7,8 @@ import javax.annotation.concurrent.ThreadSafe;
 
 @Singleton
 @ThreadSafe
-public class AppSettingsMessageServiceImpl extends AppSettingsServiceImpl implements
-    AppSettingsMessageService {
+public class AppSettingsMessageServiceImpl extends AppSettingsServiceImpl
+    implements AppSettingsMessageService {
 
   public String sendingblueUrlSendsms() {
     return AppSettings.get().get("bondici.sendinblue.url.sendsms");
