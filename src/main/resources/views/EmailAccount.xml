@@ -36,8 +36,8 @@
     </panel>
     <panel name="actionsPanel" sidebar="true">
       <field name="isValid" readonly="true"/>
-      <button name="testConnectionBtn"
-        onClick="save,action-method-mail-account-validate" title="Test connection"/>
+      <button name="testConnectionBtn" onClick="save,action-method-mail-account-validate"
+        title="Test connection"/>
       <spacer name="btnSpacer"/>
       <button name="fetchEmailsBtn" onClick="save,action-mail-account-metho-fetch-emails"
         title="Fetch emails"

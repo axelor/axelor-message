@@ -34,8 +34,8 @@ public class MailAccountController {
 
   public void validateSmtpAccount(ActionRequest request, ActionResponse response) {
     try {
-      EmailAccount account = Beans.get(Processor.class)
-          .process(EmailAccount.class, request.getContext());
+      EmailAccount account =
+          Beans.get(Processor.class).process(EmailAccount.class, request.getContext());
       Beans.get(MailAccountService.class).checkMailAccountConfiguration(account);
       response.setReload(true);
       response.setInfo(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_3));
