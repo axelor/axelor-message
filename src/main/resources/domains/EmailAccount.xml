@@ -11,13 +11,13 @@
     <integer name="serverTypeSelect" title="Server Type" required="true"
       selection="mail.account.server.type.select" default="1"/>
     <string name="login" title="Login"/>
-    <string name="password" title="Password"/>
+    <string name="password" title="Password" copy="false"/>
     <string name="host" title="Host" required="true"/>
     <integer name="port" title="Port" min="1" nullable="true"/>
     <integer name="securitySelect" title="SSL/STARTTLS"
       selection="mail.account.security.select"/>
     <boolean name="isDefault" title="Default account"/>
-    <boolean name="isValid" title="Valid"/>
+    <boolean name="isValid" title="Valid" copy="false"/>
     <string name="signature" title="Signature" large="true"/>
     <string name="fromName" title="From email name"/>
     <string name="fromAddress" title="From email address"/>

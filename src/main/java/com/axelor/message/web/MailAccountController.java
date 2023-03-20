@@ -26,6 +26,7 @@ import com.axelor.message.service.MailAccountService;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.utils.ExceptionTool;
+import com.axelor.utils.context.adapters.Processor;
 import com.google.inject.Singleton;
 
 @Singleton
@@ -33,16 +34,12 @@ public class MailAccountController {
 
   public void validateSmtpAccount(ActionRequest request, ActionResponse response) {
     try {
-      EmailAccount account = request.getContext().asType(EmailAccount.class);
+      EmailAccount account = Beans.get(Processor.class)
+          .process(EmailAccount.class, request.getContext());
       Beans.get(MailAccountService.class).checkMailAccountConfiguration(account);
-
-      response.setValue("isValid", Boolean.TRUE);
-      response.setValue("change", Boolean.FALSE);
-      response.setValue("newPassword", null);
+      response.setReload(true);
       response.setInfo(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_3));
-
     } catch (Exception e) {
-      response.setValue("isValid", Boolean.FALSE);
       ExceptionTool.trace(response, e);
     }
   }

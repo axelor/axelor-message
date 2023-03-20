@@ -143,13 +143,11 @@ public class MailAccountServiceImpl implements MailAccountService {
   }
 
   @Override
+  @Transactional(ignore = Exception.class)
   public void checkMailAccountConfiguration(EmailAccount mailAccount) throws MessagingException {
-
-    com.axelor.mail.MailAccount account = getMailAccount(mailAccount);
-
-    Session session = account.getSession();
-
     try {
+      com.axelor.mail.MailAccount account = getMailAccount(mailAccount);
+      Session session = account.getSession();
 
       if (mailAccount.getServerTypeSelect().equals(EmailAccountRepository.SERVER_TYPE_SMTP)) {
         Transport transport = session.getTransport(getProtocol(mailAccount));
@@ -162,11 +160,15 @@ public class MailAccountServiceImpl implements MailAccountService {
       } else {
         session.getStore().connect();
       }
-
+      mailAccount.setIsValid(true);
     } catch (AuthenticationFailedException e) {
+      mailAccount.setIsValid(false);
       throw new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_1), e);
     } catch (NoSuchProviderException e) {
+      mailAccount.setIsValid(false);
       throw new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_2), e);
+    } finally {
+      mailAccountRepo.save(mailAccount);
     }
   }
 
