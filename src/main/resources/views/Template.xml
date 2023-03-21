@@ -52,8 +52,8 @@
     <panel-tabs name="mainPanelTab">
       <panel name="subjectContentPanel" title="Content" colSpan="12">
         <field name="subject" colSpan="12" height="2"/>
-        <field name="content" showTitle="false" colSpan="12" widget="html"
-          hidden="true" showIf="mediaTypeSelect != 5"/>
+        <field name="content" showTitle="false" colSpan="12" widget="html" hidden="true"
+          showIf="mediaTypeSelect != 5"/>
         <field name="content" colSpan="12" showTitle="false" widget="html" x-lite="true"
           hidden="true" showIf="mediaTypeSelect == 5"/>
       </panel>

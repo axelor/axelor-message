@@ -123,8 +123,8 @@
     </panel>
     <panel name="contentPanel" title="Content" readonlyIf="statusSelect != 1">
       <field name="subject" title="Subject" colSpan="12" required="true"/>
-      <field name="content" colSpan="12" showTitle="false" widget="html"
-        hidden="true" showIf="mediaTypeSelect != 5"/>
+      <field name="content" colSpan="12" showTitle="false" widget="html" hidden="true"
+        showIf="mediaTypeSelect != 5"/>
       <field name="content" colSpan="12" showTitle="false" widget="html" x-lite="true"
         hidden="true" showIf="mediaTypeSelect == 5"/>
     </panel>
