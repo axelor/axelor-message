@@ -1,5 +1,7 @@
 ## Current (unreleased)
 
+## 1.0.1
+
 * Anomalie #62504: Menu: Plural form missing ('s')
 * Anomalie #62744: Fixed a bug that could occur when sending a mail with no content
 
