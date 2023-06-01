@@ -1,5 +1,3 @@
-## Current (unreleased)
-
 ## 1.0.1
 
 * Anomalie #62504: Menu: Plural form missing ('s')
