@@ -31,8 +31,8 @@
       <field name="login"/>
       <field name="password" widget="password"/>
     </panel>
-    <panel name="sendinBlueApiPanel" title="SendinBlue identification">
-      <field name="sendingblueApiKey" colSpan="12"/>
+    <panel name="brevoApiPanel" title="Brevo identification">
+      <field name="brevoApiKey" colSpan="12"/>
     </panel>
     <panel name="actionsPanel" sidebar="true">
       <field name="isValid" readonly="true"/>
