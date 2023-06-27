@@ -11,6 +11,6 @@ public class AppSettingsMessageServiceImpl extends AppSettingsServiceImpl
     implements AppSettingsMessageService {
 
   public String sendingblueUrlSendsms() {
-    return AppSettings.get().get("bondici.sendinblue.url.sendsms");
+    return AppSettings.get().get("sendinblue.url.send.sms");
   }
 }

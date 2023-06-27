@@ -442,7 +442,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   public Message sendSMS(Message message) throws IOException, JSONException {
 
     if (message.getMailAccount() == null
-        || Strings.isNullOrEmpty(message.getMailAccount().getSendingblueApiKey())) {
+        || Strings.isNullOrEmpty(message.getMailAccount().getBrevoApiKey())) {
       return message;
     }
     if (Strings.isNullOrEmpty(message.getToMobilePhone())) {
@@ -467,7 +467,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     Request request =
         new Request.Builder()
             .url(appSettingsMessageService.sendingblueUrlSendsms())
-            .header("api-key", message.getMailAccount().getSendingblueApiKey())
+            .header("api-key", message.getMailAccount().getBrevoApiKey())
             .post(body)
             .build();
     Response response = client.newCall(request).execute();
