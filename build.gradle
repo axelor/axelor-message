@@ -38,9 +38,8 @@ dependencies {
 	implementation "com.squareup.okhttp3:okhttp:4.10.0-RC1"
 	if (findProject(":modules:axelor-utils") != null) {
 		api project(":modules:axelor-utils")
-	}
-	else {
-		api "com.axelor.addons:axelor-utils:1.0.0"
+	} else {
+		api "com.axelor.addons:axelor-utils:1.2.0"
 	}
 	api "com.github.groovy-wslite:groovy-wslite:1.1.3"
 }
