@@ -1,3 +1,14 @@
+## 1.1.0 (2023-07-03)
+
+#### Changes
+
+* EmailAccount : Sendinblue connector for sending SMS issues
+
+#### Features
+
+* Bump AOP version to 6.1.3
+* Update xsd to 6.1
+
 ## 1.0.1
 
 * Anomalie #62504: Menu: Plural form missing ('s')
