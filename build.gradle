@@ -36,7 +36,7 @@ axelor {
 
 dependencies {
 	implementation "com.squareup.okhttp3:okhttp:4.10.0-RC1"
-	if (file("../axelor-utils").exists()) {
+	if (findProject(":modules:axelor-utils") != null) {
 		api project(":modules:axelor-utils")
 	}
 	else {
