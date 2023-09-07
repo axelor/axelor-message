@@ -45,7 +45,7 @@
       <field name="bccRecipients" height="2" colSpan="12"/>
     </panel>
     <panel name="recipientPanel" title="Recipient"
-      readonlyIf="statusSelect == 2 || statusSelect == 3" showIf="mediaTypeSelect == 4"
+      readonlyIf="statusSelect == 2 || statusSelect == 3" showIf="mediaTypeSelect == 5"
       hidden="true" colSpan="12">
       <field name="toMobilePhone" widget="phone"/>
     </panel>
