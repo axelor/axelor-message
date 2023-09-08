@@ -1,3 +1,9 @@
+## 1.2.0 (2023-09-08)
+
+#### Fixed
+
+* Fix toMobilePhone field visibility condition
+
 ## 1.1.0 (2023-07-03)
 
 #### Changes
