@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.mail.MessagingException;
-import wslite.json.JSONException;
 
 public interface TemplateMessageService {
 
@@ -115,7 +114,7 @@ public interface TemplateMessageService {
    * @throws IllegalAccessException
    */
   public Message generateAndSendMessage(Model model, Template template)
-      throws IOException, ClassNotFoundException, JSONException;
+      throws IOException, ClassNotFoundException;
 
   /**
    * Send the transient {@link Message} generated from the template and model.<br>
@@ -131,7 +130,7 @@ public interface TemplateMessageService {
    * @throws IllegalAccessException
    */
   public Message generateAndSendTemporaryMessage(Model model, Template template)
-      throws MessagingException, IOException, ClassNotFoundException, JSONException;
+      throws MessagingException, IOException, ClassNotFoundException;
 
   public Set<MetaFile> getMetaFiles(
       Template template, Templates templates, Map<String, Object> templatesContext);

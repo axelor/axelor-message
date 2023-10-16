@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import javax.mail.MessagingException;
-import wslite.json.JSONException;
 
 public interface MessageService {
 
@@ -99,7 +98,7 @@ public interface MessageService {
    * @param message
    * @return
    */
-  public Message sendMessage(Message message) throws JSONException, IOException;
+  public Message sendMessage(Message message) throws IOException;
 
   /**
    * Send {@link Message}.
@@ -114,7 +113,7 @@ public interface MessageService {
    * @throws MessagingException
    */
   public Message sendMessage(Message message, Boolean isTemporaryEmail)
-      throws MessagingException, JSONException, IOException;
+      throws MessagingException, IOException;
 
   /**
    * Send {@link Message} as Email.
@@ -148,7 +147,7 @@ public interface MessageService {
   public Message sendByMail(Message message);
 
   @Transactional(rollbackOn = {Exception.class})
-  public Message sendSMS(Message message) throws IOException, JSONException;
+  public Message sendSMS(Message message) throws IOException;
 
   public String printMessage(Message message);
 

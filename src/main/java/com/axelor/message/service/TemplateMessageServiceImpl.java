@@ -58,7 +58,6 @@ import java.util.Set;
 import javax.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wslite.json.JSONException;
 
 public class TemplateMessageServiceImpl implements TemplateMessageService {
 
@@ -263,7 +262,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateAndSendMessage(Model model, Template template)
-      throws IOException, ClassNotFoundException, JSONException {
+      throws IOException, ClassNotFoundException {
 
     Message message = this.generateMessage(model, template);
     messageService.sendMessage(message);
@@ -273,7 +272,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   @Override
   public Message generateAndSendTemporaryMessage(Model model, Template template)
-      throws MessagingException, IOException, ClassNotFoundException, JSONException {
+      throws MessagingException, IOException, ClassNotFoundException {
 
     Message message = this.generateMessage(model, template, true);
     messageService.sendMessage(message, true);

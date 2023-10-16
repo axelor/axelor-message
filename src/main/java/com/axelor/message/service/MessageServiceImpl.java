@@ -41,6 +41,7 @@ import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
 import com.axelor.meta.db.repo.MetaAttachmentRepository;
 import com.axelor.utils.ExceptionTool;
+import com.axelor.utils.json.JsonUtils;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -61,10 +62,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.groovy.util.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wslite.json.JSONException;
-import wslite.json.JSONObject;
 
 public class MessageServiceImpl extends JpaSupport implements MessageService {
 
@@ -254,27 +254,24 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
       content += "<p></p><p></p>" + Beans.get(MailAccountService.class).getSignature(emailAccount);
     }
 
-    Message message =
-        new Message(
-            typeSelect,
-            subject,
-            content,
-            statusSelect,
-            mediaTypeSelect,
-            addressBlock,
-            fromEmailAddress,
-            replyToEmailAddressSet,
-            toEmailAddressSet,
-            ccEmailAddressSet,
-            bccEmailAddressSet,
-            sentByEmail,
-            emailAccount);
-
-    return message;
+    return new Message(
+        typeSelect,
+        subject,
+        content,
+        statusSelect,
+        mediaTypeSelect,
+        addressBlock,
+        fromEmailAddress,
+        replyToEmailAddressSet,
+        toEmailAddressSet,
+        ccEmailAddressSet,
+        bccEmailAddressSet,
+        sentByEmail,
+        emailAccount);
   }
 
   @Override
-  public Message sendMessage(Message message) throws JSONException, IOException {
+  public Message sendMessage(Message message) throws IOException {
     try {
       sendMessage(message, false);
     } catch (MessagingException e) {
@@ -285,7 +282,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
 
   @Override
   public Message sendMessage(Message message, Boolean isTemporaryEmail)
-      throws MessagingException, JSONException, IOException {
+      throws MessagingException, IOException {
 
     if (!isTemporaryEmail) {
       if (message.getMediaTypeSelect() == MessageRepository.MEDIA_TYPE_MAIL) {
@@ -439,7 +436,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   @Override
   @SuppressWarnings("deprecation")
   @Transactional(rollbackOn = {Exception.class})
-  public Message sendSMS(Message message) throws IOException, JSONException {
+  public Message sendSMS(Message message) throws IOException {
 
     if (message.getMailAccount() == null
         || Strings.isNullOrEmpty(message.getMailAccount().getBrevoApiKey())) {
@@ -456,13 +453,20 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     builder.writeTimeout(30, TimeUnit.SECONDS);
     OkHttpClient client = new OkHttpClient(builder);
     MediaType mediaType = MediaType.parse("application/json");
-    String datas =
-        new JSONObject()
-            .put("sender", getSender(message))
-            .put("recipient", message.getToMobilePhone())
-            .put("content", message.getContent().replaceAll("<\\/*\\w+>", ""))
-            .put("type", "transactional")
-            .toString();
+
+    var map =
+        Maps.of(
+            "sender",
+            getSender(message),
+            "recipient",
+            message.getToMobilePhone(),
+            "content",
+            message.getContent().replaceAll("<\\/*\\w+>", ""),
+            "type",
+            "transactional");
+
+    String datas = JsonUtils.toJson(map);
+
     RequestBody body = RequestBody.create(mediaType, datas);
     Request request =
         new Request.Builder()
@@ -470,10 +474,11 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
             .header("api-key", message.getMailAccount().getBrevoApiKey())
             .post(body)
             .build();
-    Response response = client.newCall(request).execute();
-
-    if (!response.isSuccessful() || response.code() != 201) {
-      throw new IllegalStateException(String.format("%d %s", response.code(), response.message()));
+    try (Response response = client.newCall(request).execute()) {
+      if (!response.isSuccessful() || response.code() != 201) {
+        throw new IllegalStateException(
+            String.format("%d %s", response.code(), response.message()));
+      }
     }
 
     message.setStatusSelect(MessageRepository.STATUS_SENT);

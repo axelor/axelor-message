@@ -47,7 +47,6 @@ dependencies {
   } else {
     api "com.axelor.addons:axelor-utils:2.0.+"
   }
-  api "com.github.groovy-wslite:groovy-wslite:1.1.3"
 }
 
 tasks.register('generateChangelog', GenerateChangelog) {
