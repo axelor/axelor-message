@@ -1,0 +1,4 @@
+"code";"name";"password";"group.code";"email"
+"admin";"Admin";"admin";"admins";"admin@axelor.com"
+"client";"Client";"client";"clients";
+"supplier";"Supplier";"supplier";"suppliers";
