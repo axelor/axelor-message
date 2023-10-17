@@ -19,26 +19,25 @@ package com.axelor.message.service;
 
 import com.axelor.auth.db.User;
 import com.axelor.db.JPA;
+import com.axelor.db.JpaRepository;
 import com.axelor.db.Model;
 import com.axelor.mail.MailConstants;
 import com.axelor.mail.db.MailFlags;
 import com.axelor.mail.db.MailFollower;
-import com.axelor.mail.db.MailMessage;
 import com.axelor.mail.db.repo.MailFollowerRepository;
-import com.axelor.mail.db.repo.MailMessageRepository;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
 public class MailMessageServiceImpl implements MailMessageService {
 
-  protected final MailMessageRepository mailMessageRepository;
   protected final MailFollowerRepository mailFollowerRepository;
+  protected final MailMessageCreator mailMessageCreator;
 
   @Inject
   public MailMessageServiceImpl(
-      MailMessageRepository mailMessageRepository, MailFollowerRepository mailFollowerRepository) {
-    this.mailMessageRepository = mailMessageRepository;
+      MailFollowerRepository mailFollowerRepository, MailMessageCreator mailMessageCreator) {
     this.mailFollowerRepository = mailFollowerRepository;
+    this.mailMessageCreator = mailMessageCreator;
   }
 
   @Override
@@ -51,26 +50,25 @@ public class MailMessageServiceImpl implements MailMessageService {
   @Transactional
   public void sendNotification(
       User user, String subject, String body, Long relatedId, Class<? extends Model> relatedModel) {
-    MailMessage message = new MailMessage();
 
-    message.setSubject(subject);
-    message.setBody(body);
+    long userId = user.getId();
+    mailMessageCreator.persist(
+        userId,
+        body,
+        subject,
+        MailConstants.MESSAGE_TYPE_COMMENT,
+        mailMessage -> {
+          if (relatedId != null && relatedModel != null) {
+            mailMessage.setRelatedId(relatedId);
+            mailMessage.setRelatedModel(relatedModel.getName());
+          }
 
-    message.setAuthor(user);
-    message.setType(MailConstants.MESSAGE_TYPE_COMMENT);
-
-    if (relatedId != null && relatedModel != null) {
-      message.setRelatedId(relatedId);
-      message.setRelatedModel(relatedModel.getName());
-    }
-
-    MailFlags flags = new MailFlags();
-    flags.setMessage(message);
-    flags.setUser(user);
-    flags.setIsRead(Boolean.FALSE);
-    message.addFlag(flags);
-
-    mailMessageRepository.save(message);
+          MailFlags flags = new MailFlags();
+          flags.setMessage(mailMessage);
+          flags.setUser(JpaRepository.of(User.class).find(userId));
+          flags.setIsRead(Boolean.FALSE);
+          mailMessage.addFlag(flags);
+        });
 
     if (relatedId == null || relatedModel == null) {
       return;

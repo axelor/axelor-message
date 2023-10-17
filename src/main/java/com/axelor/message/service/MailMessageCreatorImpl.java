@@ -6,8 +6,7 @@ import com.axelor.mail.db.repo.MailMessageRepository;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
@@ -18,14 +17,14 @@ import java.util.function.Consumer;
 @Singleton
 public class MailMessageCreatorImpl implements MailMessageCreator {
 
-  protected final ExecutorService executorService;
+  protected final ForkJoinPool commonPool;
   protected final MailMessageRepository mailMessageRepository;
   protected final UserRepository userRepository;
 
   @Inject
   public MailMessageCreatorImpl(
       MailMessageRepository mailMessageRepository, UserRepository userRepository) {
-    this.executorService = Executors.newCachedThreadPool();
+    this.commonPool = ForkJoinPool.commonPool();
     this.mailMessageRepository = mailMessageRepository;
     this.userRepository = userRepository;
   }
@@ -62,7 +61,12 @@ public class MailMessageCreatorImpl implements MailMessageCreator {
   @Override
   public Future<MailMessage> persist(
       Long userId, String body, String subject, String type, Consumer<MailMessage> extraConfigs) {
-    return executorService.submit(() -> save(create(userId, body, subject, type, extraConfigs)));
+    return commonPool.submit(() -> save(create(userId, body, subject, type, extraConfigs)));
+  }
+
+  @Override
+  public boolean idle() {
+    return commonPool.isQuiescent();
   }
 
   @Transactional(rollbackOn = Exception.class)

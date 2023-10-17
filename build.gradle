@@ -47,6 +47,7 @@ dependencies {
   } else {
     api "com.axelor.addons:axelor-utils:2.0.+"
   }
+  testImplementation 'org.awaitility:awaitility:4.2.0'
 }
 
 tasks.register('generateChangelog', GenerateChangelog) {

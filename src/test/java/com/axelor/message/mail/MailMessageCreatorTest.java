@@ -32,6 +32,7 @@ class MailMessageCreatorTest extends BaseTest {
     MailMessage message = mailMessageCreator.persist(1L, "body", "subject", "type").get();
 
     Assertions.assertNotNull(message);
+    Assertions.assertNotNull(message.getId());
     Assertions.assertEquals("body", message.getBody());
     Assertions.assertEquals("subject", message.getSubject());
     Assertions.assertEquals("type", message.getType());
@@ -45,6 +46,7 @@ class MailMessageCreatorTest extends BaseTest {
     MailMessage message = mailMessageCreator.persist(null, null, null, null).get();
 
     Assertions.assertNotNull(message);
+    Assertions.assertNotNull(message.getId());
     Assertions.assertNull(message.getBody());
     Assertions.assertNull(message.getSubject());
     Assertions.assertNull(message.getType());
@@ -68,6 +70,7 @@ class MailMessageCreatorTest extends BaseTest {
             .get();
 
     Assertions.assertNotNull(message);
+    Assertions.assertNotNull(message.getId());
     Assertions.assertEquals("body", message.getBody());
     Assertions.assertEquals("subject", message.getSubject());
     Assertions.assertEquals("type", message.getType());

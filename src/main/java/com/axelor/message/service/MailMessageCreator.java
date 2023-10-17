@@ -57,4 +57,7 @@ public interface MailMessageCreator {
    */
   Future<MailMessage> persist(
       Long userId, String body, String subject, String type, Consumer<MailMessage> extraConfigs);
+
+  /** @return true if the MailMessageCreator is currently persisting MailMessage objects. */
+  boolean idle();
 }
