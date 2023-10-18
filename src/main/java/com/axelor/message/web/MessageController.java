@@ -25,8 +25,8 @@ import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.message.service.MessageService;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
-import com.axelor.utils.ExceptionTool;
-import com.axelor.utils.ModelTool;
+import com.axelor.utils.helpers.ExceptionHelper;
+import com.axelor.utils.helpers.ModelHelper;
 import com.google.inject.Singleton;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class MessageController {
       response.setReload(true);
       response.setInfo(I18n.get(MessageExceptionMessage.MESSAGE_4));
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 
@@ -52,18 +52,18 @@ public class MessageController {
       List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
 
       if (idList == null) {
-        ExceptionTool.trace(
+        ExceptionHelper.trace(
             response, I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
         return;
       }
       MessageService messageService = Beans.get(MessageService.class);
-      ModelTool.apply(Message.class, idList, messageService::sendMessage);
+      ModelHelper.apply(Message.class, idList, messageService::sendMessage);
       response.setInfo(
           String.format(
               I18n.get(MessageExceptionMessage.MESSAGES_SEND_IN_PROGRESS), idList.size()));
       response.setReload(true);
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 
@@ -73,12 +73,12 @@ public class MessageController {
       List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
 
       if (idList == null) {
-        ExceptionTool.trace(
+        ExceptionHelper.trace(
             response, I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
         return;
       }
       MessageService messageService = Beans.get(MessageService.class);
-      int error = ModelTool.apply(Message.class, idList, messageService::regenerateMessage);
+      int error = ModelHelper.apply(Message.class, idList, messageService::regenerateMessage);
       response.setInfo(
           String.format(
               I18n.get(MessageExceptionMessage.MESSAGES_REGENERATED),
@@ -86,7 +86,7 @@ public class MessageController {
               error));
       response.setReload(true);
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 
@@ -94,7 +94,7 @@ public class MessageController {
     try {
       response.setValues(request.getContext().get("_message"));
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 }

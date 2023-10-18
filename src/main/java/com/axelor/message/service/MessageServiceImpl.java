@@ -40,8 +40,8 @@ import com.axelor.meta.MetaFiles;
 import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
 import com.axelor.meta.db.repo.MetaAttachmentRepository;
-import com.axelor.utils.ExceptionTool;
-import com.axelor.utils.json.JsonUtils;
+import com.axelor.utils.helpers.ExceptionHelper;
+import com.axelor.utils.helpers.json.JsonHelper;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -275,7 +275,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     try {
       sendMessage(message, false);
     } catch (MessagingException e) {
-      ExceptionTool.trace(e);
+      ExceptionHelper.trace(e);
     }
     return message;
   }
@@ -465,7 +465,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
             "type",
             "transactional");
 
-    String datas = JsonUtils.toJson(map);
+    String datas = JsonHelper.toJson(map);
 
     RequestBody body = RequestBody.create(mediaType, datas);
     Request request =

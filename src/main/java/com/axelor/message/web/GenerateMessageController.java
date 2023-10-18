@@ -31,7 +31,7 @@ import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
-import com.axelor.utils.ExceptionTool;
+import com.axelor.utils.helpers.ExceptionHelper;
 import com.axelor.utils.db.Wizard;
 import com.google.inject.Singleton;
 import java.lang.invoke.MethodHandles;
@@ -93,7 +93,7 @@ public class GenerateMessageController {
       }
 
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 
@@ -116,7 +116,7 @@ public class GenerateMessageController {
           Beans.get(GenerateMessageService.class).generateMessage(objectId, model, tag, template));
       response.setCanClose(true);
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 }

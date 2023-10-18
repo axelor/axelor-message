@@ -25,8 +25,8 @@ import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.message.service.MailAccountService;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
-import com.axelor.utils.ExceptionTool;
-import com.axelor.utils.context.adapters.Processor;
+import com.axelor.utils.helpers.ExceptionHelper;
+import com.axelor.utils.helpers.context.adapters.Processor;
 import com.google.inject.Singleton;
 
 @Singleton
@@ -40,7 +40,7 @@ public class MailAccountController {
       response.setReload(true);
       response.setInfo(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_3));
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 
@@ -50,7 +50,7 @@ public class MailAccountController {
       Beans.get(MailAccountService.class).checkDefaultMailAccount(account);
     } catch (Exception e) {
       response.setAttr("isDefault", "value", false);
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 
@@ -63,7 +63,7 @@ public class MailAccountController {
 
       response.setInfo(I18n.get(String.format("Total email fetched: %s", totalFetched)));
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 
@@ -75,7 +75,7 @@ public class MailAccountController {
             Beans.get(MailAccountService.class)
                 .getEncryptPassword(request.getContext().get("newPassword").toString()));
     } catch (Exception e) {
-      ExceptionTool.trace(response, e);
+      ExceptionHelper.trace(response, e);
     }
   }
 }
