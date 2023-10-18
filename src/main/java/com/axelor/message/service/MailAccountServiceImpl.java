@@ -33,7 +33,7 @@ import com.axelor.message.db.repo.MessageRepository;
 import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.meta.MetaFiles;
 import com.axelor.utils.helpers.ExceptionHelper;
-import com.axelor.utils.date.DateTool;
+import com.axelor.utils.helpers.date.LocalDateTimeHelper;
 import com.axelor.utils.service.CipherService;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -344,7 +344,7 @@ public class MailAccountServiceImpl implements MailAccountService {
 
     message.setContent(parser.getHtml());
     message.setSubject(parser.getSubject());
-    message.setSentDateT(DateTool.toLocalDateT(date));
+    message.setSentDateT(LocalDateTimeHelper.toLocalDateT(date));
 
     message = messageRepo.save(message);
 
