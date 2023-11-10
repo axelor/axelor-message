@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_6.1.xsd">
 
-  <menuitem name="mail-conf" title="Message"/>
+  <menuitem name="mail-conf" title="Message" icon="envelope-at" icon-background="green" />
 
   <menuitem name="mail-conf-template" parent="mail-conf" title="Templates"
     action="admin.root.templating.template" order="5"/>
@@ -34,7 +34,7 @@
   </action-view>
 
   <menuitem name="mail-message" parent="mail-conf" title="All messages"
-    action="mail.root.messages" order="25"/>
+    action="mail.root.messages" order="25" tag-count="true"/>
 
   <action-view name="mail.root.messages" title="All messages"
     model="com.axelor.message.db.Message">
@@ -43,7 +43,7 @@
   </action-view>
 
   <menuitem name="mail-message-not-send" title="Messages not sent" parent="mail-conf"
-    order="26" action="mail.root.messages.not.send"/>
+    order="26" action="mail.root.messages.not.send" tag-count="true"/>
 
   <action-view name="mail.root.messages.not.send" title="Messages not sent"
     model="com.axelor.message.db.Message">
