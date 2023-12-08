@@ -152,7 +152,7 @@ findAndReplace() {
 update_properties
 
 if [ "$1" = "start" ]; then
-	shift
+  shift
 
   if [[ ! -f ${APP_DATA_BASE_DIR}/.first_start_completed ]]; then
     wait_for_postgres
@@ -163,7 +163,7 @@ if [ "$1" = "start" ]; then
     touch ${APP_DATA_BASE_DIR}/.first_start_completed
   fi
 
-	exec ${CATALINA_HOME}/bin/catalina.sh run
+  exec ${CATALINA_HOME}/bin/catalina.sh run
 fi
 
 exec "$@"
