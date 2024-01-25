@@ -1,3 +1,19 @@
+## 2.0.0 (2024-01-25)
+
+#### Feature
+
+* Add a thread-safe asynchronous MailMessageCreator
+
+  <details>
+  
+  This change also remove the com.github.groovy-wslite dependency 
+  to get rid of the associated vulnerable transitive dependency and replace it with the usage of 
+  Jackson library by the new JsonUtils classes.
+  The memory leak issue in the sendSMS service is also fixed.
+  
+  </details>
+
+
 ## 1.2.2 (2023-09-14)
 
 #### Fixed
