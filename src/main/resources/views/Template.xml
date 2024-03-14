@@ -28,6 +28,7 @@
       <field name="metaJsonModel" showIf="isJson" form-view="json-model-form"
         grid-view="json-model-grid"/>
       <field name="target"/>
+      <field name="emailAccount" hidden="true" showIf="mediaTypeSelect == 2"/>
     </panel>
     <panel name="recipientAddressPanel" title="Recipient address"
       showIf="mediaTypeSelect == 1">
