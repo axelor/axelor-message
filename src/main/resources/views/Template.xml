@@ -113,6 +113,8 @@
     <field name="metaModel" expr="eval: __parent__?.__parent__?.metaModel"
       if="__parent__?.__parent__?.metaModel"/>
     <field if="_mediaType != null" name="mediaTypeSelect" expr="eval:_mediaType"/>
+    <field name="emailAccount"
+      expr="eval: __repo__(EmailAccount).all().filter('self.isDefault = true').fetchOne()"/>
   </action-record>
 
   <action-record name="action-template-record-is-json-change"

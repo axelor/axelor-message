@@ -173,12 +173,14 @@
 
   <action-record name="action-message-record-mail-account"
     model="com.axelor.message.db.Message">
+    <field name="mailAccount" expr="eval: _templateEmailAccount" if="_templateEmailAccount"/>
     <field name="mailAccount"
       expr="eval: __repo__(EmailAccount).all().filter('self.isDefault = true and self.user = ?1',senderUser).fetchOne()"
-      if="__config__.app.getApp('base')?.getEmailAccountByUser()"/>
+      if="_templateEmailAccount == null &amp;&amp; __config__.app.getApp('base')?.getEmailAccountByUser()"/>
     <field name="mailAccount"
       expr="eval: __repo__(EmailAccount).all().filter('self.isDefault = true').fetchOne()"
-      if="!__config__.app.getApp('base')?.getEmailAccountByUser()"/>
+      if="_templateEmailAccount == null &amp;&amp; !__config__.app.getApp('base')?.getEmailAccountByUser()"/>
+
   </action-record>
 
   <action-record name="action-message-record-get-signature"

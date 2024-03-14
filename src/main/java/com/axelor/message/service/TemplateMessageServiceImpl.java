@@ -232,8 +232,10 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       signature = templates.fromText(template.getSignature()).make(templatesContext).render();
       log.debug("Signature ::: {}", signature);
     }
-    EmailAccount mailAccount = template.getEmailAccount() != null ?
-            template.getEmailAccount() : Beans.get(MailAccountService.class).getDefaultSender();
+    EmailAccount mailAccount =
+        template.getEmailAccount() != null
+            ? template.getEmailAccount()
+            : Beans.get(MailAccountService.class).getDefaultSender();
     EmailAddress fromAddress = null;
 
     if (mailAccount == null) {
