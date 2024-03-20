@@ -21,6 +21,7 @@ import com.axelor.app.AxelorModule;
 import com.axelor.mail.service.MailServiceImpl;
 import com.axelor.message.db.repo.MessageManagementRepository;
 import com.axelor.message.db.repo.MessageRepository;
+import com.axelor.message.listener.ServerStartListener;
 import com.axelor.message.service.AppSettingsMessageService;
 import com.axelor.message.service.AppSettingsMessageServiceImpl;
 import com.axelor.message.service.GenerateMessageService;
@@ -57,5 +58,6 @@ public class MessageModule extends AxelorModule {
     // needed to use event notification methods
     bind(SendMailQueueService.class);
     bind(TemplateService.class);
+    bind(ServerStartListener.class);
   }
 }

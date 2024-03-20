@@ -1,0 +1,8 @@
+name: amd
+title: Axelor Message
+version: '1.0.0'
+start-page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+  - modules/technical-doc/nav.adoc
+  - modules/functional-doc/nav.adoc

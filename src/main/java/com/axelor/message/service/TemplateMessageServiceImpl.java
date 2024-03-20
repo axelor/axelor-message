@@ -169,6 +169,12 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       messageService.attachMetaFiles(message, getMetaFiles(template, templates, templatesContext));
     }
 
+    for (Class<? extends MailMessageAction> mailMessageAction :
+        MailMessageActionRegister.getInstance().getMailActionClasses()) {
+      message = JPA.save(message);
+      message = Beans.get(mailMessageAction).postMailAction(message);
+    }
+
     return message;
   }
 
