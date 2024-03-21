@@ -28,7 +28,7 @@
       <field name="metaJsonModel" showIf="isJson" form-view="json-model-form"
         grid-view="json-model-grid"/>
       <field name="target"/>
-      <field name="emailAccount" hidden="true" showIf="mediaTypeSelect == 2"
+      <field name="mailAccount" hidden="true" showIf="mediaTypeSelect == 2"
         grid-view="mail-account-grid" form-view="mail-account-form" domain="self.isValid = true"/>
     </panel>
     <panel name="recipientAddressPanel" title="Recipient address"
@@ -114,7 +114,7 @@
     <field name="metaModel" expr="eval: __parent__?.__parent__?.metaModel"
       if="__parent__?.__parent__?.metaModel"/>
     <field if="_mediaType != null" name="mediaTypeSelect" expr="eval:_mediaType"/>
-    <field name="emailAccount"
+    <field name="mailAccount"
       expr="eval: __repo__(EmailAccount).all().filter('self.isDefault = true and self.isValid = true').fetchOne()"/>
   </action-record>
 

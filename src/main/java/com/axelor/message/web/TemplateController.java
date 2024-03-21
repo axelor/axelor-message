@@ -55,7 +55,7 @@ public class TemplateController {
               .add("grid", "message-grid")
               .param("forceTitle", "true")
               .context("_message", message)
-              .context("_templateEmailAccount", template.getEmailAccount())
+              .context("_templateMailAccount", template.getMailAccount())
               .map());
     } catch (Exception e) {
       ExceptionHelper.trace(response, e);

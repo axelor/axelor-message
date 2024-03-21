@@ -233,8 +233,8 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       log.debug("Signature ::: {}", signature);
     }
     EmailAccount mailAccount =
-        template.getEmailAccount() != null
-            ? template.getEmailAccount()
+        template.getMailAccount() != null
+            ? template.getMailAccount()
             : Beans.get(MailAccountService.class).getDefaultSender();
     EmailAddress fromAddress = null;
 
