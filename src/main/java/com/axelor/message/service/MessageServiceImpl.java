@@ -137,6 +137,8 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
 
     attachMetaFiles(message, metaFiles);
 
+    message = Beans.get(MailMessageActionService.class).executePostMailMessageActions(message);
+
     return message;
   }
 

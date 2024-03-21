@@ -1,6 +1,7 @@
-package com.axelor.message.service;
+package com.axelor.message.registry;
 
 import com.axelor.inject.Beans;
+import com.axelor.message.service.MailMessageAction;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
@@ -25,7 +26,12 @@ public class MailMessageActionRegister {
   }
 
   public void registerAction() {
-
+    /*
+        Beans.get(Injector.class)
+            .getAllBindings()
+            .entrySet()
+            .forEach(entry -> LOG.debug(entry.toString()));
+    */
     Beans.get(Injector.class).getAllBindings().entrySet().stream()
         .map(Map.Entry::getKey)
         .map(Key::getTypeLiteral)
@@ -34,8 +40,7 @@ public class MailMessageActionRegister {
             _class -> {
               Class<?>[] interfaces = _class.getInterfaces();
               boolean isMailMessageActionInterfaceExist =
-                  Arrays.stream(interfaces)
-                      .anyMatch(iClass -> iClass.equals(MailMessageAction.class));
+                  Arrays.asList(interfaces).contains(MailMessageAction.class);
               if (isMailMessageActionInterfaceExist) {
                 mailActionClasses.add((Class<? extends MailMessageAction>) _class);
               }

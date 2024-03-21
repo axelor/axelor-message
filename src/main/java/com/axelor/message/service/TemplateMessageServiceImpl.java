@@ -99,7 +99,6 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   @Override
   public Message generateMessage(Long objectId, String model, String tag, Template template)
       throws ClassNotFoundException {
-
     return generateMessage(objectId, model, tag, template, false);
   }
 
@@ -169,11 +168,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       messageService.attachMetaFiles(message, getMetaFiles(template, templates, templatesContext));
     }
 
-    for (Class<? extends MailMessageAction> mailMessageAction :
-        MailMessageActionRegister.getInstance().getMailActionClasses()) {
-      message = JPA.save(message);
-      message = Beans.get(mailMessageAction).postMailAction(message);
-    }
+    message = Beans.get(MailMessageActionService.class).executePostMailMessageActions(message);
 
     return message;
   }
