@@ -18,6 +18,6 @@ public class MailMessageActionServiceImpl implements MailMessageActionService {
       message = Beans.get(mailMessageActionClass).postMailGenerationAction(message);
     }
 
-    return JPA.save(message);
+    return message;
   }
 }

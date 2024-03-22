@@ -126,12 +126,6 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
             emailAccount,
             signature);
     addMessageRelatedTo(message, model, id);
-    /*
-    for (Class<?> actionClass : MailMessageActionRegister.getInstance().getMailActionClasses()) {
-      message = Beans.get(actionClass).
-    }
-
-     */
 
     messageRepository.save(message);
 
