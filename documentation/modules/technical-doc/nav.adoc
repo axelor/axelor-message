@@ -1,2 +1,0 @@
-* xref:index.adoc[Technical documentation]
-** xref:api.adoc[Api]
