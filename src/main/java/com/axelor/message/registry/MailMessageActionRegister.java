@@ -32,17 +32,16 @@ public class MailMessageActionRegister {
             .entrySet()
             .forEach(entry -> LOG.debug(entry.toString()));
     */
-    Beans.get(Injector.class).getAllBindings().entrySet().stream()
-        .map(Map.Entry::getKey)
+    Beans.get(Injector.class).getAllBindings().keySet().stream()
         .map(Key::getTypeLiteral)
         .map(TypeLiteral::getRawType)
         .forEach(
-            _class -> {
-              Class<?>[] interfaces = _class.getInterfaces();
+            klass -> {
+              Class<?>[] interfaces = klass.getInterfaces();
               boolean isMailMessageActionInterfaceExist =
                   Arrays.asList(interfaces).contains(MailMessageAction.class);
               if (isMailMessageActionInterfaceExist) {
-                mailActionClasses.add((Class<? extends MailMessageAction>) _class);
+                mailActionClasses.add((Class<? extends MailMessageAction>) klass);
               }
             });
   }
