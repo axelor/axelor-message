@@ -3,7 +3,7 @@ package com.axelor.message.service;
 import com.axelor.db.JPA;
 import com.axelor.inject.Beans;
 import com.axelor.message.db.Message;
-import com.axelor.message.registry.MailMessageActionRegister;
+import com.axelor.message.service.registry.MailMessageActionRegister;
 
 public class MailMessageActionServiceImpl implements MailMessageActionService {
 

@@ -2,7 +2,7 @@ package com.axelor.message.listener;
 
 import com.axelor.event.Observes;
 import com.axelor.events.StartupEvent;
-import com.axelor.message.registry.MailMessageActionRegister;
+import com.axelor.message.service.registry.MailMessageActionRegister;
 import javax.annotation.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

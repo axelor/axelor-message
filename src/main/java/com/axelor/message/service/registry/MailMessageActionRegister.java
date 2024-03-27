@@ -1,14 +1,15 @@
-package com.axelor.message.registry;
+package com.axelor.message.service.registry;
 
 import com.axelor.inject.Beans;
 import com.axelor.message.service.MailMessageAction;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
+import org.reflections.ReflectionUtils;
+import org.reflections.Reflections;
+import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,21 +27,19 @@ public class MailMessageActionRegister {
   }
 
   public void registerAction() {
-    /*
-        Beans.get(Injector.class)
-            .getAllBindings()
-            .entrySet()
-            .forEach(entry -> LOG.debug(entry.toString()));
-    */
+    scanActionClasses();
+  }
+
+  private void scanActionClasses() {
+    Reflections reflections = new Reflections(new ConfigurationBuilder().forPackage("com.axelor"));
+
     Beans.get(Injector.class).getAllBindings().keySet().stream()
         .map(Key::getTypeLiteral)
         .map(TypeLiteral::getRawType)
         .forEach(
             klass -> {
-              Class<?>[] interfaces = klass.getInterfaces();
-              boolean isMailMessageActionInterfaceExist =
-                  Arrays.asList(interfaces).contains(MailMessageAction.class);
-              if (isMailMessageActionInterfaceExist) {
+              Set<Class<?>> interfaces = reflections.get(ReflectionUtils.Interfaces.of(klass));
+              if (interfaces.contains(MailMessageAction.class)) {
                 mailActionClasses.add((Class<? extends MailMessageAction>) klass);
               }
             });
