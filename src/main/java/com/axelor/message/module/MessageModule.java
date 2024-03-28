@@ -21,8 +21,26 @@ import com.axelor.app.AxelorModule;
 import com.axelor.mail.service.MailServiceImpl;
 import com.axelor.message.db.repo.MessageManagementRepository;
 import com.axelor.message.db.repo.MessageRepository;
-import com.axelor.message.listener.ServerStartListener;
-import com.axelor.message.service.*;
+import com.axelor.message.listener.MailMessageServerStartListener;
+import com.axelor.message.service.AppSettingsMessageService;
+import com.axelor.message.service.AppSettingsMessageServiceImpl;
+import com.axelor.message.service.GenerateMessageService;
+import com.axelor.message.service.GenerateMessageServiceImpl;
+import com.axelor.message.service.MailAccountService;
+import com.axelor.message.service.MailAccountServiceImpl;
+import com.axelor.message.service.MailMessageActionService;
+import com.axelor.message.service.MailMessageActionServiceImpl;
+import com.axelor.message.service.MailMessageCreator;
+import com.axelor.message.service.MailMessageCreatorImpl;
+import com.axelor.message.service.MailMessageService;
+import com.axelor.message.service.MailMessageServiceImpl;
+import com.axelor.message.service.MailServiceMessageImpl;
+import com.axelor.message.service.MessageService;
+import com.axelor.message.service.MessageServiceImpl;
+import com.axelor.message.service.SendMailQueueService;
+import com.axelor.message.service.TemplateMessageService;
+import com.axelor.message.service.TemplateMessageServiceImpl;
+import com.axelor.message.service.TemplateService;
 import com.axelor.utils.service.AppSettingsServiceImpl;
 
 public class MessageModule extends AxelorModule {
@@ -43,6 +61,7 @@ public class MessageModule extends AxelorModule {
     // needed to use event notification methods
     bind(SendMailQueueService.class);
     bind(TemplateService.class);
-    bind(ServerStartListener.class);
+    // needed to scan classes that implements the MailMessageAction in the startup
+    bind(MailMessageServerStartListener.class);
   }
 }

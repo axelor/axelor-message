@@ -7,7 +7,7 @@ import javax.annotation.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServerStartListener {
+public class MailMessageServerStartListener {
   protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
   public void onStartup(@Priority(-1) @Observes StartupEvent event) {
