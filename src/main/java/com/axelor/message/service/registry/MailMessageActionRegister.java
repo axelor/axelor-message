@@ -18,6 +18,8 @@ public class MailMessageActionRegister {
   private static MailMessageActionRegister instance;
   private final Set<Class<? extends MailMessageAction>> mailActionClasses;
 
+  private static final String AXELOR_BASE_PACKAGE = "com.axelor";
+
   public Set<Class<? extends MailMessageAction>> getMailActionClasses() {
     return mailActionClasses;
   }
@@ -31,7 +33,8 @@ public class MailMessageActionRegister {
   }
 
   private void scanActionClasses() {
-    Reflections reflections = new Reflections(new ConfigurationBuilder().forPackage("com.axelor"));
+    Reflections reflections =
+        new Reflections(new ConfigurationBuilder().forPackage(AXELOR_BASE_PACKAGE));
 
     Beans.get(Injector.class).getAllBindings().keySet().stream()
         .map(Key::getTypeLiteral)
