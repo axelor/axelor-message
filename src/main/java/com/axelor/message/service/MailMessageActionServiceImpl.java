@@ -8,16 +8,19 @@ import com.google.inject.Inject;
 
 public class MailMessageActionServiceImpl implements MailMessageActionService {
   protected final MessageRepository messageRepository;
+  protected final MailMessageActionRegister mailMessageActionRegister;
 
   @Inject
-  public MailMessageActionServiceImpl(MessageRepository messageRepository) {
+  public MailMessageActionServiceImpl(
+      MessageRepository messageRepository, MailMessageActionRegister mailMessageActionRegister) {
     this.messageRepository = messageRepository;
+    this.mailMessageActionRegister = mailMessageActionRegister;
   }
 
   @Override
   public Message executePostMailMessageActions(Message message) {
     for (Class<? extends MailMessageAction> mailMessageActionClass :
-        MailMessageActionRegister.getInstance().getMailActionClasses()) {
+        mailMessageActionRegister.getMailActionClasses()) {
       message = Beans.get(mailMessageActionClass).postMailGenerationAction(message);
     }
     return messageRepository.save(message);

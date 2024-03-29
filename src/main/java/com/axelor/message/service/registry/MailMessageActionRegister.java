@@ -4,6 +4,7 @@ import com.axelor.inject.Beans;
 import com.axelor.message.service.MailMessageAction;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,9 +14,9 @@ import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Singleton
 public class MailMessageActionRegister {
   protected final Logger LOG = LoggerFactory.getLogger(getClass());
-  private static MailMessageActionRegister instance;
   private final Set<Class<? extends MailMessageAction>> mailActionClasses;
 
   private static final String AXELOR_BASE_PACKAGE = "com.axelor";
@@ -24,7 +25,7 @@ public class MailMessageActionRegister {
     return mailActionClasses;
   }
 
-  private MailMessageActionRegister() {
+  public MailMessageActionRegister() {
     this.mailActionClasses = new LinkedHashSet<>();
   }
 
@@ -46,12 +47,5 @@ public class MailMessageActionRegister {
                 mailActionClasses.add((Class<? extends MailMessageAction>) klass);
               }
             });
-  }
-
-  public static MailMessageActionRegister getInstance() {
-    if (instance == null) {
-      instance = new MailMessageActionRegister();
-    }
-    return instance;
   }
 }

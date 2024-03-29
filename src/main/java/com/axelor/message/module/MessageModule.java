@@ -41,7 +41,9 @@ import com.axelor.message.service.SendMailQueueService;
 import com.axelor.message.service.TemplateMessageService;
 import com.axelor.message.service.TemplateMessageServiceImpl;
 import com.axelor.message.service.TemplateService;
+import com.axelor.message.service.registry.MailMessageActionRegister;
 import com.axelor.utils.service.AppSettingsServiceImpl;
+import com.google.inject.Singleton;
 
 public class MessageModule extends AxelorModule {
 
@@ -58,6 +60,7 @@ public class MessageModule extends AxelorModule {
     bind(AppSettingsServiceImpl.class).to(AppSettingsMessageServiceImpl.class);
     bind(MailMessageCreator.class).to(MailMessageCreatorImpl.class);
     bind(MailMessageActionService.class).to(MailMessageActionServiceImpl.class);
+    bind(MailMessageActionRegister.class).in(Singleton.class);
     // needed to use event notification methods
     bind(SendMailQueueService.class);
     bind(TemplateService.class);
