@@ -18,6 +18,11 @@ import org.slf4j.LoggerFactory;
 public class MailMessageActionRegister {
   protected final Logger LOG = LoggerFactory.getLogger(getClass());
   private final Set<Class<? extends MailMessageAction>> mailActionClasses;
+  /**
+   * mailActionClassesCache: used to store temporary classes that implements or override action
+   * classes
+   */
+  private final Set<Class<? extends MailMessageAction>> mailActionClassesCache;
 
   private static final String AXELOR_BASE_PACKAGE = "com.axelor";
 
@@ -27,13 +32,15 @@ public class MailMessageActionRegister {
 
   public MailMessageActionRegister() {
     this.mailActionClasses = new LinkedHashSet<>();
+    this.mailActionClassesCache = new LinkedHashSet<>();
   }
 
   public void registerAction() {
-    scanActionClasses();
+    scanMailActionClasses();
+    filterOutAndStoreSubClasses();
   }
 
-  private void scanActionClasses() {
+  private void scanMailActionClasses() {
     Reflections reflections =
         new Reflections(new ConfigurationBuilder().forPackage(AXELOR_BASE_PACKAGE));
 
@@ -44,8 +51,28 @@ public class MailMessageActionRegister {
             klass -> {
               Set<Class<?>> interfaces = reflections.get(ReflectionUtils.Interfaces.of(klass));
               if (interfaces.contains(MailMessageAction.class)) {
-                mailActionClasses.add((Class<? extends MailMessageAction>) klass);
+                mailActionClassesCache.add((Class<? extends MailMessageAction>) klass);
               }
             });
+  }
+
+  private void filterOutAndStoreSubClasses() {
+    mailActionClassesCache.forEach(
+        klass -> {
+          if (Boolean.FALSE.equals(isSubClassPresent(klass))) {
+            mailActionClasses.add(klass);
+          }
+        });
+
+    LOG.debug("Registered classes : ");
+    mailActionClasses.forEach(klass -> LOG.debug(klass.getCanonicalName()));
+  }
+
+  private boolean isSubClassPresent(Class<?> klass) {
+    return mailActionClassesCache.stream()
+        .anyMatch(
+            actionClass ->
+                Boolean.FALSE.equals(actionClass.equals(klass))
+                    && klass.isAssignableFrom(actionClass));
   }
 }
