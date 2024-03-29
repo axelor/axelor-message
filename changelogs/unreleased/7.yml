@@ -1,0 +1,8 @@
+---
+title: Implement MailMessage action register
+type: feature
+description: |
+  The previous problem revolves around the axelor mail message actions being over-written by numerous modules,
+  and there's a sequential inheritance issue with that. To address this, we implemented  a mail message action
+  registry that can identify classes that implements a generic class of the MailMessageAction 
+  and then to execute those post actions in the generation of the message regardless of the behavior of other modules.
