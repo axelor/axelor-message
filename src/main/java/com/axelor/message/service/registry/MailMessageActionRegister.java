@@ -18,21 +18,11 @@ import org.slf4j.LoggerFactory;
 public class MailMessageActionRegister {
   protected final Logger LOG = LoggerFactory.getLogger(getClass());
   private final Set<Class<? extends MailMessageAction>> mailActionClasses;
-  /**
-   * mailActionClassesCache: used to store temporary classes that implements or override action
-   * classes
-   */
-  private final Set<Class<? extends MailMessageAction>> mailActionClassesCache;
 
   private static final String AXELOR_BASE_PACKAGE = "com.axelor";
 
-  public Set<Class<? extends MailMessageAction>> getMailActionClasses() {
-    return mailActionClasses;
-  }
-
   public MailMessageActionRegister() {
     this.mailActionClasses = new LinkedHashSet<>();
-    this.mailActionClassesCache = new LinkedHashSet<>();
   }
 
   public void registerAction() {
@@ -51,28 +41,27 @@ public class MailMessageActionRegister {
             klass -> {
               Set<Class<?>> interfaces = reflections.get(ReflectionUtils.Interfaces.of(klass));
               if (interfaces.contains(MailMessageAction.class)) {
-                mailActionClassesCache.add((Class<? extends MailMessageAction>) klass);
+                mailActionClasses.add((Class<? extends MailMessageAction>) klass);
               }
             });
   }
 
   private void filterOutAndStoreSubClasses() {
-    mailActionClassesCache.forEach(
-        klass -> {
-          if (Boolean.FALSE.equals(isSubClassPresent(klass))) {
-            mailActionClasses.add(klass);
-          }
-        });
+    mailActionClasses.removeIf(klass -> Boolean.TRUE.equals(isSubClassPresent(klass)));
 
     LOG.debug("Registered classes : ");
     mailActionClasses.forEach(klass -> LOG.debug(klass.getCanonicalName()));
   }
 
   private boolean isSubClassPresent(Class<?> klass) {
-    return mailActionClassesCache.stream()
+    return mailActionClasses.stream()
         .anyMatch(
             actionClass ->
                 Boolean.FALSE.equals(actionClass.equals(klass))
                     && klass.isAssignableFrom(actionClass));
+  }
+
+  public Set<Class<? extends MailMessageAction>> getMailActionClasses() {
+    return mailActionClasses;
   }
 }
