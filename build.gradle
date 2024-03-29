@@ -51,6 +51,7 @@ axelor {
 
 dependencies {
   implementation "com.squareup.okhttp3:okhttp:4.12.0"
+  implementation 'org.reflections:reflections:0.10.2'
   if (findProject(":modules:axelor-utils") != null) {
     api project(":modules:axelor-utils")
   } else {

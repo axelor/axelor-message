@@ -69,12 +69,16 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
   protected final MessageService messageService;
   protected final TemplateContextService templateContextService;
+  protected final MailMessageActionService mailMessageActionService;
 
   @Inject
   public TemplateMessageServiceImpl(
-      MessageService messageService, TemplateContextService templateContextService) {
+      MessageService messageService,
+      TemplateContextService templateContextService,
+      MailMessageActionService mailMessageActionService) {
     this.messageService = messageService;
     this.templateContextService = templateContextService;
+    this.mailMessageActionService = mailMessageActionService;
   }
 
   @Override
@@ -99,7 +103,6 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   @Override
   public Message generateMessage(Long objectId, String model, String tag, Template template)
       throws ClassNotFoundException {
-
     return generateMessage(objectId, model, tag, template, false);
   }
 
@@ -163,10 +166,11 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
         generateMessage(
             model, objectId, template, templates, templatesContext, isForTemporaryEmail);
 
-    if (!isForTemporaryEmail) {
+    if (Boolean.FALSE.equals(isForTemporaryEmail)) {
       message.setTemplate(Beans.get(TemplateRepository.class).find(template.getId()));
       message = Beans.get(MessageRepository.class).save(message);
       messageService.attachMetaFiles(message, getMetaFiles(template, templates, templatesContext));
+      message = mailMessageActionService.executePostMailMessageActions(message);
     }
 
     return message;
