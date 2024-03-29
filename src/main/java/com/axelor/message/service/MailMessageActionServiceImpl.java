@@ -18,10 +18,10 @@ public class MailMessageActionServiceImpl implements MailMessageActionService {
   }
 
   @Override
-  public Message executePostMailMessageActions(Long objectId, Message message) {
+  public Message executePostMailMessageActions(Message message) {
     for (Class<? extends MailMessageAction> mailMessageActionClass :
         mailMessageActionRegister.getMailActionClasses()) {
-      message = Beans.get(mailMessageActionClass).postMailGenerationAction(objectId, message);
+      message = Beans.get(mailMessageActionClass).postMailGenerationAction(message);
     }
     return messageRepository.save(message);
   }
