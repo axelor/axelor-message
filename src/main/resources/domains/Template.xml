@@ -25,6 +25,8 @@
     <boolean name="isJson" title="Json"/>
     <many-to-one name="metaJsonModel" ref="com.axelor.meta.db.MetaJsonModel"
       title="Model"/>
+    <many-to-one name="mailAccount" title="Mail Account"
+      ref="com.axelor.message.db.EmailAccount"/>
 
     <one-to-many name="templateContextList" ref="com.axelor.message.db.TemplateContext"
       mappedBy="template" title="Context"/>

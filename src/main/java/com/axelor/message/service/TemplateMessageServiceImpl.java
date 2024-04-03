@@ -236,8 +236,12 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       signature = templates.fromText(template.getSignature()).make(templatesContext).render();
       log.debug("Signature ::: {}", signature);
     }
-    EmailAccount mailAccount = getMailAccount();
+    EmailAccount mailAccount =
+        template.getMailAccount() != null
+            ? template.getMailAccount()
+            : Beans.get(MailAccountService.class).getDefaultSender();
     EmailAddress fromAddress = null;
+
     if (mailAccount == null) {
       IllegalStateException illegalStateException =
           new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_6));
