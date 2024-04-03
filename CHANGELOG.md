@@ -1,3 +1,25 @@
+## 3.0.0 (2024-04-03)
+
+#### Feature
+
+* Implement MailMessage action register
+
+  <details>
+  
+  Implement a mail message action registry that can identify classes that implements a generic class of the MailMessageAction 
+  and execute those post actions in the generation of the message.
+  
+  </details>
+
+* Indicate Mail account in template
+
+  <details>
+  
+  Add MailAccount field to the template, allowing users to select a mail account to use for each message template.
+  
+  </details>
+
+
 ## 2.0.0 (2024-01-25)
 
 #### Feature

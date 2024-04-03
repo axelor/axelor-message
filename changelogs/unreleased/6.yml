@@ -1,5 +1,0 @@
----
-title: Indicate Mail account in template
-type: feature
-description: |
-  Add MailAccount field to the template, allowing users to select a mail account to use for each message template.

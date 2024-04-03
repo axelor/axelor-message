@@ -1,6 +1,0 @@
----
-title: Implement MailMessage action register
-type: feature
-description: |
-  Implement a mail message action registry that can identify classes that implements a generic class of the MailMessageAction 
-  and execute those post actions in the generation of the message.
