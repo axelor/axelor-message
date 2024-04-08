@@ -1,0 +1,6 @@
+---
+title: Remove references to AOS models
+type: fix
+description: |
+  Remove AOS models reference from the message module 
+  ```
