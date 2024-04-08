@@ -1,5 +1,3 @@
-
-
 bin
 build
 .gradle
@@ -17,4 +15,11 @@ application.min.*
 out/
 *.iml
 *.jar
+
+# gradle
+.gradle
+
+# Visual Studio Code
+.vscode
+
 app.zip
