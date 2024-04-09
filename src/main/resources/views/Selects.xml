@@ -32,13 +32,7 @@
     <option value="1">Mail</option>
     <option value="2">Email</option>
     <option value="3">Chat</option>
-    <option value="5">SMS</option>
-  </selection>
-
-  <selection name="template.media.type.select">
-    <option value="1">Mail</option>
-    <option value="2">Email</option>
-    <option value="3">Chat</option>
+    <option value="4">Emailing</option>
     <option value="5">SMS</option>
   </selection>
 
