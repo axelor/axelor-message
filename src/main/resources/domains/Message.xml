@@ -65,6 +65,7 @@
 			public static final int MEDIA_TYPE_MAIL = 1;
 			public static final int MEDIA_TYPE_EMAIL = 2;
 			public static final int MEDIA_TYPE_CHAT = 3;
+			public static final int MEDIA_TYPE_EMAILING = 4;
 			public static final int MEDIA_TYPE_SMS = 5;
 
 			// RELATED TO SELECT
