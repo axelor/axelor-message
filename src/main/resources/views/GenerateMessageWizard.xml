@@ -39,9 +39,4 @@
   <action-attrs name="action-on-change-language-template">
     <attribute for="_xTemplate" name="value" expr="eval: null"/>
   </action-attrs>
-
-  <action-method name="action-method-template-domain" >
-    <call class="com.axelor.apps.base.web.GenerateMessageController" method="templateDomain"/>
-  </action-method>
-
 </object-views>
