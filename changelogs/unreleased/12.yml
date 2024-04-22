@@ -1,0 +1,6 @@
+---
+title: Replace axelor base reference from Message module
+type: fix
+description: |
+  Replacing language axelor base reference from Message module to aop reference
+  ```
