@@ -119,4 +119,41 @@ public class GenerateMessageController {
       ExceptionHelper.trace(response, e);
     }
   }
+
+  /**
+   * This method is used to update dummyField _xTemplate domain attribute in GenerateMessageWizard
+   * to filter template based on the selected language
+   */
+  public void templateDomain(ActionRequest request, ActionResponse response) {
+    Context context = request.getContext();
+    // Model name in context from callMessageWizard method
+    String model = (String) context.get("_templateContextModel");
+    LOG.info("Applying language filter ...");
+
+    Object languageObj = context.get("language");
+    String language = null;
+    if (languageObj == null) {
+      LOG.info("No selected language");
+    } else if (languageObj instanceof String) {
+      language = (String) languageObj;
+      LOG.info("Language selected : {}", language);
+    } else {
+      LOG.error("Language parse error");
+    }
+
+    String domain;
+
+    if (language == null) {
+      domain = "self.metaModel.fullName = '" + model + "' and self.isSystem != true";
+    } else {
+      domain =
+          "self.metaModel.fullName = '"
+              + model
+              + "' and self.isSystem != true and self.language = '"
+              + language
+              + "'";
+    }
+    LOG.debug("Applying filter {} on template", domain);
+    response.setAttr("_xTemplate", "domain", domain);
+  }
 }

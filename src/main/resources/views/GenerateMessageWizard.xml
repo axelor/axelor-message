@@ -36,6 +36,10 @@
     <call class="com.axelor.message.web.GenerateMessageController" method="generateMessage"/>
   </action-method>
 
+  <action-method name="action-method-template-domain">
+    <call class="com.axelor.message.web.GenerateMessageController" method="templateDomain"/>
+  </action-method>
+
   <action-attrs name="action-on-change-language-template">
     <attribute for="_xTemplate" name="value" expr="eval: null"/>
   </action-attrs>
