@@ -1,6 +1,7 @@
 ---
-title: Replace axelor base reference from Message module
+title: Update GenerateMessageWizard from Message module and support template language selection
 type: fix
 description: |
-  Replacing language axelor base reference from Message module to aop reference
+  Updating the language axelor base reference from the Message module to an aop reference in GenerateMessageWizard,
+  and implementing language selection within the template.
   ```
