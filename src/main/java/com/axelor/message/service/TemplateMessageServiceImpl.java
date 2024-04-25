@@ -24,7 +24,6 @@ import com.axelor.db.Query;
 import com.axelor.db.mapper.Mapper;
 import com.axelor.dms.db.DMSFile;
 import com.axelor.i18n.I18n;
-import com.axelor.inject.Beans;
 import com.axelor.message.db.EmailAccount;
 import com.axelor.message.db.EmailAddress;
 import com.axelor.message.db.Message;
@@ -68,17 +67,33 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   private Model modelObject;
 
   protected final MessageService messageService;
+  protected final MailAccountService mailAccountService;
   protected final TemplateContextService templateContextService;
+
   protected final MailMessageActionService mailMessageActionService;
+  protected final MessageRepository messageRepository;
+  protected final TemplateRepository templateRepository;
+  protected final EmailAddressRepository emailAddressRepository;
+  protected final GroovyTemplates groovyTemplates;
 
   @Inject
   public TemplateMessageServiceImpl(
+      EmailAddressRepository emailAddressRepository,
+      GroovyTemplates groovyTemplates,
+      MessageRepository messageRepository,
+      TemplateRepository templateRepository,
+      MailAccountService mailAccountService,
       MessageService messageService,
       TemplateContextService templateContextService,
       MailMessageActionService mailMessageActionService) {
+    this.emailAddressRepository = emailAddressRepository;
+    this.templateRepository = templateRepository;
+    this.messageRepository = messageRepository;
     this.messageService = messageService;
+    this.mailAccountService = mailAccountService;
     this.templateContextService = templateContextService;
     this.mailMessageActionService = mailMessageActionService;
+    this.groovyTemplates = groovyTemplates;
   }
 
   @Override
@@ -111,71 +126,118 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   public Message generateMessage(
       Long objectId, String model, String tag, Template template, Boolean isForTemporaryEmail)
       throws ClassNotFoundException {
-
     Templates templates;
     Map<String, Object> templatesContext = Maps.newHashMap();
 
+    // Extract Templates implementation based on the template's engine - FACTORY DESIGN PATTERN
     if (template.getTemplateEngineSelect() == TemplateRepository.TEMPLATE_ENGINE_GROOVY_TEMPLATE) {
-      templates = Beans.get(GroovyTemplates.class);
+      templates = groovyTemplates;
     } else {
       templates = new StringTemplates(TEMPLATE_DELIMITER, TEMPLATE_DELIMITER);
     }
 
-    Object modelObj = template.getIsJson() ? template.getMetaJsonModel() : template.getMetaModel();
+    Object modelObj =
+        Boolean.TRUE.equals(template.getIsJson())
+            ? template.getMetaJsonModel()
+            : template.getMetaModel();
 
     if (modelObj != null) {
-      String modelName =
-          template.getIsJson()
-              ? ((MetaJsonModel) modelObj).getName()
-              : ((MetaModel) modelObj).getFullName();
-
-      if (!model.equals(modelName)) {
-        throw new IllegalStateException(
-            String.format(
-                I18n.get(MessageExceptionMessage.INVALID_MODEL_TEMPLATE_EMAIL), modelName, model));
-      }
-
-      if (objectId != 0L) {
-        initMaker(objectId, model, tag, template.getIsJson(), templatesContext);
-        computeTemplateContexts(
-            template.getTemplateContextList(),
-            objectId,
-            model,
-            template.getIsJson(),
-            templatesContext);
-      } else {
-        Class<?> klass = EntityHelper.getEntityClass(this.modelObject);
-        Context context = new Context(Mapper.toMap(this.modelObject), klass);
-
-        templatesContext.put(tag, context.asType(klass));
-        if (template.getTemplateContextList() != null) {
-          for (TemplateContext templateContext : template.getTemplateContextList()) {
-            Object result = templateContextService.computeTemplateContext(templateContext, context);
-            templatesContext.put(templateContext.getName(), result);
-          }
-        }
-      }
+      handleModelObjectTemplatesContext(objectId, model, tag, template, modelObj, templatesContext);
     }
 
-    log.debug("model : {}", model);
-    log.debug("tag : {}", tag);
-    log.debug("object id : {}", objectId);
-    log.debug("template : {}", template);
+    log.debug(
+        "model : {}\ntag : {}\nobject id : {}\ntemplate : {}", model, tag, objectId, template);
 
     Message message =
         generateMessage(
             model, objectId, template, templates, templatesContext, isForTemporaryEmail);
 
     if (Boolean.FALSE.equals(isForTemporaryEmail)) {
-      message.setTemplate(Beans.get(TemplateRepository.class).find(template.getId()));
-      message = Beans.get(MessageRepository.class).save(message);
-      messageService.attachMetaFiles(message, getMetaFiles(template, templates, templatesContext));
+      log.debug("Saving message with meta files");
+      message = saveMessageWithMetaFiles(template, message, templates, templatesContext);
+      log.debug("Execute Post mail message actions");
       message = mailMessageActionService.executePostMailMessageActions(message);
     }
 
     return message;
   }
 
+  protected Message saveMessageWithMetaFiles(
+      Template template,
+      Message message,
+      Templates templates,
+      Map<String, Object> templatesContext) {
+    message.setTemplate(templateRepository.find(template.getId()));
+    message = messageRepository.save(message);
+    messageService.attachMetaFiles(message, getMetaFiles(template, templates, templatesContext));
+    return message;
+  }
+
+  protected void handleModelObjectTemplatesContext(
+      Long objectId,
+      String model,
+      String tag,
+      Template template,
+      Object modelObj,
+      Map<String, Object> templatesContext)
+      throws ClassNotFoundException {
+    String modelName =
+        Boolean.TRUE.equals(template.getIsJson())
+            ? ((MetaJsonModel) modelObj).getName()
+            : ((MetaModel) modelObj).getFullName();
+
+    if (!model.equals(modelName)) {
+      throw new IllegalStateException(
+          String.format(
+              I18n.get(MessageExceptionMessage.INVALID_MODEL_TEMPLATE_EMAIL), modelName, model));
+    }
+
+    initAndComputeTemplatesContext(objectId, model, tag, template, templatesContext);
+  }
+
+  protected Map<String, Object> initAndComputeTemplatesContextForUnSavedObject(
+      String tag, Template template, Map<String, Object> templatesContext) {
+    Class<?> klass = EntityHelper.getEntityClass(this.modelObject);
+    Context context = new Context(Mapper.toMap(this.modelObject), klass);
+
+    templatesContext.put(tag, context.asType(klass));
+    if (template.getTemplateContextList() != null) {
+      for (TemplateContext templateContext : template.getTemplateContextList()) {
+        Object result = templateContextService.computeTemplateContext(templateContext, context);
+        templatesContext.put(templateContext.getName(), result);
+      }
+    }
+    return templatesContext;
+  }
+
+  protected Map<String, Object> initAndComputeTemplatesContext(
+      Long objectId,
+      String model,
+      String tag,
+      Template template,
+      Map<String, Object> templatesContext)
+      throws ClassNotFoundException {
+    if (objectId != 0L) {
+      // initialize template context with object record
+      initMaker(objectId, model, tag, template.getIsJson(), templatesContext);
+      // evaluate template context list
+      computeTemplateContexts(
+          template.getTemplateContextList(),
+          objectId,
+          model,
+          template.getIsJson(),
+          templatesContext);
+    } else {
+      initAndComputeTemplatesContextForUnSavedObject(tag, template, templatesContext);
+    }
+
+    return templatesContext;
+  }
+
+  /**
+   * This method is used to generate a message from the template's content and assign the email
+   * address to the message
+   */
   protected Message generateMessage(
       String model,
       Long objectId,
@@ -236,18 +298,17 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       signature = templates.fromText(template.getSignature()).make(templatesContext).render();
       log.debug("Signature ::: {}", signature);
     }
+
     EmailAccount mailAccount =
-        template.getMailAccount() != null
-            ? template.getMailAccount()
-            : Beans.get(MailAccountService.class).getDefaultSender();
+        template.getMailAccount() != null ? template.getMailAccount() : getMailAccount();
     EmailAddress fromAddress = null;
 
-    if (mailAccount == null) {
+    if (mailAccount != null) {
+      fromAddress = getMailAddress(mailAccount.getFromAddress());
+    } else {
       IllegalStateException illegalStateException =
           new IllegalStateException(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_6));
       log.error(illegalStateException.getMessage(), illegalStateException);
-    } else {
-      fromAddress = getEmailAddress(mailAccount.getFromAddress());
     }
 
     return messageService.createMessage(
@@ -289,9 +350,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   }
 
   @Override
-  public Set<MetaFile> getMetaFiles(
-      Template template, Templates templates, Map<String, Object> templatesContext) {
-
+  public Set<MetaFile> getMetaFiles(Template template) {
     List<DMSFile> metaAttachments =
         Query.of(DMSFile.class)
             .filter(
@@ -301,13 +360,19 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
             .fetch();
     Set<MetaFile> metaFiles = Sets.newHashSet();
     for (DMSFile metaAttachment : metaAttachments) {
-      if (!Boolean.TRUE.equals(metaAttachment.getIsDirectory())) {
+      if (Boolean.FALSE.equals(metaAttachment.getIsDirectory())) {
         metaFiles.add(metaAttachment.getMetaFile());
       }
     }
 
     log.debug("Metafile to attach: {}", metaFiles);
     return metaFiles;
+  }
+
+  @Override
+  public Set<MetaFile> getMetaFiles(
+      Template template, Templates templates, Map<String, Object> templatesContext) {
+    return getMetaFiles(template);
   }
 
   @Override
@@ -340,12 +405,12 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       return templatesContext;
     }
 
-    Context context = null;
+    Context context;
     if (isJson) {
-      context = new com.axelor.rpc.Context(objectId, MetaJsonRecord.class);
+      context = new Context(objectId, MetaJsonRecord.class);
     } else {
       Class<? extends Model> myClass = (Class<? extends Model>) Class.forName(model);
-      context = new com.axelor.rpc.Context(objectId, myClass);
+      context = new Context(objectId, myClass);
     }
 
     for (TemplateContext templateContext : templateContextList) {
@@ -356,6 +421,12 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
     return templatesContext;
   }
 
+  /**
+   * This method is used to return a list of email addresses from recipients string
+   *
+   * @param recipients
+   * @return
+   */
   protected List<EmailAddress> getEmailAddresses(String recipients) {
 
     List<EmailAddress> emailAddressList = Lists.newArrayList();
@@ -368,43 +439,40 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
             .trimResults()
             .omitEmptyStrings()
             .splitToList(recipients)) {
-      emailAddressList.add(getEmailAddress(recipient));
+      emailAddressList.add(getMailAddress(recipient));
     }
     return emailAddressList;
   }
 
-  protected EmailAddress getEmailAddress(String recipient) {
+  /**
+   * This method is used to get EmailAddress by recipient string, or create it otherwise if it's not
+   * found
+   *
+   * @param recipient
+   * @return
+   */
+  protected EmailAddress getMailAddress(String recipient) {
 
     if (Strings.isNullOrEmpty(recipient)) {
       return null;
     }
 
-    EmailAddressRepository emailAddressRepo = Beans.get(EmailAddressRepository.class);
-
-    EmailAddress emailAddress = emailAddressRepo.findByAddress(recipient);
+    EmailAddress emailAddress = emailAddressRepository.findByAddress(recipient);
 
     if (emailAddress == null) {
       Map<String, Object> values = new HashMap<>();
       values.put("address", recipient);
-      emailAddress = emailAddressRepo.create(values);
+      emailAddress = emailAddressRepository.create(values);
     }
 
     return emailAddress;
   }
 
   protected Integer getMediaTypeSelect(Template template) {
-
     return template.getMediaTypeSelect();
   }
 
   protected EmailAccount getMailAccount() {
-
-    EmailAccount mailAccount = Beans.get(MailAccountService.class).getDefaultSender();
-
-    if (mailAccount != null) {
-      return mailAccount;
-    }
-
-    return null;
+    return mailAccountService.getDefaultSender();
   }
 }
