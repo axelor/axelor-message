@@ -38,6 +38,8 @@ import com.axelor.message.service.MailServiceMessageImpl;
 import com.axelor.message.service.MessageService;
 import com.axelor.message.service.MessageServiceImpl;
 import com.axelor.message.service.SendMailQueueService;
+import com.axelor.message.service.TemplateContextService;
+import com.axelor.message.service.TemplateContextServiceImpl;
 import com.axelor.message.service.TemplateMessageService;
 import com.axelor.message.service.TemplateMessageServiceImpl;
 import com.axelor.message.service.TemplateService;
@@ -60,6 +62,7 @@ public class MessageModule extends AxelorModule {
     bind(AppSettingsServiceImpl.class).to(AppSettingsMessageServiceImpl.class);
     bind(MailMessageCreator.class).to(MailMessageCreatorImpl.class);
     bind(MailMessageActionService.class).to(MailMessageActionServiceImpl.class);
+    bind(TemplateContextService.class).to(TemplateContextServiceImpl.class);
     bind(MailMessageActionRegister.class).in(Singleton.class);
     // needed to use event notification methods
     bind(SendMailQueueService.class);
