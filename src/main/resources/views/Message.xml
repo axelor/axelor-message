@@ -5,9 +5,15 @@
 
   <grid name="message-grid" title="Emails" model="com.axelor.message.db.Message"
     orderBy="-sentDateT">
-    <field name="sentDateT"/>
-    <field name="senderUser" form-view="user-form" grid-view="user-grid"/>
+    <field name="sentDateT" width="150"/>
+    <field name="senderUser" form-view="user-form" grid-view="user-grid" width="200"/>
     <field name="subject"/>
+    <field name="statusSelect" width="200">
+      <hilite if="statusSelect == 1" color="grey"/>
+      <hilite if="statusSelect == 2" color="orange"/>
+      <hilite if="statusSelect == 3" color="green"/>
+      <hilite if="statusSelect == 4" color="red"/>
+    </field>
   </grid>
 
   <grid name="message-not-sent-grid" title="Emails" model="com.axelor.message.db.Message"
