@@ -1,3 +1,57 @@
+## 3.1.0 (2024-05-31)
+
+#### Feature
+
+* adapt message grid-view
+
+  <details>
+  
+  adapt message grid-view to better display fields
+  
+  </details>
+
+#### Change
+
+* Refactoring Template Message Service
+
+  <details>
+  
+  Refactoring the template message service by removing some duplications, extract methods
+  from code to lower complexity of functions with the help of sonarLint, use of DI and Constructor injection
+  
+  </details>
+
+#### Fix
+
+* Update GenerateMessageWizard from Message module and support template language selection
+
+  <details>
+  
+  Updating the language axelor base reference from the Message module to an aop reference in GenerateMessageWizard,
+  and implementing language selection within the template.
+  ```
+  
+  </details>
+
+* Remove references to AOS models
+
+  <details>
+  
+  Remove AOS models reference from the message module 
+  ```
+  
+  </details>
+
+* Remove duplicate selections and constants for media type and handle EMAILING in message
+
+  <details>
+  
+  isolate duplicated media type constants (MAIL,EMAIL,SMS..) from message and template domains
+  and adding new constant of type EMAILING
+  
+  </details>
+
+
 ## 3.0.1 (2024-04-26)
 
 #### Fix

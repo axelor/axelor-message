@@ -1,6 +1,0 @@
----
-title: Remove duplicate selections and constants for media type and handle EMAILING in message
-type: fix
-description: |
-  isolate duplicated media type constants (MAIL,EMAIL,SMS..) from message and template domains
-  and adding new constant of type EMAILING

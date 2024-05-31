@@ -1,6 +1,0 @@
----
-title: Refactoring Template Message Service
-type: change
-description: |
-  Refactoring the template message service by removing some duplications, extract methods
-  from code to lower complexity of functions with the help of sonarLint, use of DI and Constructor injection
