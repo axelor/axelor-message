@@ -22,6 +22,8 @@ import static com.axelor.common.StringUtils.isBlank;
 import com.axelor.auth.AuditableRunner;
 import com.axelor.db.Model;
 import com.axelor.db.Query;
+import com.axelor.db.tenants.TenantAware;
+import com.axelor.db.tenants.TenantResolver;
 import com.axelor.inject.Beans;
 import com.axelor.mail.MailAccount;
 import com.axelor.mail.MailBuilder;
@@ -199,15 +201,29 @@ public class MailServiceMessageImpl extends MailServiceImpl {
       throw new MailException(e);
     }
 
+    Callable<Boolean> callable =
+        () -> {
+          send(sender, email);
+          return true;
+        };
+
+    String tenantId = TenantResolver.currentTenantIdentifier();
+    String tenantHost = TenantResolver.currentTenantHost();
+
     // send email using a separate process to void thread blocking
     executor.submit(
-        new Callable<Boolean>() {
-          @Override
-          public Boolean call() throws Exception {
-            send(sender, email);
-            return true;
-          }
-        });
+        () ->
+            new TenantAware( // Add Tenant Aware
+                    () -> {
+                      try {
+                        callable.call();
+                      } catch (Exception e) {
+                        throw new IllegalStateException(e);
+                      }
+                    })
+                .tenantHost(tenantHost)
+                .tenantId(tenantId)
+                .run());
   }
 
   protected MailSender getMailSender(EmailAccount emailAccount) {
