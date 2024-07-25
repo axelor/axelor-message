@@ -1,0 +1,5 @@
+---
+title: Update email sending thread with TenantAware
+type: feature
+description:
+  Update thread sending email jobs with TenantAware

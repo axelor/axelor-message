@@ -21,6 +21,8 @@ import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
 import com.axelor.auth.db.repo.UserRepository;
 import com.axelor.db.JpaSupport;
+import com.axelor.db.tenants.TenantAware;
+import com.axelor.db.tenants.TenantResolver;
 import com.axelor.event.Observes;
 import com.axelor.events.ShutdownEvent;
 import com.axelor.mail.MailBuilder;
@@ -30,6 +32,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.persistence.EntityNotFoundException;
@@ -65,7 +68,7 @@ public class SendMailQueueService extends JpaSupport {
     long messageId = message.getId();
     log.debug("Submitting job to executor for message {}...", messageId);
     User currentUser = AuthUtils.getUser();
-    executor.submit(
+    Callable<Boolean> callable =
         () -> {
           try {
             final long startTime = System.currentTimeMillis();
@@ -101,7 +104,24 @@ public class SendMailQueueService extends JpaSupport {
             log.error("Exception when sending email: {}", e.getMessage(), e);
           }
           return true;
-        });
+        };
+
+    String tenantId = TenantResolver.currentTenantIdentifier();
+    String tenantHost = TenantResolver.currentTenantHost();
+
+    executor.submit(
+        () ->
+            new TenantAware(
+                    () -> {
+                      try {
+                        callable.call();
+                      } catch (Exception e) {
+                        throw new IllegalStateException(e);
+                      }
+                    })
+                .tenantHost(tenantHost)
+                .tenantId(tenantId)
+                .run());
   }
 
   /**
