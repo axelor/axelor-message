@@ -11,6 +11,12 @@
   </details>
 
 
+## 3.1.1 (2024-06-27)
+
+#### Change
+
+* Change AOP version to 7.1.0
+
 ## 3.1.0 (2024-05-31)
 
 #### Feature
