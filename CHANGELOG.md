@@ -1,3 +1,16 @@
+## 3.1.2 (2024-08-30)
+
+#### Fix
+
+* Update email sending thread with TenantAware
+
+  <details>
+  
+  Update thread sending email jobs with TenantAware
+  
+  </details>
+
+
 ## 3.1.0 (2024-05-31)
 
 #### Feature
