@@ -105,21 +105,24 @@
     <view-param name="forceEdit" value="true"/>
     <context name="_metaModel" expr="eval:__repo__(MetaModel).find(metaModel.id).fullName"
       if="metaModel!=null"/>
-    <context name="_metaJsonModel" expr="eval:__self__.metaJsonModel"
+    <context name="_metaJsonModel" expr="eval: metaJsonModel"
+      if="isJson &amp;&amp; metaJsonModel!=null"/>
+    <context name="_metaJsonModelName" expr="eval: metaJsonModel.name"
       if="isJson &amp;&amp; metaJsonModel!=null"/>
     <context name="_showRecord" expr="eval: __self__.id"/>
   </action-view>
 
   <action-attrs name="action-template-test-attrs-onload">
-    <attribute if="metaModel != null" name="value" expr="eval:_metaModel" for="$reference"/>
+    <attribute if="metaModel != null" name="value" expr="eval: _metaModel"
+      for="$reference"/>
     <attribute if="metaModel == null" name="hidden" expr="true"
       for="metaModelReferencePanel"/>
     <attribute if="isJson" name="value" expr="eval: _metaJsonModel"
       for="jsonModelReference"/>
     <attribute if="metaModel != null" name="hidden" expr="true"
       for="metaJsonModelReferencePanel"/>
-    <attribute if="_metaJsonModel!=null"
-      expr="eval: 'self.jsonModel=\''+_metaJsonModel.name+'\''" for="jsonModelRecord" name="domain"/>
+    <attribute expr="eval: 'self.jsonModel=\''+_metaJsonModelName+'\''"
+      for="jsonModelRecord" name="domain"/>
   </action-attrs>
   <action-attrs name="action-template-json-model-reference-attrs-on-change">
     <attribute name="value" expr="eval: null" for="jsonModelRecord"/>
