@@ -29,6 +29,8 @@ import com.axelor.message.db.Message;
 import com.axelor.message.db.Template;
 import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.meta.db.MetaModel;
+import com.axelor.meta.db.repo.MetaJsonModelRepository;
+import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.utils.template.TemplateMaker;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -94,19 +96,31 @@ public class TemplateServiceImpl implements TemplateService {
   }
 
   @SuppressWarnings("unchecked")
-  public Message generateDraftMessage(Template template, MetaModel metaModel, String referenceId)
+  public Message generateDraftMessage(Template template, String reference, String referenceId)
       throws ClassNotFoundException {
-
-    if (metaModel == null) {
-      return null;
-    }
-    String model = metaModel.getFullName();
     Model modelObject = null;
-
-    if (StringUtils.notEmpty(model)) {
-      Class<? extends Model> modelClass = (Class<? extends Model>) Class.forName(model);
-      modelObject = JPA.find(modelClass, Long.valueOf(referenceId));
+    if (template.getIsJson()) {
+      modelObject =
+          Beans.get(MetaJsonModelRepository.class)
+              .all()
+              .filter("self.name = ?", reference)
+              .fetchOne();
+    } else {
+      MetaModel metaModel =
+          Beans.get(MetaModelRepository.class)
+              .all()
+              .filter("self.fullName = ?", reference)
+              .fetchOne();
+      if (metaModel == null) {
+        return null;
+      }
+      String model = metaModel.getFullName();
+      if (StringUtils.notEmpty(model)) {
+        Class<? extends Model> modelClass = (Class<? extends Model>) Class.forName(model);
+        modelObject = JPA.find(modelClass, Long.valueOf(referenceId));
+      }
     }
+
     return Beans.get(TemplateMessageService.class).generateMessage(modelObject, template, true);
   }
 }

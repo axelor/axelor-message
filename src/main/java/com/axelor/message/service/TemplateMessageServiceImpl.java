@@ -109,8 +109,8 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
     Class<?> klass = EntityHelper.getEntityClass(model);
     return generateMessage(
         model.getId() == null ? 0L : model.getId(),
-        klass.getCanonicalName(),
-        klass.getSimpleName(),
+        template.getIsJson() ? ((MetaJsonModel) model).getName() : klass.getCanonicalName(),
+        template.getIsJson() ? ((MetaJsonModel) model).getName() : klass.getSimpleName(),
         template,
         isTemporaryMessage);
   }
@@ -185,7 +185,6 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
         Boolean.TRUE.equals(template.getIsJson())
             ? ((MetaJsonModel) modelObj).getName()
             : ((MetaModel) modelObj).getFullName();
-
     if (!model.equals(modelName)) {
       throw new IllegalStateException(
           String.format(
