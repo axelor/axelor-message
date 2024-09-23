@@ -43,6 +43,7 @@ import com.axelor.message.service.TemplateContextServiceImpl;
 import com.axelor.message.service.TemplateMessageService;
 import com.axelor.message.service.TemplateMessageServiceImpl;
 import com.axelor.message.service.TemplateService;
+import com.axelor.message.service.TemplateServiceImpl;
 import com.axelor.message.service.registry.MailMessageActionRegister;
 import com.axelor.utils.service.AppSettingsServiceImpl;
 import com.google.inject.Singleton;
@@ -66,7 +67,7 @@ public class MessageModule extends AxelorModule {
     bind(MailMessageActionRegister.class).in(Singleton.class);
     // needed to use event notification methods
     bind(SendMailQueueService.class);
-    bind(TemplateService.class);
+    bind(TemplateService.class).to(TemplateServiceImpl.class);
     // needed to scan classes that implements the MailMessageAction in the startup
     bind(MailMessageServerStartListener.class);
   }
