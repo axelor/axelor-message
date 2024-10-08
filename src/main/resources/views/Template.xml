@@ -14,7 +14,8 @@
     onNew="action-template-record-new" width="large">
     <toolbar>
       <button name="testTemplateBtn" title="Test template"
-        onClick="save,action-template-view-test-template" readonlyIf="metaModel == null"/>
+        onClick="save,action-template-view-test-template"
+        readonlyIf="metaModel == null &amp;&amp; (!isJson || metaJsonModel == null)"/>
     </toolbar>
     <panel name="mainPanel" colSpan="12">
       <field name="name" colSpan="4"/>
@@ -76,10 +77,20 @@
   <form name="template-test-wizard-form" title="Test template"
     model="com.axelor.utils.db.Wizard" onLoad="action-template-test-attrs-onload">
     <panel name="mainPanel">
-      <field name="$reference" colSpan="8" title="Reference" widget="RefSelect"
-        selection="all.model.reference.select" x-related="$referenceId"/>
-      <button name="generateMsgBtn" title="Generate Message" showIf="$referenceId"
-        colSpan="4" onClick="save,action-template-method-generate-message,close"/>
+      <panel name="metaModelReferencePanel" colSpan="8">
+        <field name="$reference" colSpan="12" title="Reference" widget="RefSelect"
+          selection="all.model.reference.select" x-related="$referenceId"/>
+      </panel>
+      <panel name="metaJsonModelReferencePanel" colSpan="8">
+        <field name="jsonModelReference" colSpan="3" title="Reference" type="many-to-one"
+          target="com.axelor.meta.db.MetaJsonModel" target-name="name"
+          onChange="action-template-json-model-reference-attrs-on-change"/>
+        <field name="jsonModelRecord" colSpan="9" showTitle="false" type="many-to-one"
+          target="com.axelor.meta.db.MetaJsonRecord"/>
+      </panel>
+      <button name="generateMsgBtn" title="Generate Message"
+        showIf="$referenceId||jsonModelRecord" colSpan="4"
+        onClick="save,action-template-method-generate-message,close"/>
       <field name="$referenceId" hidden="true"/>
     </panel>
   </form>
@@ -94,12 +105,30 @@
     <view-param name="forceEdit" value="true"/>
     <context name="_metaModel" expr="eval:__repo__(MetaModel).find(metaModel.id).fullName"
       if="metaModel!=null"/>
+    <context name="_metaJsonModel" expr="eval: metaJsonModel"
+      if="isJson &amp;&amp; metaJsonModel!=null"/>
+    <context name="_metaJsonModelName" expr="eval: metaJsonModel.name"
+      if="isJson &amp;&amp; metaJsonModel!=null"/>
     <context name="_showRecord" expr="eval: __self__.id"/>
   </action-view>
 
   <action-attrs name="action-template-test-attrs-onload">
-    <attribute if="_metaModel != null" name="value" expr="eval:_metaModel"
+    <attribute if="metaModel != null" name="value" expr="eval: _metaModel"
       for="$reference"/>
+    <attribute if="metaModel == null" name="hidden" expr="true"
+      for="metaModelReferencePanel"/>
+    <attribute if="isJson" name="value" expr="eval: _metaJsonModel"
+      for="jsonModelReference"/>
+    <attribute if="metaModel != null" name="hidden" expr="true"
+      for="metaJsonModelReferencePanel"/>
+    <attribute expr="eval: 'self.jsonModel=\''+_metaJsonModelName+'\''"
+      for="jsonModelRecord" name="domain"/>
+  </action-attrs>
+  <action-attrs name="action-template-json-model-reference-attrs-on-change">
+    <attribute name="value" expr="eval: null" for="jsonModelRecord"/>
+    <attribute if="jsonModelReference!=null"
+      expr="eval: 'self.jsonModel=\''+jsonModelReference.name+'\''" for="jsonModelRecord"
+      name="domain"/>
   </action-attrs>
 
   <action-method name="action-template-method-generate-message">

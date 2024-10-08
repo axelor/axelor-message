@@ -24,6 +24,7 @@ import com.axelor.message.db.Template;
 import com.axelor.message.db.repo.TemplateRepository;
 import com.axelor.message.service.TemplateService;
 import com.axelor.message.translation.ITranslation;
+import com.axelor.meta.db.MetaJsonModel;
 import com.axelor.meta.db.MetaModel;
 import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.meta.schema.actions.ActionView;
@@ -31,6 +32,7 @@ import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
 import com.axelor.utils.helpers.ExceptionHelper;
+import java.util.Map;
 
 public class TemplateController {
 
@@ -39,15 +41,30 @@ public class TemplateController {
       Context context = request.getContext();
       Template template = context.asType(Template.class);
       template = Beans.get(TemplateRepository.class).find(template.getId());
-      MetaModel metaModel =
-          Beans.get(MetaModelRepository.class)
-              .all()
-              .filter("self.fullName = ?", context.get("reference").toString())
-              .fetchOne();
-
+      String reference = null;
+      String referenceId = null;
+      MetaModel metaModel = null;
+      if (template.getIsJson()) {
+        Map<String, Object> jsonModelReference =
+            (Map<String, Object>) context.get("jsonModelReference");
+        Map<String, Object> jsonModelRecord = (Map<String, Object>) context.get("jsonModelRecord");
+        if (jsonModelReference != null && jsonModelReference.containsKey("name")) {
+          reference = (String) jsonModelReference.get("name");
+        }
+        if (jsonModelRecord != null && jsonModelRecord.containsKey("id")) {
+          referenceId = jsonModelRecord.get("id").toString();
+        }
+        metaModel =
+            Beans.get(MetaModelRepository.class)
+                .all()
+                .filter("self.fullName = ?", MetaJsonModel.class.getName())
+                .fetchOne();
+      } else {
+        reference = context.get("reference").toString();
+        referenceId = context.get("referenceId").toString();
+      }
       Message message =
-          Beans.get(TemplateService.class)
-              .generateDraftMessage(template, metaModel, context.get("referenceId").toString());
+          Beans.get(TemplateService.class).generateDraftMessage(template, reference, referenceId);
       response.setView(
           ActionView.define(I18n.get(ITranslation.MESSAGE_TEST_TEMPLATE))
               .model(Message.class.getName())
