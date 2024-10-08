@@ -1,0 +1,5 @@
+title: Extract all ALL_MODEL_SELECT related code from TemplateService
+type: Change
+description:
+  Refactored TemplateService fixing bad practices.
+  Extracted all ALL_MODEL_SELECT related logic into Utils module.
