@@ -1,3 +1,26 @@
+## 3.2.0 (2024-10-08)
+
+#### Feature
+
+* Support Draft message generation on custom models
+
+  <details>
+  
+  Support costume models while generating a draft message or testing a template costume models are added on test template wizard so its possible to select a json model and the select the record
+  
+  </details>
+
+#### Change
+
+* Extract all ALL_MODEL_SELECT related code from TemplateService
+
+  <details>
+  
+  Refactored TemplateService fixing bad practices. Extracted all ALL_MODEL_SELECT related logic into Utils module.
+  
+  </details>
+
+
 ## 3.1.2 (2024-08-30)
 
 #### Fix
