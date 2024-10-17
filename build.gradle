@@ -11,7 +11,7 @@ buildscript {
     }
     maven { url 'https://repository.axelor.com/nexus/repository/maven-public/' }
   }
-  ext.aopVersion = '7.0.0'
+  ext.aopVersion = '7.0.10'
   repositories repos
   buildscript.repositories repos
   dependencies {
@@ -55,7 +55,7 @@ dependencies {
   if (findProject(":modules:axelor-utils") != null) {
     api project(":modules:axelor-utils")
   } else {
-    implementation "com.axelor.addons:axelor-utils:3.0.0"
+    implementation "com.axelor.addons:axelor-utils:3.0.1"
   }
   testImplementation 'org.awaitility:awaitility:4.2.0'
 }
