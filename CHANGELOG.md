@@ -1,3 +1,16 @@
+## 3.1.3 (2024-10-17)
+
+#### Fix
+
+* Update axelor utils version to use aop 7.1.8
+
+  <details>
+  
+  Update axelor utils version and use aop 7.1.8 fix
+  
+  </details>
+
+
 ## 3.1.2 (2024-08-30)
 
 #### Fix
