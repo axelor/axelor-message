@@ -1,0 +1,6 @@
+---
+title: Update axelor utils version to use aop 7.2.1
+type: fix
+description:
+  Update axelor utils version and use aop 7.2.1 fix
+
