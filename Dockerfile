@@ -27,7 +27,7 @@ RUN mkdir -p ${APP_SOURCE}/webapps/ROOT && \
 # Image to run tomcat with axelor-app
 FROM tomcat:9.0-jre11-temurin
 
-ARG MODULE_NAME="axelor-studio"
+ARG MODULE_NAME="axelor-message"
 ARG PROJECT_VENDOR="Axelor"
 ARG CATALINA_MEMORY_ALLOC_PCT=90
 
