@@ -10,7 +10,6 @@ import com.axelor.utils.junit.BaseTest;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import org.apache.commons.collections.CollectionUtils;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,10 +44,10 @@ public class MailMessageServiceTest extends BaseTest {
   }
 
   @Test
-  void sendNotification_simple() {
+  void sendNotification_simple() throws InterruptedException {
     User user = all(User.class).fetchOne();
     mailMessageService.sendNotification(user, "subject", "body");
-    Awaitility.await().until(mailMessageCreator::idle);
+    Thread.sleep(1000);
     MailMessage message = all(MailMessage.class).fetchOne();
     Assertions.assertNotNull(message);
     Assertions.assertNotNull(message.getId());
