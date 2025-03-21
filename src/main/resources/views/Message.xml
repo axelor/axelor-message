@@ -74,6 +74,9 @@
         onClick="save,action-message-method-print-pdf-email" readonlyIf="id == null"/>
       <button name="sendBtn" title="Send" icon="fa-envelope"
         onClick="action-group-message-message-send-click" showIf="statusSelect == 1 "/>
+      <button name="resendBtn" title="Resend" icon="fa-envelope"
+        onClick="action-group-message-message-send-click"
+        showIf="statusSelect == 2 &amp;&amp; sentDateT == null "/>
       <button name="trashBtn" title="Delete" icon="fa-trash"
         onClick="action-group-message-message-delete-click" showIf="statusSelect != 4 "/>
     </toolbar>
