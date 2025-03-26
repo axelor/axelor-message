@@ -1,0 +1,7 @@
+---
+title: Update schema locations to version 7.3 in XML configuration files
+type: fix
+description: |
+  Updated XML schema references to the latest version (7.3) across domain, 
+  view, and data-import files. Upgraded `axelor-utils` dependency from 
+  version 3.2.1 to 3.3.0 in the build configuration for compatibility.
