@@ -14,7 +14,7 @@
         grid-view="template-grid" onSelect="action-method-template-domain"/>
       <spacer name="languageSpacer"/>
       <button name="validateBtn" title="Validate"
-        onClick="save, action-generate-message-method-generate-message"/>
+        onClick="action-generate-message-method-generate-message"/>
     </panel>
   </form>
 
