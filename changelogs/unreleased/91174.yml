@@ -1,0 +1,5 @@
+---
+title: Pattern validation issue for email address
+type: fix
+description: |
+  Enforce the regex pattern in the repository to prevent persistence of invalid email addresses when creating it using "Create and Select".
