@@ -50,12 +50,14 @@ import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeUtility;
 import javax.persistence.LockModeType;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -375,8 +377,13 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     if (!Strings.isNullOrEmpty(mailAccount.getFromAddress())) {
       String fromAddress = mailAccount.getFromAddress();
       if (!Strings.isNullOrEmpty(mailAccount.getFromName())) {
-        fromAddress =
-            String.format("%s <%s>", mailAccount.getFromName(), mailAccount.getFromAddress());
+        String fromName;
+        try {
+          fromName = MimeUtility.encodeText(mailAccount.getFromName(), "UTF-8", "B");
+        } catch (UnsupportedEncodingException e) {
+          fromName = mailAccount.getFromName();
+        }
+        fromAddress = String.format("%s <%s>", fromName, mailAccount.getFromAddress());
       } else if (message.getFromEmailAddress() != null) {
         if (!Strings.isNullOrEmpty(message.getFromEmailAddress().getAddress())) {
           log.debug(
