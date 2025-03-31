@@ -66,4 +66,7 @@ public final class MessageExceptionMessage {
 
   public static final String TEMPORARY_EMAIL_MEDIA_TYPE_ERROR = /*$$(*/
       "Temporary email service only support Email media type." /*)*/;
+
+  public static final String INVALID_EMAIL_ADDRESS_FORMAT = /*$$(*/
+      "Invalid address format :  %s" /*)*/;
 }
