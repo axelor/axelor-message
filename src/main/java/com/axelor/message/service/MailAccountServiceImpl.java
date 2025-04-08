@@ -359,11 +359,17 @@ public class MailAccountServiceImpl implements MailAccountService {
     EmailAddress emailAddress = null;
     emailAddress = emailAddressRepo.findByAddress(address.getAddress());
     if (emailAddress == null) {
-      emailAddress = new EmailAddress();
-      emailAddress.setAddress(address.getAddress());
+      emailAddress = createEmailAddress(address.getAddress());
     }
 
     return emailAddress;
+  }
+
+  @Transactional(rollbackOn = Exception.class)
+  private EmailAddress createEmailAddress(String address) {
+    EmailAddress emailAddress = new EmailAddress();
+    emailAddress.setAddress(address);
+    return emailAddressRepo.save(emailAddress);
   }
 
   private Set<EmailAddress> getEmailAddressSet(List<InternetAddress> addresses) {
