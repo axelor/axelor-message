@@ -85,6 +85,7 @@
 "Related to","Associé à ",,
 "Related to select",,,
 "Reply to","Répondre à",,
+"Resend","Renvoyer",,
 "Resend messages","Renvoyer les messages",,
 "SMS",,,
 "SMTP","SMTP",,
@@ -128,3 +129,4 @@
 "Waiting model: %s","En attente du modèle : %s",,
 "Your target receptor is not valid. Please check it.","Votre récepteur cible n’est pas valide. Veuillez le vérifier.",,
 "user@mydomain.com",,,
+"Invalid address format :  %s","Le format de l'adresse est invalide : %s",,

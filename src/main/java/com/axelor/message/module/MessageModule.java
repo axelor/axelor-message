@@ -19,6 +19,8 @@ package com.axelor.message.module;
 
 import com.axelor.app.AxelorModule;
 import com.axelor.mail.service.MailServiceImpl;
+import com.axelor.message.db.repo.EmailAddressRepo;
+import com.axelor.message.db.repo.EmailAddressRepository;
 import com.axelor.message.db.repo.MessageManagementRepository;
 import com.axelor.message.db.repo.MessageRepository;
 import com.axelor.message.listener.MailMessageServerStartListener;
@@ -70,5 +72,6 @@ public class MessageModule extends AxelorModule {
     bind(TemplateService.class).to(TemplateServiceImpl.class);
     // needed to scan classes that implements the MailMessageAction in the startup
     bind(MailMessageServerStartListener.class);
+    bind(EmailAddressRepository.class).to(EmailAddressRepo.class);
   }
 }

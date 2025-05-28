@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.3.xsd">
 
   <grid name="message-grid" title="Emails" model="com.axelor.message.db.Message"
     orderBy="-sentDateT">
@@ -74,6 +74,9 @@
         onClick="save,action-message-method-print-pdf-email" readonlyIf="id == null"/>
       <button name="sendBtn" title="Send" icon="fa-envelope"
         onClick="action-group-message-message-send-click" showIf="statusSelect == 1 "/>
+      <button name="resendBtn" title="Resend" icon="fa-envelope"
+        onClick="action-group-message-message-send-click"
+        showIf="statusSelect == 2 &amp;&amp; sentDateT == null "/>
       <button name="trashBtn" title="Delete" icon="fa-trash"
         onClick="action-group-message-message-delete-click" showIf="statusSelect != 4 "/>
     </toolbar>
