@@ -75,7 +75,7 @@
       <button name="sendBtn" title="Send" icon="fa-envelope"
         onClick="action-group-message-message-send-click" showIf="statusSelect == 1 "/>
       <button name="resendBtn" title="Resend" icon="fa-envelope"
-        onClick="action-group-message-message-send-click"
+        onClick="action-group-message-message-resend-click"
         showIf="statusSelect == 2 &amp;&amp; sentDateT == null "/>
       <button name="trashBtn" title="Delete" icon="fa-trash"
         onClick="action-group-message-message-delete-click" showIf="statusSelect != 4 "/>
@@ -242,5 +242,15 @@
   <action-method name="action-message-method-display-generate-message">
     <call class="com.axelor.message.web.MessageController" method="setContextValues"/>
   </action-method>
+
+  <action-group name="action-group-message-message-resend-click">
+    <action name="action-attrs-message-message-back-to-draft"/>
+    <action name="save"/>
+    <action name="action-group-message-message-send-click"/>
+  </action-group>
+
+  <action-attrs name="action-attrs-message-message-back-to-draft">
+    <attribute for="statusSelect" name="value" expr="1"/>
+  </action-attrs>
 
 </object-views>
