@@ -1,3 +1,26 @@
+## 3.1.4 (2025-06-16)
+
+#### Fix
+
+* Duplicate email addresses created when fetching emails
+* Remove unnecessary save action from validate button
+* Encode from name
+
+  <details>
+  
+  Encode fromName in MessageServiceImpl#sendByEmail to handle non-ASCII characters, preventing display issues in user inboxes.
+  
+  </details>
+
+* Pattern validation issue for email address
+
+  <details>
+  
+  Enforce the regex pattern in the repository to prevent persistence of invalid email addresses when creating it using "Create and Select".
+  
+  </details>
+
+
 ## 3.1.3 (2024-10-17)
 
 #### Fix
