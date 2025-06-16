@@ -1,3 +1,42 @@
+## 3.2.3 (2025-06-16)
+
+#### Fix
+
+* Remove unnecessary save action from validate button
+* Encode from name
+
+  <details>
+  
+  Encode fromName in MessageServiceImpl#sendByEmail to handle non-ASCII characters, preventing display issues in user inboxes.
+  
+  </details>
+
+* Pattern validation issue for email address
+
+  <details>
+  
+  Enforce the regex pattern in the repository to prevent persistence of invalid email addresses when creating it using "Create and Select".
+  
+  </details>
+
+* In progress messages blocked
+
+  <details>
+  
+  Allow to resend messages in the "In Progress" status from the message form view.
+  
+  </details>
+
+* Duplicate email addresses created when fetching emails
+* Prevent duplicate email sending
+
+  <details>
+  
+  Improved the message sending logic to ensure a message is only sent if it's in draft status. This prevents accidental multiple sends when clicking the send button twice.
+  
+  </details>
+
+
 ## 3.2.2 (2024-11-04)
 
 #### Fix
