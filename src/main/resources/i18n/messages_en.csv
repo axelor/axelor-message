@@ -130,3 +130,4 @@
 "Your target receptor is not valid. Please check it.",,,
 "user@mydomain.com",,,
 "Invalid address format :  %s",,,
+"The message is already being sent. Please wait...",,,
