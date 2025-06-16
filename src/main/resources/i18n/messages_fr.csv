@@ -130,3 +130,4 @@
 "Your target receptor is not valid. Please check it.","Votre récepteur cible n’est pas valide. Veuillez le vérifier.",,
 "user@mydomain.com",,,
 "Invalid address format :  %s","Le format de l'adresse est invalide : %s",,
+"The message is already being sent. Please wait...","Le message est déjà en cours d'envoi. Veuillez patienter...",,
