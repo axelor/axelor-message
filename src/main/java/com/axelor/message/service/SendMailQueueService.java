@@ -56,7 +56,7 @@ public class SendMailQueueService extends JpaSupport {
   }
 
   private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-  protected ExecutorService executor = Executors.newSingleThreadExecutor();
+  protected final ExecutorService executor = Executors.newSingleThreadExecutor();
 
   /**
    * Submit a mail job to an executor which will send mails in a separate thread.
