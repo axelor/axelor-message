@@ -31,7 +31,7 @@ import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** An example {@link Job} class that prints a some messages to the stderr. */
+/** An example {@link Job} class that prints some messages to the stderr. */
 public class FetchEmailJob implements Job {
 
   protected final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
