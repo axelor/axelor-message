@@ -47,7 +47,7 @@ public class MailMessageActionRegister {
   }
 
   private void filterOutAndStoreSubClasses() {
-    mailActionClasses.removeIf(klass -> Boolean.TRUE.equals(isSubClassPresent(klass)));
+    mailActionClasses.removeIf(this::isSubClassPresent);
 
     LOG.debug("Registered classes : ");
     mailActionClasses.forEach(klass -> LOG.debug(klass.getCanonicalName()));
@@ -55,10 +55,7 @@ public class MailMessageActionRegister {
 
   private boolean isSubClassPresent(Class<?> klass) {
     return mailActionClasses.stream()
-        .anyMatch(
-            actionClass ->
-                Boolean.FALSE.equals(actionClass.equals(klass))
-                    && klass.isAssignableFrom(actionClass));
+        .anyMatch(actionClass -> !actionClass.equals(klass) && klass.isAssignableFrom(actionClass));
   }
 
   public Set<Class<? extends MailMessageAction>> getMailActionClasses() {
