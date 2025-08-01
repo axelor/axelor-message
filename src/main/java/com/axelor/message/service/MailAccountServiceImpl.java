@@ -19,6 +19,7 @@ package com.axelor.message.service;
 
 import com.axelor.i18n.I18n;
 import com.axelor.mail.ImapAccount;
+import com.axelor.mail.MailAccount;
 import com.axelor.mail.MailConstants;
 import com.axelor.mail.MailParser;
 import com.axelor.mail.MailReader;
@@ -261,30 +262,17 @@ public class MailAccountServiceImpl implements MailAccountService {
       return 0;
     }
 
-    log.debug(
-        "Fetching emails from host: {}, port: {}, login: {} ",
-        mailAccount.getHost(),
-        mailAccount.getPort(),
-        mailAccount.getLogin());
+    String host = mailAccount.getHost();
+    Integer port = mailAccount.getPort();
+    String login = mailAccount.getLogin();
+    String password = mailAccount.getPassword();
 
-    com.axelor.mail.MailAccount account = null;
-    if (mailAccount.getServerTypeSelect().equals(EmailAccountRepository.SERVER_TYPE_IMAP)) {
-      account =
-          new ImapAccount(
-              mailAccount.getHost(),
-              mailAccount.getPort().toString(),
-              mailAccount.getLogin(),
-              mailAccount.getPassword(),
-              getSecurity(mailAccount));
-    } else {
-      account =
-          new Pop3Account(
-              mailAccount.getHost(),
-              mailAccount.getPort().toString(),
-              mailAccount.getLogin(),
-              mailAccount.getPassword(),
-              getSecurity(mailAccount));
-    }
+    log.debug("Fetching emails from host: {}, port: {}, login: {} ", host, port, login);
+
+    MailAccount account =
+        mailAccount.getServerTypeSelect().equals(EmailAccountRepository.SERVER_TYPE_IMAP)
+            ? new ImapAccount(host, port.toString(), login, password, getSecurity(mailAccount))
+            : new Pop3Account(host, port.toString(), login, password, getSecurity(mailAccount));
 
     MailReader reader = new MailReader(account);
     final Store store = reader.getStore();
