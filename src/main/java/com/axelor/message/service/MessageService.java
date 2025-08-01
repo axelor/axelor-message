@@ -46,9 +46,9 @@ public interface MessageService {
       String signature);
 
   /**
-   * Function is used to create temporary {@link Message}, which will only be send but not be saved.
-   * <br>
-   * Only when isTemporaryMessage = {@code True}.
+   * Create temporary {@link Message}, which will only be sent but not saved.
+   *
+   * <p>Only when isTemporaryMessage = {@code True}.
    *
    * @param model
    * @param id
@@ -99,9 +99,7 @@ public interface MessageService {
   /**
    * Send {@link Message}.
    *
-   * <p>If @param isTemporaryEmail is {@code True}, Message will not saved but only send.
-   *
-   * <p>
+   * <p>If @param isTemporaryEmail is {@code True}, Message will not be saved but only send.
    *
    * @param message
    * @param isTemporaryEmail
@@ -124,9 +122,7 @@ public interface MessageService {
   /**
    * Send Message as email.
    *
-   * <p>If @param isTemporaryEmail is {@code True}, Message will not saved but only send.
-   *
-   * <p>
+   * <p>If @param isTemporaryEmail is {@code True}, Message will not be saved but only send.
    *
    * @param message
    * @param isTemporaryEmail
