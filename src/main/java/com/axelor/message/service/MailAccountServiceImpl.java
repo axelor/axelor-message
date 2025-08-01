@@ -232,19 +232,17 @@ public class MailAccountServiceImpl implements MailAccountService {
 
   public String getProtocol(EmailAccount mailAccount) {
 
-    switch (mailAccount.getServerTypeSelect()) {
-      case EmailAccountRepository.SERVER_TYPE_SMTP:
-        return "smtp";
-      case EmailAccountRepository.SERVER_TYPE_IMAP:
+    return switch (mailAccount.getServerTypeSelect()) {
+      case EmailAccountRepository.SERVER_TYPE_SMTP -> "smtp";
+      case EmailAccountRepository.SERVER_TYPE_IMAP -> {
         if (mailAccount.getSecuritySelect() == EmailAccountRepository.SECURITY_SSL) {
-          return MailConstants.PROTOCOL_IMAPS;
+          yield MailConstants.PROTOCOL_IMAPS;
         }
-        return MailConstants.PROTOCOL_IMAP;
-      case EmailAccountRepository.SERVER_TYPE_POP:
-        return MailConstants.PROTOCOL_POP3;
-      default:
-        return "";
-    }
+        yield MailConstants.PROTOCOL_IMAP;
+      }
+      case EmailAccountRepository.SERVER_TYPE_POP -> MailConstants.PROTOCOL_POP3;
+      default -> "";
+    };
   }
 
   public String getSignature(EmailAccount mailAccount) {
