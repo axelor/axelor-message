@@ -41,7 +41,6 @@ dependencies {
     // TODO use stable version when available
     implementation 'com.axelor.addons:axelor-utils:4.0.+'
   }
-  testImplementation 'org.awaitility:awaitility:4.3.0'
 }
 
 changelog {
