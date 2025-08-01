@@ -18,7 +18,7 @@ ARG NEXUS_READER_PASSWORD
 
 
 RUN chmod +x gradlew && \
-./gradlew --no-daemon clean assemble
+./gradlew --no-daemon clean assemble -PaxelorMavenUsername=${NEXUS_READER_USERNAME} -PaxelorMavenPassword=${NEXUS_READER_PASSWORD}
 
 RUN mkdir -p ${APP_SOURCE}/webapps/ROOT && \
     unzip -q -o ${APP_SOURCE}/build/libs/*.war -d ${APP_SOURCE}/webapps/ROOT/
