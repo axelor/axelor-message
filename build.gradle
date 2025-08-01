@@ -9,7 +9,7 @@ apply from: './gradle/version.gradle'
 apply plugin: ChangelogSupport
 
 try {
-  tasks.named("spotlessCheck")
+  tasks.named('spotlessCheck')
 } catch (UnknownTaskException ignored) {
   apply from: './gradle/style.gradle'
 }
@@ -24,12 +24,12 @@ java {
   }
 }
 
-group = "com.axelor.addons"
-description "Axelor Message Module"
+group = 'com.axelor.addons'
+description 'Axelor Message Module'
 
 axelor {
-  title "Axelor Message"
-  description "Axelor Message Module"
+  title 'Axelor Message'
+  description 'Axelor Message Module'
 }
 
 dependencies {
@@ -46,10 +46,10 @@ dependencies {
 
 changelog {
   version = baseVersion
-  output.set(file("CHANGELOG.md"))
-  inputPath.set(file("changelogs/unreleased"))
-  types.set(["Feature", "Change", "Deprecate", "Remove", "Fix", "Security"])
-  header.set("${version.get()} (${new Date().format("yyyy-MM-dd")})")
+  output.set(file('CHANGELOG.md'))
+  inputPath.set(file('changelogs/unreleased'))
+  types.set(['Feature', 'Change', 'Deprecate', 'Remove', 'Fix', 'Security'])
+  header.set("${version.get()} (${new Date().format('yyyy-MM-dd')})")
 }
 
 //
@@ -59,18 +59,18 @@ changelog {
 apply plugin: 'maven-publish'
 
 ext {
-  mavenUsername = project.findProperty("addonsMavenUsername")
-  mavenPassword = project.findProperty("addonsMavenPassword")
+  mavenUsername = project.findProperty('addonsMavenUsername')
+  mavenPassword = project.findProperty('addonsMavenPassword')
 }
 
 publishing {
   repositories {
     maven {
-      def repoPath = project.hasProperty("finalRelease")
-          ? "maven-releases"
-          : "maven-snapshots"
-      name = "maven"
-      url = "https://repository.axelor.com/nexus/repository/" + repoPath
+      def repoPath = project.hasProperty('finalRelease')
+          ? 'maven-releases'
+          : 'maven-snapshots'
+      name = 'maven'
+      url = 'https://repository.axelor.com/nexus/repository/' + repoPath
       credentials {
         username = project.mavenUsername
         password = project.mavenPassword
