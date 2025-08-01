@@ -41,7 +41,7 @@ public class MessageManagementRepository extends MessageRepository {
 
   @Override
   public Message copy(Message entity, boolean deep) {
-    entity.setStatusSelect(1);
+    entity.setStatusSelect(MessageRepository.STATUS_DRAFT);
     entity.setSentDateT(null);
     entity.setToEmailAddressSet(null);
     entity.setCcEmailAddressSet(null);
