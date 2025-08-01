@@ -22,7 +22,6 @@ import com.axelor.message.db.EmailAddress;
 import com.axelor.message.db.Message;
 import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
-import com.google.inject.persist.Transactional;
 import jakarta.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +29,6 @@ import java.util.Set;
 
 public interface MessageService {
 
-  @Transactional
   Message createMessage(
       String model,
       long id,
@@ -47,7 +45,6 @@ public interface MessageService {
       EmailAccount emailAccount,
       String signature);
 
-  @Transactional(rollbackOn = {Exception.class})
   /**
    * Function is used to create temporary {@link Message}, which will only be send but not be saved.
    * <br>
@@ -87,7 +84,6 @@ public interface MessageService {
       String signature,
       Boolean isTemporaryMessage);
 
-  @Transactional
   void attachMetaFiles(Message message, Set<MetaFile> metaFiles);
 
   Set<MetaAttachment> getMetaAttachments(Message message);
@@ -125,7 +121,6 @@ public interface MessageService {
    */
   Message sendByEmail(Message message) throws MessagingException;
 
-  @Transactional(rollbackOn = {Exception.class})
   /**
    * Send Message as email.
    *
@@ -140,13 +135,10 @@ public interface MessageService {
    */
   Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
 
-  @Transactional
   Message sendToUser(Message message);
 
-  @Transactional(rollbackOn = {Exception.class})
   Message sendByMail(Message message);
 
-  @Transactional(rollbackOn = {Exception.class})
   Message sendSMS(Message message) throws IOException;
 
   String printMessage(Message message);
