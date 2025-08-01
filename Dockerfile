@@ -35,7 +35,7 @@ ARG BUILD_DATE
 
 # Refresh repositories and install tools needed by the entrypoint
 RUN apt update && \
-    apt install -y curl coreutils postgresql-client && \
+    apt install -y coreutils curl postgresql-client && \
     rm -rf /var/lib/apt/lists/*
 
 
