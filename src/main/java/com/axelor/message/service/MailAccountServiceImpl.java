@@ -299,8 +299,8 @@ public class MailAccountServiceImpl implements MailAccountService {
 
     int count = 0;
     for (jakarta.mail.Message message : messages) {
-      if (message instanceof MimeMessage) {
-        MailParser parser = new MailParser((MimeMessage) message);
+      if (message instanceof MimeMessage mimeMessage) {
+        MailParser parser = new MailParser(mimeMessage);
         parser.parse();
         createMessage(mailAccount, parser, message.getSentDate());
         count++;
