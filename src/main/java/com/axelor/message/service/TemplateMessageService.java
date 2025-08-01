@@ -23,11 +23,11 @@ import com.axelor.message.db.Template;
 import com.axelor.message.db.TemplateContext;
 import com.axelor.meta.db.MetaFile;
 import com.axelor.text.Templates;
+import jakarta.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.mail.MessagingException;
 
 public interface TemplateMessageService {
 

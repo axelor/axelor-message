@@ -30,14 +30,14 @@ import com.axelor.message.db.Message;
 import com.axelor.message.db.repo.MessageRepository;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceException;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

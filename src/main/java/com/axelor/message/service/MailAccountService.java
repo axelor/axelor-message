@@ -19,8 +19,8 @@ package com.axelor.message.service;
 
 import com.axelor.mail.MailAccount;
 import com.axelor.message.db.EmailAccount;
+import jakarta.mail.MessagingException;
 import java.io.IOException;
-import javax.mail.MessagingException;
 
 public interface MailAccountService {
 
