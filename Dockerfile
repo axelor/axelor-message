@@ -1,4 +1,4 @@
-FROM axelor/app-builder:7.2 AS builder
+FROM axelor/app-builder:8.0-beta AS builder
 
 ARG JAVA_OPTS="-Xmx4g"
 ARG APP_SOURCE="/app/open-platform-demo"
@@ -16,7 +16,6 @@ WORKDIR ${APP_SOURCE}
 ARG NEXUS_READER_USERNAME
 ARG NEXUS_READER_PASSWORD
 
-
 RUN chmod +x gradlew && \
 ./gradlew --no-daemon clean assemble -PaxelorMavenUsername=${NEXUS_READER_USERNAME} -PaxelorMavenPassword=${NEXUS_READER_PASSWORD}
 
@@ -25,7 +24,7 @@ RUN mkdir -p ${APP_SOURCE}/webapps/ROOT && \
 
 
 # Image to run tomcat with axelor-app
-FROM tomcat:9.0-jre11-temurin
+FROM tomcat:10.1-jre21-temurin
 
 ARG MODULE_NAME="axelor-message"
 ARG PROJECT_VENDOR="Axelor"
