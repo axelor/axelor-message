@@ -156,7 +156,6 @@ public interface MessageService {
    *
    * @param message Message to regenerate.
    * @return The new message regenerated.
-   * @throws Exception If a error append during generation.
    */
   Message regenerateMessage(Message message)
       throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException;
