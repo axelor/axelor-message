@@ -36,7 +36,7 @@ dependencies {
   implementation 'com.squareup.okhttp3:okhttp:5.1.0'
   implementation 'org.reflections:reflections:0.10.2'
   if (findProject(':modules:axelor-utils') != null) {
-    api project(':modules:axelor-utils')
+    implementation project(':modules:axelor-utils')
   } else {
     // TODO use stable version when available
     implementation 'com.axelor.addons:axelor-utils:4.0.+'
