@@ -401,7 +401,7 @@ public class MailAccountServiceImpl implements MailAccountService {
         InputStream stream = source.getInputStream();
         metaFiles.attach(stream, source.getName(), message);
       } catch (IOException e) {
-        ExceptionHelper.trace(e);
+        ExceptionHelper.error(e);
       }
     }
   }

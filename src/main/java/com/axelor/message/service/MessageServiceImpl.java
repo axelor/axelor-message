@@ -277,7 +277,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     try {
       sendMessage(message, false);
     } catch (MessagingException e) {
-      ExceptionHelper.trace(e);
+      ExceptionHelper.error(e);
     }
     return message;
   }

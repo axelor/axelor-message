@@ -40,7 +40,7 @@ public class MailAccountController {
       response.setReload(true);
       response.setInfo(I18n.get(MessageExceptionMessage.MAIL_ACCOUNT_3));
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 
@@ -50,7 +50,7 @@ public class MailAccountController {
       Beans.get(MailAccountService.class).checkDefaultMailAccount(account);
     } catch (Exception e) {
       response.setAttr("isDefault", "value", false);
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 
@@ -63,7 +63,7 @@ public class MailAccountController {
 
       response.setInfo(I18n.get(String.format("Total email fetched: %s", totalFetched)));
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 
@@ -75,7 +75,7 @@ public class MailAccountController {
             Beans.get(MailAccountService.class)
                 .getEncryptPassword(request.getContext().get("newPassword").toString()));
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 }

@@ -146,7 +146,7 @@ public class MailServiceMessageImpl extends MailServiceImpl {
             try {
               fetch(reader);
             } catch (Exception e) {
-              ExceptionHelper.trace("Unable to fetch messages", e);
+              ExceptionHelper.error("Unable to fetch messages", e);
             }
           });
     }

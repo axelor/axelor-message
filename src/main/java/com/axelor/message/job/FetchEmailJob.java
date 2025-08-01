@@ -59,7 +59,7 @@ public class FetchEmailJob implements Job {
         Integer total = mailAccountService.fetchEmails(account, true);
         log.debug("Email fetched for account: {}, total: {} ", account.getName(), total);
       } catch (MessagingException | IOException e) {
-        ExceptionHelper.trace(e);
+        ExceptionHelper.error(e);
       }
     }
   }

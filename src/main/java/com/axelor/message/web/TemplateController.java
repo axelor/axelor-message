@@ -75,7 +75,7 @@ public class TemplateController {
               .context("_templateMailAccount", template.getMailAccount())
               .map());
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 }
