@@ -50,24 +50,23 @@
     <string name="toMobilePhone" title="Mobile phone"/>
 
     <extra-code><![CDATA[
+        // typeSelect
+        public static final int TYPE_RECEIVED = 1;
+        public static final int TYPE_SENT = 2;
 
-			// TYPE SELECT
-			public static final int TYPE_RECEIVED = 1;
-			public static final int TYPE_SENT = 2;
+        // statusSelect
+        public static final int STATUS_DRAFT = 1;
+        public static final int STATUS_IN_PROGRESS = 2;
+        public static final int STATUS_SENT = 3;
+        public static final int STATUS_DELETED = 4;
 
-			// STATUS SELECT
-			public static final int STATUS_DRAFT = 1;
-			public static final int STATUS_IN_PROGRESS = 2;
-			public static final int STATUS_SENT = 3;
-			public static final int STATUS_DELETED = 4;
-
-			// MEDIA TYPE SELECT
-			public static final int MEDIA_TYPE_MAIL = 1;
-			public static final int MEDIA_TYPE_EMAIL = 2;
-			public static final int MEDIA_TYPE_CHAT = 3;
-			public static final int MEDIA_TYPE_EMAILING = 4;
-			public static final int MEDIA_TYPE_SMS = 5;
-		]]></extra-code>
+        // mediaTypeSelect
+        public static final int MEDIA_TYPE_MAIL = 1;
+        public static final int MEDIA_TYPE_EMAIL = 2;
+        public static final int MEDIA_TYPE_CHAT = 3;
+        public static final int MEDIA_TYPE_EMAILING = 4;
+        public static final int MEDIA_TYPE_SMS = 5;
+    ]]></extra-code>
 
   </entity>
 
