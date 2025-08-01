@@ -342,7 +342,7 @@ public class MailAccountServiceImpl implements MailAccountService {
 
   private EmailAddress getEmailAddress(InternetAddress address) {
 
-    EmailAddress emailAddress = null;
+    EmailAddress emailAddress;
     emailAddress = emailAddressRepo.findByAddress(address.getAddress());
     if (emailAddress == null) {
       emailAddress = createEmailAddress(address.getAddress());

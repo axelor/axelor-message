@@ -29,7 +29,7 @@ public class GenerateMessageServiceImpl implements GenerateMessageService {
     LOG.debug("object id : {} ", objectId);
     LOG.debug("model : {} ", model);
     LOG.debug("tag : {} ", tag);
-    Message message = null;
+    Message message;
     if (template != null) {
       message = templateMessageService.generateMessage(objectId, model, tag, template);
     } else {
