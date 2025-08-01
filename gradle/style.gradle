@@ -26,7 +26,7 @@ spotless {
       exclude '**/.gradle/**'
       exclude '**/build/**'
     }
-    indentWithSpaces(2)
+    leadingTabsToSpaces(2)
     trimTrailingWhitespace()
     endWithNewline()
   }
@@ -37,7 +37,7 @@ spotless {
       exclude 'CHANGELOG.md'
       exclude '**/build/**'
     }
-    indentWithSpaces(2)
+    leadingTabsToSpaces(2)
     endWithNewline()
   }
 
