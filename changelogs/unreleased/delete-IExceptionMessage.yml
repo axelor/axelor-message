@@ -1,0 +1,2 @@
+title: Delete the deprecated class `IExceptionMessage`. Use `MessageExceptionMessage` instead.
+type: remove
