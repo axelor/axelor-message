@@ -111,6 +111,7 @@ public interface MessageService {
    * @param isTemporaryEmail
    * @return
    * @throws MessagingException
+   * @throws IOException
    */
   Message sendMessage(Message message, Boolean isTemporaryEmail)
       throws MessagingException, IOException;
@@ -136,7 +137,6 @@ public interface MessageService {
    * @param isTemporaryEmail
    * @return
    * @throws MessagingException
-   * @throws AxelorException
    */
   Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
 
