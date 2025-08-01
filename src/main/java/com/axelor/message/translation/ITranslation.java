@@ -19,5 +19,5 @@ package com.axelor.message.translation;
 
 public interface ITranslation {
 
-  public static final String MESSAGE_TEST_TEMPLATE = /*$$(*/ "Test template"; /*)*/
+  String MESSAGE_TEST_TEMPLATE = /*$$(*/ "Test template"; /*)*/
 }

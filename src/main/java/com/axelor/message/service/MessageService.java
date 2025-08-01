@@ -31,7 +31,7 @@ import java.util.Set;
 public interface MessageService {
 
   @Transactional
-  public Message createMessage(
+  Message createMessage(
       String model,
       long id,
       String subject,
@@ -70,7 +70,7 @@ public interface MessageService {
    * @param isTemporaryMessage
    * @return
    */
-  public Message createMessage(
+  Message createMessage(
       String model,
       long id,
       String subject,
@@ -88,9 +88,9 @@ public interface MessageService {
       Boolean isTemporaryMessage);
 
   @Transactional
-  public void attachMetaFiles(Message message, Set<MetaFile> metaFiles);
+  void attachMetaFiles(Message message, Set<MetaFile> metaFiles);
 
-  public Set<MetaAttachment> getMetaAttachments(Message message);
+  Set<MetaAttachment> getMetaAttachments(Message message);
 
   /**
    * Send {@link Message}.
@@ -98,7 +98,7 @@ public interface MessageService {
    * @param message
    * @return
    */
-  public Message sendMessage(Message message) throws IOException;
+  Message sendMessage(Message message) throws IOException;
 
   /**
    * Send {@link Message}.
@@ -112,7 +112,7 @@ public interface MessageService {
    * @return
    * @throws MessagingException
    */
-  public Message sendMessage(Message message, Boolean isTemporaryEmail)
+  Message sendMessage(Message message, Boolean isTemporaryEmail)
       throws MessagingException, IOException;
 
   /**
@@ -122,7 +122,7 @@ public interface MessageService {
    * @return
    * @throws MessagingException
    */
-  public Message sendByEmail(Message message) throws MessagingException;
+  Message sendByEmail(Message message) throws MessagingException;
 
   @Transactional(rollbackOn = {Exception.class})
   /**
@@ -138,18 +138,18 @@ public interface MessageService {
    * @throws MessagingException
    * @throws AxelorException
    */
-  public Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
+  Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
 
   @Transactional
-  public Message sendToUser(Message message);
+  Message sendToUser(Message message);
 
   @Transactional(rollbackOn = {Exception.class})
-  public Message sendByMail(Message message);
+  Message sendByMail(Message message);
 
   @Transactional(rollbackOn = {Exception.class})
-  public Message sendSMS(Message message) throws IOException;
+  Message sendSMS(Message message) throws IOException;
 
-  public String printMessage(Message message);
+  String printMessage(Message message);
 
   /**
    * Regenerate message with template attached it.
@@ -161,7 +161,7 @@ public interface MessageService {
   Message regenerateMessage(Message message)
       throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException;
 
-  public String getFullEmailAddress(EmailAddress emailAddress);
+  String getFullEmailAddress(EmailAddress emailAddress);
 
-  public void addMessageRelatedTo(Message message, String relatedToSelect, Long relatedToSelectId);
+  void addMessageRelatedTo(Message message, String relatedToSelect, Long relatedToSelectId);
 }

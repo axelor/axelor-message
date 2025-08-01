@@ -39,7 +39,7 @@ public interface TemplateMessageService {
    * @return persisted message
    * @throws ClassNotFoundException
    */
-  public Message generateMessage(Model model, Template template) throws ClassNotFoundException;
+  Message generateMessage(Model model, Template template) throws ClassNotFoundException;
 
   /**
    * This method is used to store the model object in the service and then generate the message
@@ -51,7 +51,7 @@ public interface TemplateMessageService {
    * @return Message
    * @throws ClassNotFoundException
    */
-  public Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
+  Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
       throws ClassNotFoundException;
 
   /**
@@ -64,7 +64,7 @@ public interface TemplateMessageService {
    * @return persisted Message
    * @throws ClassNotFoundException
    */
-  public Message generateMessage(Long objectId, String model, String tag, Template template)
+  Message generateMessage(Long objectId, String model, String tag, Template template)
       throws ClassNotFoundException;
 
   /**
@@ -79,7 +79,7 @@ public interface TemplateMessageService {
    * @return Message
    * @throws ClassNotFoundException
    */
-  public Message generateMessage(
+  Message generateMessage(
       Long objectId, String model, String tag, Template template, Boolean isForTemporaryMessage)
       throws ClassNotFoundException;
 
@@ -95,7 +95,7 @@ public interface TemplateMessageService {
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
-  public Message generateAndSendMessage(Model model, Template template)
+  Message generateAndSendMessage(Model model, Template template)
       throws IOException, ClassNotFoundException;
 
   /**
@@ -111,7 +111,7 @@ public interface TemplateMessageService {
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
-  public Message generateAndSendTemporaryMessage(Model model, Template template)
+  Message generateAndSendTemporaryMessage(Model model, Template template)
       throws MessagingException, IOException, ClassNotFoundException;
 
   /**
@@ -132,7 +132,7 @@ public interface TemplateMessageService {
    * @param templatesContext: template context map
    * @return Set of metafiles attached to the message
    */
-  public Set<MetaFile> getMetaFiles(
+  Set<MetaFile> getMetaFiles(
       Template template, Templates templates, Map<String, Object> templatesContext);
 
   /**
@@ -150,7 +150,7 @@ public interface TemplateMessageService {
    * @return templatesContext map updated
    * @throws ClassNotFoundException
    */
-  public Map<String, Object> initMaker(
+  Map<String, Object> initMaker(
       long objectId, String model, String tag, boolean isJson, Map<String, Object> templatesContext)
       throws ClassNotFoundException;
 
@@ -166,7 +166,7 @@ public interface TemplateMessageService {
    * @return templatesContext map with new key context and their evaluated values
    * @throws ClassNotFoundException
    */
-  public Map<String, Object> computeTemplateContexts(
+  Map<String, Object> computeTemplateContexts(
       List<TemplateContext> templateContextList,
       long objectId,
       String model,
