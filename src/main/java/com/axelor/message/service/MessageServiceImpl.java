@@ -545,7 +545,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
       throw new IllegalStateException(I18n.get("Cannot regenerate message without related model."));
     }
 
-    MultiRelated multiRelated = message.getMultiRelatedList().get(0);
+    MultiRelated multiRelated = message.getMultiRelatedList().getFirst();
 
     Model model =
         JPA.all((Class<? extends Model>) Class.forName(multiRelated.getRelatedToSelect()))
