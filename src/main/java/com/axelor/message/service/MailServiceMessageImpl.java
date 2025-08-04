@@ -42,7 +42,7 @@ import com.axelor.utils.helpers.ExceptionHelper;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import jakarta.inject.Singleton;
+import com.google.inject.Singleton;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
