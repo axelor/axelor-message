@@ -67,6 +67,24 @@ spotless:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "schedule"'
 
+# Run tests
+test:
+  stage: test
+  cache:
+    - *global_cache
+  allow_failure: false
+  script:
+    - ./gradlew test
+  interruptible: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "schedule"'
+  artifacts:
+    expire_in: 31d
+    paths:
+      - build/reports/jacoco
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
+
 .publish_template: &publish_configuration
   extends: .global-env
   stage: plan
