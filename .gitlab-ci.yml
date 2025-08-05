@@ -69,6 +69,7 @@ spotless:
 
 # Run tests
 test:
+  extends: .global-env
   stage: test
   cache:
     - *global_cache
