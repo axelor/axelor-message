@@ -39,6 +39,7 @@
   <action-view name="mail.root.messages" title="All messages"
     model="com.axelor.message.db.Message">
     <view type="grid" name="message-grid"/>
+    <view type="cards" name="message-cards"/>
     <view type="form" name="message-form"/>
   </action-view>
 
