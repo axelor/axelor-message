@@ -106,7 +106,7 @@
         <field name="mailAccount" widget="SuggestBox"
           onChange="action-message-record-get-signature" requiredIf="mediaTypeSelect == 2"
           grid-view="mail-account-grid" form-view="mail-account-form" domain="self.isValid = true"/>
-        <field name="replyToEmailAddressSet" widget="TagSelect" x-create="address"
+        <field name="replyToEmailAddressSet" widget="Tags" x-create="address"
           form-view="email-address-form" colSpan="12" grid-view="email-address-grid"/>
       </panel>
     </panel>
@@ -117,12 +117,12 @@
     </panel>
     <panel name="recipientsPanel" title="Recipients" readonlyIf="statusSelect != 1"
       showIf="mediaTypeSelect == 2 || mediaTypeSelect == 4">
-      <field name="toEmailAddressSet" widget="TagSelect" x-create="address"
+      <field name="toEmailAddressSet" widget="Tags" x-create="address"
         form-view="email-address-form" colSpan="12" requiredIf="mediaTypeSelect == 2"
         grid-view="email-address-grid"/>
-      <field name="ccEmailAddressSet" widget="TagSelect" x-create="address"
+      <field name="ccEmailAddressSet" widget="Tags" x-create="address"
         form-view="email-address-form" colSpan="12" grid-view="email-address-grid"/>
-      <field name="bccEmailAddressSet" widget="TagSelect" x-create="address"
+      <field name="bccEmailAddressSet" widget="Tags" x-create="address"
         form-view="email-address-form" colSpan="12" grid-view="email-address-grid"/>
     </panel>
     <panel name="recipientPanel" title="Recipient"
