@@ -18,7 +18,7 @@ ARG NEXUS_READER_PASSWORD
 
 
 RUN chmod +x gradlew && \
-./gradlew --no-daemon -xtest -xcheck -xspotlessApply clean build -PaxelorMavenUsername=${NEXUS_READER_USERNAME} -PaxelorMavenPassword=${NEXUS_READER_PASSWORD}
+./gradlew --no-daemon clean assemble -PaxelorMavenUsername=${NEXUS_READER_USERNAME} -PaxelorMavenPassword=${NEXUS_READER_PASSWORD}
 
 RUN mkdir -p ${APP_SOURCE}/webapps/ROOT && \
     unzip -q -o ${APP_SOURCE}/build/libs/*.war -d ${APP_SOURCE}/webapps/ROOT/
@@ -35,7 +35,7 @@ ARG BUILD_DATE
 
 # Refresh repositories and install tools needed by the entrypoint
 RUN apt update && \
-    apt install -y curl coreutils postgresql-client && \
+    apt install -y coreutils curl postgresql-client && \
     rm -rf /var/lib/apt/lists/*
 
 

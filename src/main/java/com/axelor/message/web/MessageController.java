@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2022 Axelor (<http://axelor.com>).
+ * Copyright (C) 2025 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -36,11 +36,15 @@ public class MessageController {
   public void sendMessage(ActionRequest request, ActionResponse response) {
     try {
       Message message = request.getContext().asType(Message.class);
-
-      Beans.get(MessageService.class)
-          .sendMessage(Beans.get(MessageRepository.class).find(message.getId()));
-      response.setReload(true);
-      response.setInfo(I18n.get(MessageExceptionMessage.MESSAGE_4));
+      message = Beans.get(MessageRepository.class).find(message.getId());
+      if (message.getStatusSelect() == MessageRepository.STATUS_DRAFT) {
+        Beans.get(MessageService.class)
+            .sendMessage(Beans.get(MessageRepository.class).find(message.getId()));
+        response.setReload(true);
+        response.setInfo(I18n.get(MessageExceptionMessage.MESSAGE_4));
+      } else {
+        response.setError(I18n.get(MessageExceptionMessage.MESSAGE_7));
+      }
     } catch (Exception e) {
       ExceptionHelper.trace(response, e);
     }

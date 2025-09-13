@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2022 Axelor (<http://axelor.com>).
+ * Copyright (C) 2025 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -48,6 +48,8 @@ public final class MessageExceptionMessage {
   public static final String MESSAGE_5 = /*$$(*/ "Sender's email address is null or empty" /*)*/;
   public static final String MESSAGE_6 = /*$$(*/
       "TO/CC/BCC recipient's email address is empty" /*)*/;
+  public static final String MESSAGE_7 = /*$$(*/
+      "The message is already being sent. Please wait..." /*)*/;
   public static final String MESSAGE_MISSING_SELECTED_MESSAGES = /*$$(*/
       "Please select one or more messages." /*)*/;
   public static final String MESSAGES_SEND_IN_PROGRESS = /*$$(*/
