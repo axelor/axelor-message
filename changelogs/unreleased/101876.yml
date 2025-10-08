@@ -1,0 +1,8 @@
+title: Deprecate `MailMessageActionRegister` class and all its related services
+type: deprecate
+description: |
+  - Deprecated `MailMessageActionRegister`, replaced by `MessageActionRegister`.
+  - Deprecated `MailMessageActionService`, replaced by `MessageActionService`.
+  - Deprecated `MailMessageActionServiceImpl`, replaced by `MessageActionServiceImpl`.
+  - Deprecated `MailMessageServerStartListener`, replaced by `MessageServerStartListener`.
+  - The method `MailMessageActionService.postMailGenerationAction` has been replaced by `MessageActionService.executePostMessageActions`

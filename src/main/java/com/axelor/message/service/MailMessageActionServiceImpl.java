@@ -6,6 +6,10 @@ import com.axelor.message.db.repo.MessageRepository;
 import com.axelor.message.service.registry.MailMessageActionRegister;
 import com.google.inject.Inject;
 
+/**
+ * @deprecated Replaced by {@link MessageActionServiceImpl}
+ */
+@Deprecated(since = "3.3", forRemoval = true)
 public class MailMessageActionServiceImpl implements MailMessageActionService {
   protected final MessageRepository messageRepository;
   protected final MailMessageActionRegister mailMessageActionRegister;
