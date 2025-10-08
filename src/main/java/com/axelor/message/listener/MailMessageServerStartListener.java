@@ -8,6 +8,10 @@ import javax.annotation.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @deprecated Replaced by {@link MessageServerStartListener}
+ */
+@Deprecated(since = "3.3", forRemoval = true)
 public class MailMessageServerStartListener {
   protected final Logger LOG = LoggerFactory.getLogger(getClass());
   protected final MailMessageActionRegister mailMessageActionRegister;

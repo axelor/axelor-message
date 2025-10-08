@@ -70,7 +70,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   protected final MailAccountService mailAccountService;
   protected final TemplateContextService templateContextService;
 
-  protected final MailMessageActionService mailMessageActionService;
+  protected final MessageActionService messageActionService;
   protected final MessageRepository messageRepository;
   protected final TemplateRepository templateRepository;
   protected final EmailAddressRepository emailAddressRepository;
@@ -85,14 +85,14 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       MailAccountService mailAccountService,
       MessageService messageService,
       TemplateContextService templateContextService,
-      MailMessageActionService mailMessageActionService) {
+      MessageActionService messageActionService) {
     this.emailAddressRepository = emailAddressRepository;
     this.templateRepository = templateRepository;
     this.messageRepository = messageRepository;
     this.messageService = messageService;
     this.mailAccountService = mailAccountService;
     this.templateContextService = templateContextService;
-    this.mailMessageActionService = mailMessageActionService;
+    this.messageActionService = messageActionService;
     this.groovyTemplates = groovyTemplates;
   }
 
@@ -107,10 +107,11 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
     this.modelObject = model;
     Class<?> klass = EntityHelper.getEntityClass(model);
+    boolean isJson = Boolean.TRUE.equals(template.getIsJson());
     return generateMessage(
         model.getId() == null ? 0L : model.getId(),
-        template.getIsJson() ? ((MetaJsonModel) model).getName() : klass.getCanonicalName(),
-        template.getIsJson() ? ((MetaJsonModel) model).getName() : klass.getSimpleName(),
+        isJson ? ((MetaJsonModel) model).getName() : klass.getCanonicalName(),
+        isJson ? ((MetaJsonModel) model).getName() : klass.getSimpleName(),
         template,
         isTemporaryMessage);
   }
@@ -156,7 +157,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       log.debug("Saving message with meta files");
       message = saveMessageWithMetaFiles(template, message, templates, templatesContext);
       log.debug("Execute Post mail message actions");
-      message = mailMessageActionService.executePostMailMessageActions(message);
+      message = messageActionService.executePostMessageActions(message);
     }
 
     return message;
