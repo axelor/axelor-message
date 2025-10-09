@@ -1,32 +1,25 @@
 package com.axelor.message.service;
 
+import com.axelor.db.Model;
 import com.axelor.inject.Beans;
-import com.axelor.message.db.Message;
-import com.axelor.message.db.repo.MessageRepository;
+import com.axelor.mail.db.MailMessage;
 import com.axelor.message.service.registry.MailMessageActionRegister;
 import com.google.inject.Inject;
 
-/**
- * @deprecated Replaced by {@link MessageActionServiceImpl}
- */
-@Deprecated(since = "3.3", forRemoval = true)
 public class MailMessageActionServiceImpl implements MailMessageActionService {
-  protected final MessageRepository messageRepository;
   protected final MailMessageActionRegister mailMessageActionRegister;
 
   @Inject
-  public MailMessageActionServiceImpl(
-      MessageRepository messageRepository, MailMessageActionRegister mailMessageActionRegister) {
-    this.messageRepository = messageRepository;
+  public MailMessageActionServiceImpl(MailMessageActionRegister mailMessageActionRegister) {
     this.mailMessageActionRegister = mailMessageActionRegister;
   }
 
   @Override
-  public Message executePostMailMessageActions(Message message) {
+  public MailMessage executePreMailMessageActions(MailMessage mailMessage, Model relatedRecord) {
     for (Class<? extends MailMessageAction> mailMessageActionClass :
         mailMessageActionRegister.getMailActionClasses()) {
-      message = Beans.get(mailMessageActionClass).postMailGenerationAction(message);
+      mailMessage = Beans.get(mailMessageActionClass).preSendAction(mailMessage, relatedRecord);
     }
-    return messageRepository.save(message);
+    return mailMessage;
   }
 }

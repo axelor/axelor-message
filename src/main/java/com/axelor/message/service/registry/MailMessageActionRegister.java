@@ -6,24 +6,17 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
+import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.reflections.ReflectionUtils;
-import org.reflections.Reflections;
-import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @deprecated Replaced by {@link MessageActionRegister}
- */
 @Singleton
-@Deprecated(since = "3.3", forRemoval = true)
 public class MailMessageActionRegister {
-  protected final Logger LOG = LoggerFactory.getLogger(getClass());
-  private final Set<Class<? extends MailMessageAction>> mailActionClasses;
+  protected static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-  private static final String AXELOR_BASE_PACKAGE = "com.axelor";
+  private final Set<Class<? extends MailMessageAction>> mailActionClasses;
 
   public MailMessageActionRegister() {
     this.mailActionClasses = new LinkedHashSet<>();
@@ -35,23 +28,16 @@ public class MailMessageActionRegister {
   }
 
   private void scanMailActionClasses() {
-    Reflections reflections =
-        new Reflections(new ConfigurationBuilder().forPackage(AXELOR_BASE_PACKAGE));
 
     Beans.get(Injector.class).getAllBindings().keySet().stream()
         .map(Key::getTypeLiteral)
         .map(TypeLiteral::getRawType)
-        .forEach(
-            klass -> {
-              Set<Class<?>> interfaces = reflections.get(ReflectionUtils.Interfaces.of(klass));
-              if (interfaces.contains(MailMessageAction.class)) {
-                mailActionClasses.add((Class<? extends MailMessageAction>) klass);
-              }
-            });
+        .filter(MailMessageAction.class::isAssignableFrom)
+        .forEach(klass -> mailActionClasses.add(klass.asSubclass(MailMessageAction.class)));
   }
 
   private void filterOutAndStoreSubClasses() {
-    mailActionClasses.removeIf(klass -> Boolean.TRUE.equals(isSubClassPresent(klass)));
+    mailActionClasses.removeIf(this::isSubClassPresent);
 
     LOG.debug("Registered classes : ");
     mailActionClasses.forEach(klass -> LOG.debug(klass.getCanonicalName()));
@@ -59,10 +45,7 @@ public class MailMessageActionRegister {
 
   private boolean isSubClassPresent(Class<?> klass) {
     return mailActionClasses.stream()
-        .anyMatch(
-            actionClass ->
-                Boolean.FALSE.equals(actionClass.equals(klass))
-                    && klass.isAssignableFrom(actionClass));
+        .anyMatch(actionClass -> !actionClass.equals(klass) && klass.isAssignableFrom(actionClass));
   }
 
   public Set<Class<? extends MailMessageAction>> getMailActionClasses() {
