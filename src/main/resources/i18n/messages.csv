@@ -30,6 +30,7 @@
 "Email sending is in progress for %d messages.",,,
 "Emailing",,,
 "Emails",,,
+"Error in print. Please check report configuration and print setting.",,,
 "Error when sending email: %s",,,
 "Expr. value",,,
 "Fetch emails",,,
