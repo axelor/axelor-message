@@ -23,8 +23,7 @@ import com.axelor.message.db.repo.EmailAddressRepo;
 import com.axelor.message.db.repo.EmailAddressRepository;
 import com.axelor.message.db.repo.MessageManagementRepository;
 import com.axelor.message.db.repo.MessageRepository;
-import com.axelor.message.listener.MailMessageServerStartListener;
-import com.axelor.message.listener.MessageServerStartListener;
+import com.axelor.message.listener.ServerStartListener;
 import com.axelor.message.service.AppSettingsMessageService;
 import com.axelor.message.service.AppSettingsMessageServiceImpl;
 import com.axelor.message.service.GenerateMessageService;
@@ -73,12 +72,13 @@ public class MessageModule extends AxelorModule {
     bind(TemplateContextService.class).to(TemplateContextServiceImpl.class);
     bind(MailMessageActionRegister.class).in(Singleton.class);
     bind(MessageActionRegister.class).in(Singleton.class);
+    bind(TemplateService.class).to(TemplateServiceImpl.class);
+    bind(EmailAddressRepository.class).to(EmailAddressRepo.class);
+
     // needed to use event notification methods
     bind(SendMailQueueService.class);
-    bind(TemplateService.class).to(TemplateServiceImpl.class);
-    // needed to scan classes that implements the MailMessageAction in the startup
-    bind(MailMessageServerStartListener.class);
-    bind(MessageServerStartListener.class);
-    bind(EmailAddressRepository.class).to(EmailAddressRepo.class);
+
+    // needed to scan classes that implement MailMessageAction and MessageAction in the startup
+    bind(ServerStartListener.class);
   }
 }
