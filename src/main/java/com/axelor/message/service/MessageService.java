@@ -22,16 +22,14 @@ import com.axelor.message.db.EmailAddress;
 import com.axelor.message.db.Message;
 import com.axelor.meta.db.MetaAttachment;
 import com.axelor.meta.db.MetaFile;
-import com.google.inject.persist.Transactional;
+import jakarta.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-import javax.mail.MessagingException;
 
 public interface MessageService {
 
-  @Transactional
-  public Message createMessage(
+  Message createMessage(
       String model,
       long id,
       String subject,
@@ -47,11 +45,10 @@ public interface MessageService {
       EmailAccount emailAccount,
       String signature);
 
-  @Transactional(rollbackOn = {Exception.class})
   /**
-   * Function is used to create temporary {@link Message}, which will only be send but not be saved.
-   * <br>
-   * Only when isTemporaryMessage = {@code True}.
+   * Create temporary {@link Message}, which will only be sent but not saved.
+   *
+   * <p>Only when isTemporaryMessage = {@code True}.
    *
    * @param model
    * @param id
@@ -70,7 +67,7 @@ public interface MessageService {
    * @param isTemporaryMessage
    * @return
    */
-  public Message createMessage(
+  Message createMessage(
       String model,
       long id,
       String subject,
@@ -87,10 +84,9 @@ public interface MessageService {
       String signature,
       Boolean isTemporaryMessage);
 
-  @Transactional
-  public void attachMetaFiles(Message message, Set<MetaFile> metaFiles);
+  void attachMetaFiles(Message message, Set<MetaFile> metaFiles);
 
-  public Set<MetaAttachment> getMetaAttachments(Message message);
+  Set<MetaAttachment> getMetaAttachments(Message message);
 
   /**
    * Send {@link Message}.
@@ -98,21 +94,20 @@ public interface MessageService {
    * @param message
    * @return
    */
-  public Message sendMessage(Message message) throws IOException;
+  Message sendMessage(Message message) throws IOException;
 
   /**
    * Send {@link Message}.
    *
-   * <p>If @param isTemporaryEmail is {@code True}, Message will not saved but only send.
-   *
-   * <p>
+   * <p>If @param isTemporaryEmail is {@code True}, Message will not be saved but only send.
    *
    * @param message
    * @param isTemporaryEmail
    * @return
    * @throws MessagingException
+   * @throws IOException
    */
-  public Message sendMessage(Message message, Boolean isTemporaryEmail)
+  Message sendMessage(Message message, Boolean isTemporaryEmail)
       throws MessagingException, IOException;
 
   /**
@@ -122,46 +117,38 @@ public interface MessageService {
    * @return
    * @throws MessagingException
    */
-  public Message sendByEmail(Message message) throws MessagingException;
+  Message sendByEmail(Message message) throws MessagingException;
 
-  @Transactional(rollbackOn = {Exception.class})
   /**
    * Send Message as email.
    *
-   * <p>If @param isTemporaryEmail is {@code True}, Message will not saved but only send.
-   *
-   * <p>
+   * <p>If @param isTemporaryEmail is {@code True}, Message will not be saved but only send.
    *
    * @param message
    * @param isTemporaryEmail
    * @return
    * @throws MessagingException
-   * @throws AxelorException
    */
-  public Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
+  Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
 
-  @Transactional
-  public Message sendToUser(Message message);
+  Message sendToUser(Message message);
 
-  @Transactional(rollbackOn = {Exception.class})
-  public Message sendByMail(Message message);
+  Message sendByMail(Message message);
 
-  @Transactional(rollbackOn = {Exception.class})
-  public Message sendSMS(Message message) throws IOException;
+  Message sendSMS(Message message) throws IOException;
 
-  public String printMessage(Message message);
+  String printMessage(Message message);
 
   /**
    * Regenerate message with template attached it.
    *
    * @param message Message to regenerate.
    * @return The new message regenerated.
-   * @throws Exception If a error append during generation.
    */
   Message regenerateMessage(Message message)
       throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException;
 
-  public String getFullEmailAddress(EmailAddress emailAddress);
+  String getFullEmailAddress(EmailAddress emailAddress);
 
-  public void addMessageRelatedTo(Message message, String relatedToSelect, Long relatedToSelectId);
+  void addMessageRelatedTo(Message message, String relatedToSelect, Long relatedToSelectId);
 }

@@ -19,6 +19,7 @@ package com.axelor.message.service;
 
 import com.axelor.i18n.I18n;
 import com.axelor.mail.ImapAccount;
+import com.axelor.mail.MailAccount;
 import com.axelor.mail.MailConstants;
 import com.axelor.mail.MailParser;
 import com.axelor.mail.MailReader;
@@ -38,6 +39,19 @@ import com.axelor.utils.service.CipherService;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import jakarta.activation.DataSource;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.FetchProfile;
+import jakarta.mail.Flags;
+import jakarta.mail.Folder;
+import jakarta.mail.MessagingException;
+import jakarta.mail.NoSuchProviderException;
+import jakarta.mail.Session;
+import jakarta.mail.Store;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.search.FlagTerm;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
@@ -46,19 +60,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import javax.activation.DataSource;
-import javax.mail.AuthenticationFailedException;
-import javax.mail.FetchProfile;
-import javax.mail.Flags;
-import javax.mail.Folder;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.search.FlagTerm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -232,19 +233,17 @@ public class MailAccountServiceImpl implements MailAccountService {
 
   public String getProtocol(EmailAccount mailAccount) {
 
-    switch (mailAccount.getServerTypeSelect()) {
-      case EmailAccountRepository.SERVER_TYPE_SMTP:
-        return "smtp";
-      case EmailAccountRepository.SERVER_TYPE_IMAP:
+    return switch (mailAccount.getServerTypeSelect()) {
+      case EmailAccountRepository.SERVER_TYPE_SMTP -> "smtp";
+      case EmailAccountRepository.SERVER_TYPE_IMAP -> {
         if (mailAccount.getSecuritySelect() == EmailAccountRepository.SECURITY_SSL) {
-          return MailConstants.PROTOCOL_IMAPS;
+          yield MailConstants.PROTOCOL_IMAPS;
         }
-        return MailConstants.PROTOCOL_IMAP;
-      case EmailAccountRepository.SERVER_TYPE_POP:
-        return MailConstants.PROTOCOL_POP3;
-      default:
-        return "";
-    }
+        yield MailConstants.PROTOCOL_IMAP;
+      }
+      case EmailAccountRepository.SERVER_TYPE_POP -> MailConstants.PROTOCOL_POP3;
+      default -> "";
+    };
   }
 
   public String getSignature(EmailAccount mailAccount) {
@@ -263,30 +262,17 @@ public class MailAccountServiceImpl implements MailAccountService {
       return 0;
     }
 
-    log.debug(
-        "Fetching emails from host: {}, port: {}, login: {} ",
-        mailAccount.getHost(),
-        mailAccount.getPort(),
-        mailAccount.getLogin());
+    String host = mailAccount.getHost();
+    Integer port = mailAccount.getPort();
+    String login = mailAccount.getLogin();
+    String password = mailAccount.getPassword();
 
-    com.axelor.mail.MailAccount account = null;
-    if (mailAccount.getServerTypeSelect().equals(EmailAccountRepository.SERVER_TYPE_IMAP)) {
-      account =
-          new ImapAccount(
-              mailAccount.getHost(),
-              mailAccount.getPort().toString(),
-              mailAccount.getLogin(),
-              mailAccount.getPassword(),
-              getSecurity(mailAccount));
-    } else {
-      account =
-          new Pop3Account(
-              mailAccount.getHost(),
-              mailAccount.getPort().toString(),
-              mailAccount.getLogin(),
-              mailAccount.getPassword(),
-              getSecurity(mailAccount));
-    }
+    log.debug("Fetching emails from host: {}, port: {}, login: {} ", host, port, login);
+
+    MailAccount account =
+        mailAccount.getServerTypeSelect().equals(EmailAccountRepository.SERVER_TYPE_IMAP)
+            ? new ImapAccount(host, port.toString(), login, password, getSecurity(mailAccount))
+            : new Pop3Account(host, port.toString(), login, password, getSecurity(mailAccount));
 
     MailReader reader = new MailReader(account);
     final Store store = reader.getStore();
@@ -297,7 +283,7 @@ public class MailAccountServiceImpl implements MailAccountService {
 
     // find all unseen messages
     final FetchProfile profile = new FetchProfile();
-    javax.mail.Message[] messages;
+    jakarta.mail.Message[] messages;
     if (unseenOnly) {
       final FlagTerm unseen = new FlagTerm(new Flags(Flags.Flag.SEEN), false);
       messages = inbox.search(unseen);
@@ -312,9 +298,9 @@ public class MailAccountServiceImpl implements MailAccountService {
     log.debug("Total emails unseen: {}", messages.length);
 
     int count = 0;
-    for (javax.mail.Message message : messages) {
-      if (message instanceof MimeMessage) {
-        MailParser parser = new MailParser((MimeMessage) message);
+    for (jakarta.mail.Message message : messages) {
+      if (message instanceof MimeMessage mimeMessage) {
+        MailParser parser = new MailParser(mimeMessage);
         parser.parse();
         createMessage(mailAccount, parser, message.getSentDate());
         count++;
@@ -356,7 +342,7 @@ public class MailAccountServiceImpl implements MailAccountService {
 
   private EmailAddress getEmailAddress(InternetAddress address) {
 
-    EmailAddress emailAddress = null;
+    EmailAddress emailAddress;
     emailAddress = emailAddressRepo.findByAddress(address.getAddress());
     if (emailAddress == null) {
       emailAddress = createEmailAddress(address.getAddress());
@@ -401,7 +387,7 @@ public class MailAccountServiceImpl implements MailAccountService {
         InputStream stream = source.getInputStream();
         metaFiles.attach(stream, source.getName(), message);
       } catch (IOException e) {
-        ExceptionHelper.trace(e);
+        ExceptionHelper.error(e);
       }
     }
   }

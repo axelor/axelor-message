@@ -19,31 +19,31 @@ package com.axelor.message.service;
 
 import com.axelor.mail.MailAccount;
 import com.axelor.message.db.EmailAccount;
+import jakarta.mail.MessagingException;
 import java.io.IOException;
-import javax.mail.MessagingException;
 
 public interface MailAccountService {
 
-  public void checkDefaultMailAccount(EmailAccount mailAccount);
+  void checkDefaultMailAccount(EmailAccount mailAccount);
 
-  public EmailAccount getDefaultSender();
+  EmailAccount getDefaultSender();
 
-  public EmailAccount getDefaultReader();
+  EmailAccount getDefaultReader();
 
-  public void checkMailAccountConfiguration(EmailAccount mailAccount) throws MessagingException;
+  void checkMailAccountConfiguration(EmailAccount mailAccount) throws MessagingException;
 
-  public MailAccount getMailAccount(EmailAccount mailAccount);
+  MailAccount getMailAccount(EmailAccount mailAccount);
 
-  public String getSecurity(EmailAccount mailAccount);
+  String getSecurity(EmailAccount mailAccount);
 
-  public String getProtocol(EmailAccount mailAccount);
+  String getProtocol(EmailAccount mailAccount);
 
-  public String getSignature(EmailAccount mailAccount);
+  String getSignature(EmailAccount mailAccount);
 
-  public int fetchEmails(EmailAccount mailAccount, boolean unseenOnly)
+  int fetchEmails(EmailAccount mailAccount, boolean unseenOnly)
       throws MessagingException, IOException;
 
-  public String getEncryptPassword(String password);
+  String getEncryptPassword(String password);
 
-  public String getDecryptPassword(String password);
+  String getDecryptPassword(String password);
 }

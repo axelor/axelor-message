@@ -47,7 +47,7 @@ public class MessageController {
         response.setError(I18n.get(MessageExceptionMessage.MESSAGE_7));
       }
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 
@@ -57,7 +57,7 @@ public class MessageController {
       List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
 
       if (idList == null) {
-        ExceptionHelper.trace(
+        ExceptionHelper.error(
             response, I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
         return;
       }
@@ -68,7 +68,7 @@ public class MessageController {
               I18n.get(MessageExceptionMessage.MESSAGES_SEND_IN_PROGRESS), idList.size()));
       response.setReload(true);
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 
@@ -78,7 +78,7 @@ public class MessageController {
       List<Integer> idList = (List<Integer>) request.getContext().get("_ids");
 
       if (idList == null) {
-        ExceptionHelper.trace(
+        ExceptionHelper.error(
             response, I18n.get(MessageExceptionMessage.MESSAGE_MISSING_SELECTED_MESSAGES));
         return;
       }
@@ -91,7 +91,7 @@ public class MessageController {
               error));
       response.setReload(true);
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 
@@ -99,7 +99,7 @@ public class MessageController {
     try {
       response.setValues(request.getContext().get("_message"));
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 

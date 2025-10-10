@@ -49,6 +49,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeUtility;
+import jakarta.persistence.LockModeType;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodHandles;
@@ -56,9 +59,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeUtility;
-import javax.persistence.LockModeType;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -277,7 +277,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
     try {
       sendMessage(message, false);
     } catch (MessagingException e) {
-      ExceptionHelper.trace(e);
+      ExceptionHelper.error(e);
     }
     return message;
   }
@@ -545,7 +545,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
       throw new IllegalStateException(I18n.get("Cannot regenerate message without related model."));
     }
 
-    MultiRelated multiRelated = message.getMultiRelatedList().get(0);
+    MultiRelated multiRelated = message.getMultiRelatedList().getFirst();
 
     Model model =
         JPA.all((Class<? extends Model>) Class.forName(multiRelated.getRelatedToSelect()))

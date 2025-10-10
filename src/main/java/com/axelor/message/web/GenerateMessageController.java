@@ -93,7 +93,7 @@ public class GenerateMessageController {
       }
 
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 
@@ -116,7 +116,7 @@ public class GenerateMessageController {
           Beans.get(GenerateMessageService.class).generateMessage(objectId, model, tag, template));
       response.setCanClose(true);
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 

@@ -24,9 +24,6 @@ import com.axelor.message.db.Template;
 import com.axelor.message.db.repo.TemplateRepository;
 import com.axelor.message.service.TemplateService;
 import com.axelor.message.translation.ITranslation;
-import com.axelor.meta.db.MetaJsonModel;
-import com.axelor.meta.db.MetaModel;
-import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
@@ -43,7 +40,6 @@ public class TemplateController {
       template = Beans.get(TemplateRepository.class).find(template.getId());
       String reference = null;
       String referenceId = null;
-      MetaModel metaModel = null;
       if (template.getIsJson()) {
         Map<String, Object> jsonModelReference =
             (Map<String, Object>) context.get("jsonModelReference");
@@ -54,15 +50,12 @@ public class TemplateController {
         if (jsonModelRecord != null && jsonModelRecord.containsKey("id")) {
           referenceId = jsonModelRecord.get("id").toString();
         }
-        metaModel =
-            Beans.get(MetaModelRepository.class)
-                .all()
-                .filter("self.fullName = ?", MetaJsonModel.class.getName())
-                .fetchOne();
+
       } else {
         reference = context.get("reference").toString();
         referenceId = context.get("referenceId").toString();
       }
+
       Message message =
           Beans.get(TemplateService.class).generateDraftMessage(template, reference, referenceId);
       response.setView(
@@ -75,7 +68,7 @@ public class TemplateController {
               .context("_templateMailAccount", template.getMailAccount())
               .map());
     } catch (Exception e) {
-      ExceptionHelper.trace(response, e);
+      ExceptionHelper.error(response, e);
     }
   }
 }

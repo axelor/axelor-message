@@ -70,7 +70,7 @@ public final class MessageExceptionMessage {
       "Temporary email service only support Email media type." /*)*/;
 
   public static final String INVALID_EMAIL_ADDRESS_FORMAT = /*$$(*/
-      "Invalid address format :  %s" /*)*/;
+      "Invalid address format: %s" /*)*/;
 
   public static final String REPORT_CONFIG_PRINT_SETTING = /*$$(*/
       "Error in print. Please check report configuration and print setting." /*)*/;

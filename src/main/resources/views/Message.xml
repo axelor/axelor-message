@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.4.xsd">
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_8.0.xsd">
 
   <grid name="message-grid" title="Emails" model="com.axelor.message.db.Message"
     orderBy="-sentDateT">
@@ -30,7 +30,7 @@
   </grid>
 
   <cards name="message-cards" title="Emails" css="rect-image"
-    model="com.axelor.message.db.Message" width="100%" orderBy="-sentDateT">
+    model="com.axelor.message.db.Message" width="25%" orderBy="-sentDateT">
     <field name="statusSelect"/>
     <field name="typeSelect"/>
     <field name="mediaTypeSelect"/>
@@ -39,59 +39,64 @@
     <field name="subject"/>
     <field name="content"/>
     <field name="toEmailAddressSet"/>
+    <field name="addressBlock"/>
     <field name="fromEmailAddress.address"/>
-    <template>
-      <![CDATA[
-        <div class="span12">
-          <div class="span2 pull-right text-right">
-            <span class='label label-info' ng-show="record.statusSelect == 1 &amp;&amp; record.sentDateT == null" x-translate>Not sent</span>
-            <span class='label label-success' ng-show="record.statusSelect == 3 &amp;&amp; record.sentDateT != null" x-translate>Successful send</span>
-            <span class='label label-important' ng-show="record.statusSelect == 2 &amp;&amp; record.sentDateT == null" x-translate>In progress</span>
-            <span class="label label-warning" ng-show="record.statusSelect == 4" x-translate>Deleted</span>
+    <template><![CDATA[
+        <>
+            <Box d="flex" justifyContent="flex-end">
+                {statusSelect == 1 && sentDateT == null && <Badge bg="info">{_t('Not sent')}</Badge>}
+                {statusSelect == 2 && sentDateT == null && <Badge bg="danger">{_t('In progress')}</Badge>}
+                {statusSelect == 3 && sentDateT != null && <Badge bg="success">{_t('Successfully sent')}</Badge>}
+                {statusSelect == 4 && <Badge bg="warning">{_t('Deleted')}</Badge>}
+                <br/>
+                {sentDateT != null && <span><Icon icon='schedule'/> <span>{$fmt('sentDateT')}</span></span>}
+            </Box>
+            <span><strong>{subject}</strong></span>
+            <Box>
+                <strong><span>{_t('To: ')}</span></strong>
+                <span>{mediaTypeSelect == 1 && addressBlock}</span>
+                <span>{mediaTypeSelect == 2 && toEmailAddresses}</span>
+            </Box>
+            {mediaTypeSelect == 2
+                && <Box>
+                    <strong><span>{_t('From: ')}</span></strong>
+                    <span>{fromEmailAddress.address}</span>
+                </Box>
+            }
             <br/>
-            <span ng-show="record.sentDateT != null" ><i class='fa fa-clock-o'></i> <span>{{$fmt('sentDateT')}}</span></span>
-          </div>
-          <span><strong>{{subject}}</strong></span>
-          <div ng-show="record.toEmailAddressSet &amp;&amp; typeSelect == 2">
-            <strong><span x-translate>To :</span></strong>
-            <span>{{toEmailAddresses}}</span>
-          </div>
-          <div ng-show="record.fromEmailAddress &amp;&amp; typeSelect == 1">
-            <strong><span x-translate>From :</span></strong>
-            <span>{{record.fromEmailAddress.address}}</span>
-          </div>
-          <br/>
-          <div style="max-width: 600px; max-height: 80px; overflow: hidden; text-overflow: ellipsis" ng-bind-html="content" />
-        <div>
-      ]]>
-    </template>
+            <Box style={{maxWidth: "600px", maxHeight: "80px", overflow: "hidden", "textOverflow": "ellipsis"}}>{content}</Box>
+        </>
+      ]]></template>
   </cards>
 
   <form name="message-form" title="Email" model="com.axelor.message.db.Message"
     onNew="action-group-message-message-onnew">
     <toolbar>
-      <button name="printBtn" title="Print" icon="fa-print"
+      <button name="printBtn" title="Print" icon="print"
         onClick="save,action-message-method-print-pdf-email" readonlyIf="id == null"/>
-      <button name="sendBtn" title="Send" icon="fa-envelope"
+      <button name="sendBtn" title="Send" icon="envelope"
         onClick="action-group-message-message-send-click" showIf="statusSelect == 1 "/>
-      <button name="resendBtn" title="Resend" icon="fa-envelope"
+      <button name="resendBtn" title="Resend" icon="envelope"
         onClick="action-group-message-message-resend-click"
         showIf="statusSelect == 2 &amp;&amp; sentDateT == null "/>
-      <button name="trashBtn" title="Delete" icon="fa-trash"
+      <button name="trashBtn" title="Delete" icon="trash"
         onClick="action-group-message-message-delete-click" showIf="statusSelect != 4 "/>
     </toolbar>
     <panel name="informationsPanel" title="Information" readonlyIf="statusSelect != 1">
       <field name="mediaTypeSelect" readonlyIf="statusSelect != 1"/>
-      <field name="statusSelect"/>
-      <field name="$statusSelectTag" colSpan="2" css="label-bold bold" showTitle="false"
-        readonly="true">
+      <field name="statusSelect" colSpan="4"/>
+      <field name="_xStatusSelectTag" colSpan="2" showTitle="false" readonly="true"
+        x-dirty="false">
         <viewer><![CDATA[
-					<h5>
-						<span class='label label-info' ng-show="record.statusSelect == 1 &amp;&amp; record.sentDateT == null" x-translate>Not sent</span>
-						<span class='label label-success' ng-show="record.statusSelect == 3 &amp;&amp; record.sentDateT != null" x-translate>Successful send</span>
-						<span class='label label-important' ng-show="record.statusSelect == 2 &amp;&amp; record.sentDateT == null" x-translate>In progress</span>
-					</h5>
-				]]></viewer>
+            <>
+              <Box d="flex" justifyContent="flex-start">
+                {statusSelect == 1 && sentDateT == null && <Badge bg="info">{_t('Not sent')}</Badge>}
+                {statusSelect == 2 && sentDateT == null && <Badge bg="danger">{_t('In progress')}</Badge>}
+                {statusSelect == 3 && sentDateT != null && <Badge bg="success">{_t('Successfully sent')}</Badge>}
+                {statusSelect == 4 && <Badge bg="warning">{_t('Deleted')}</Badge>}
+              </Box>
+            </>
+          ]]></viewer>
       </field>
       <field name="senderUser" form-view="user-form" grid-view="user-grid"/>
       <field name="sentDateT" colSpan="4"/>
@@ -101,7 +106,7 @@
         <field name="mailAccount" widget="SuggestBox"
           onChange="action-message-record-get-signature" requiredIf="mediaTypeSelect == 2"
           grid-view="mail-account-grid" form-view="mail-account-form" domain="self.isValid = true"/>
-        <field name="replyToEmailAddressSet" widget="TagSelect" x-create="address"
+        <field name="replyToEmailAddressSet" widget="Tags" x-create="address"
           form-view="email-address-form" colSpan="12" grid-view="email-address-grid"/>
       </panel>
     </panel>
@@ -112,12 +117,12 @@
     </panel>
     <panel name="recipientsPanel" title="Recipients" readonlyIf="statusSelect != 1"
       showIf="mediaTypeSelect == 2 || mediaTypeSelect == 4">
-      <field name="toEmailAddressSet" widget="TagSelect" x-create="address"
+      <field name="toEmailAddressSet" widget="Tags" x-create="address"
         form-view="email-address-form" colSpan="12" requiredIf="mediaTypeSelect == 2"
         grid-view="email-address-grid"/>
-      <field name="ccEmailAddressSet" widget="TagSelect" x-create="address"
+      <field name="ccEmailAddressSet" widget="Tags" x-create="address"
         form-view="email-address-form" colSpan="12" grid-view="email-address-grid"/>
-      <field name="bccEmailAddressSet" widget="TagSelect" x-create="address"
+      <field name="bccEmailAddressSet" widget="Tags" x-create="address"
         form-view="email-address-form" colSpan="12" grid-view="email-address-grid"/>
     </panel>
     <panel name="recipientPanel" title="Recipient"
@@ -201,7 +206,7 @@
 
   <action-record name="action-message-record-delete-status"
     model="com.axelor.message.db.Message">
-    <field name="statusSelect" expr="4"/>
+    <field name="statusSelect" expr="eval: __repo__(Message).STATUS_DELETED"/>
   </action-record>
 
 
@@ -226,7 +231,7 @@
 
   <action-validate name="action-validate-message-content-onsave">
     <alert message="No Mail content entered."
-      if="mediaTypeSelect == 1 &amp;&amp; content== null"/>
+      if="mediaTypeSelect == __repo__(Message).MEDIA_TYPE_MAIL &amp;&amp; content == null"/>
   </action-validate>
 
   <action-view name="action.message.view.messages" model="com.axelor.message.db.Message"
@@ -250,11 +255,7 @@
   </action-group>
 
   <action-attrs name="action-attrs-message-message-back-to-draft">
-    <attribute for="statusSelect" name="value" expr="1"/>
+    <attribute for="statusSelect" name="value" expr="__repo__(Message).STATUS_DRAFT"/>
   </action-attrs>
-
-  <action-method name="action-message-method-print-pdf-email">
-    <call class="com.axelor.message.web.MessageController" method="printMessage"/>
-  </action-method>
 
 </object-views>
