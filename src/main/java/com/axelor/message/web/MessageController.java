@@ -113,7 +113,7 @@ public class MessageController {
       if (pdfPath != null) {
 
         response.setView(
-            ActionView.define(I18n.get("Message ") + message.getSubject())
+            ActionView.define(I18n.get("Message") + " " + message.getSubject())
                 .add("html", pdfPath)
                 .map());
 
