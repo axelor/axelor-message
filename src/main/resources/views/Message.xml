@@ -253,4 +253,8 @@
     <attribute for="statusSelect" name="value" expr="1"/>
   </action-attrs>
 
+  <action-method name="action-message-method-print-pdf-email">
+    <call class="com.axelor.message.web.MessageController" method="printMessage"/>
+  </action-method>
+
 </object-views>

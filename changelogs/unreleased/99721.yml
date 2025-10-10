@@ -1,0 +1,4 @@
+title: Move the action `action-message-method-print-pdf-email` definition to `axelor-message` module
+type: fix
+description: |
+  The action `action-message-method-print-pdf-email` is now explicitly declared in Axelor Message instead of relying on its definition from the Base module.

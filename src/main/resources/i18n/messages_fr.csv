@@ -30,6 +30,7 @@
 "Email sending is in progress for %d messages.","L’envoi d’email est en cours pour les %d messages.",,
 "Emailing",,,
 "Emails","Emails",,
+"Error in print. Please check report configuration and print setting.","Erreur d’impression. Veuillez vérifier les paramètres d’impression et la configuration des rapports.",,
 "Error when sending email: %s","Erreur lors de l'envoi d'email : %s",,
 "Expr. value","Valeur Expr.",,
 "Fetch emails","Récupérer les emails",,

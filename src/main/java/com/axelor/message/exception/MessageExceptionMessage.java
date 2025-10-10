@@ -71,4 +71,7 @@ public final class MessageExceptionMessage {
 
   public static final String INVALID_EMAIL_ADDRESS_FORMAT = /*$$(*/
       "Invalid address format :  %s" /*)*/;
+
+  public static final String REPORT_CONFIG_PRINT_SETTING = /*$$(*/
+      "Error in print. Please check report configuration and print setting." /*)*/;
 }

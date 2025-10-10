@@ -23,6 +23,7 @@ import com.axelor.message.db.Message;
 import com.axelor.message.db.repo.MessageRepository;
 import com.axelor.message.exception.MessageExceptionMessage;
 import com.axelor.message.service.MessageService;
+import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.utils.helpers.ExceptionHelper;
@@ -99,6 +100,27 @@ public class MessageController {
       response.setValues(request.getContext().get("_message"));
     } catch (Exception e) {
       ExceptionHelper.trace(response, e);
+    }
+  }
+
+  public void printMessage(ActionRequest request, ActionResponse response) {
+
+    try {
+      Message message = request.getContext().asType(Message.class);
+      message = Beans.get(MessageRepository.class).find(message.getId());
+      String pdfPath = Beans.get(MessageService.class).printMessage(message);
+
+      if (pdfPath != null) {
+
+        response.setView(
+            ActionView.define(I18n.get("Message") + " " + message.getSubject())
+                .add("html", pdfPath)
+                .map());
+
+      } else response.setInfo(I18n.get(MessageExceptionMessage.REPORT_CONFIG_PRINT_SETTING));
+
+    } catch (Exception e) {
+      ExceptionHelper.error(response, e);
     }
   }
 }
