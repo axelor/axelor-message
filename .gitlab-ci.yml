@@ -26,6 +26,8 @@ include:
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  # TODO remove next line once this branch is merged on https://git.axelor.com/aop/addons/axelor-test/create-aop-addons-app
+  CAAP_BRANCH: feat/upgrade-aop-8.0
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
