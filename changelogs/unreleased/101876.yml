@@ -1,7 +1,0 @@
-title: Rename `MailMessageAction` class and its related services
-type: change
-description: |
-  The name was confusing as it was actually handling `Message` records and not `MailMessage` records.
-  * Legacy `MailMessageAction` has been replaced by `MessageAction`.
-  * Legacy `MailMessageActionService` has been replaced by `MessageActionService`.
-  * Legacy `MailMessageActionServiceImpl` has been replaced by `MessageActionServiceImpl`.

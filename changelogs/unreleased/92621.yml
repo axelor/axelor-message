@@ -1,5 +1,0 @@
----
-title: In progress messages blocked
-type: fix
-description:
-  Allow to resend messages in the "In Progress" status from the message form view.

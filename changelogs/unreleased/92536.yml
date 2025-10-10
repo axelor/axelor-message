@@ -1,4 +1,0 @@
-title: Prevent duplicate email sending
-type: fix
-description: |
-  Improved the message sending logic to ensure a message is only sent if it's in draft status. This prevents accidental multiple sends when clicking the send button twice.

@@ -1,4 +1,0 @@
-title: Pre-send action on `MailMessage`
-type: feature
-description: |
-  Consumers module can now implement `preSendAction` method of `MailMessageAction` to trigger actions on a `MailMessage` record before sending it.

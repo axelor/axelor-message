@@ -1,5 +1,0 @@
----
-title: Encode from name
-type: fix
-description: |
-  Encode fromName in MessageServiceImpl#sendByEmail to handle non-ASCII characters, preventing display issues in user inboxes.

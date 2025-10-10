@@ -1,4 +1,0 @@
-title: Rename `MailMessageServerStartListener` into `ServerStartListener`
-type: change
-description: |
-  * `ServerStartListener` manages different registers: `MessageServerStartListener` and `MailMessageServerStartListener`.
