@@ -5,8 +5,8 @@ import com.axelor.events.StartupEvent;
 import com.axelor.message.service.registry.MailMessageActionRegister;
 import com.axelor.message.service.registry.MessageActionRegister;
 import com.google.inject.Inject;
-import java.lang.invoke.MethodHandles;
 import jakarta.annotation.Priority;
+import java.lang.invoke.MethodHandles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
