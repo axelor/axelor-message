@@ -48,7 +48,7 @@ public interface MessageService {
   /**
    * Create temporary {@link Message}, which will only be sent but not saved.
    *
-   * <p>Only when isTemporaryMessage = {@code True}.
+   * <p>Only when isTemporaryMessage = {@code true}.
    *
    * @param model
    * @param id
@@ -82,7 +82,7 @@ public interface MessageService {
       int mediaTypeSelect,
       EmailAccount emailAccount,
       String signature,
-      Boolean isTemporaryMessage);
+      boolean isTemporaryMessage);
 
   void attachMetaFiles(Message message, Set<MetaFile> metaFiles);
 
@@ -99,7 +99,7 @@ public interface MessageService {
   /**
    * Send {@link Message}.
    *
-   * <p>If @param isTemporaryEmail is {@code True}, Message will not be saved but only send.
+   * <p>If @param isTemporaryEmail is {@code true}, Message will not be saved but only send.
    *
    * @param message
    * @param isTemporaryEmail
@@ -107,7 +107,7 @@ public interface MessageService {
    * @throws MessagingException
    * @throws IOException
    */
-  Message sendMessage(Message message, Boolean isTemporaryEmail)
+  Message sendMessage(Message message, boolean isTemporaryEmail)
       throws MessagingException, IOException;
 
   /**
@@ -122,14 +122,14 @@ public interface MessageService {
   /**
    * Send Message as email.
    *
-   * <p>If @param isTemporaryEmail is {@code True}, Message will not be saved but only send.
+   * <p>If @param isTemporaryEmail is {@code true}, Message will not be saved but only send.
    *
    * @param message
    * @param isTemporaryEmail
    * @return
    * @throws MessagingException
    */
-  Message sendByEmail(Message message, Boolean isTemporaryEmail) throws MessagingException;
+  Message sendByEmail(Message message, boolean isTemporaryEmail) throws MessagingException;
 
   Message sendToUser(Message message);
 

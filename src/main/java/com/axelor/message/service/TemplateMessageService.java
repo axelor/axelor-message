@@ -56,7 +56,7 @@ public interface TemplateMessageService {
    * @return Message
    * @throws ClassNotFoundException
    */
-  Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
+  Message generateMessage(Model model, Template template, boolean isTemporaryMessage)
       throws ClassNotFoundException;
 
   /**
@@ -85,7 +85,7 @@ public interface TemplateMessageService {
    * @throws ClassNotFoundException
    */
   Message generateMessage(
-      Long objectId, String model, String tag, Template template, Boolean isForTemporaryMessage)
+      Long objectId, String model, String tag, Template template, boolean isForTemporaryMessage)
       throws ClassNotFoundException;
 
   /**
