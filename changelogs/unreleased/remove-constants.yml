@@ -1,0 +1,8 @@
+title: Remove unreferenced constants
+type: remove
+description: |
+  The following constants have been removed from `MessageExceptionMessage`
+  - `MAIL_ACCOUNT_4`
+  - `MESSAGE_1`
+  - `SET_EMAIL_TEMPLATE_MESSAGE`
+  - `SEND_EMAIL_EXCEPTION`

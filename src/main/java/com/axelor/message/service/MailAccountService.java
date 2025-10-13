@@ -24,23 +24,23 @@ import java.io.IOException;
 
 public interface MailAccountService {
 
-  void checkDefaultMailAccount(EmailAccount mailAccount);
+  void checkDefaultMailAccount(EmailAccount emailAccount);
 
   EmailAccount getDefaultSender();
 
   EmailAccount getDefaultReader();
 
-  void checkMailAccountConfiguration(EmailAccount mailAccount) throws MessagingException;
+  void checkMailAccountConfiguration(EmailAccount emailAccount) throws MessagingException;
 
   MailAccount getMailAccount(EmailAccount mailAccount);
 
-  String getSecurity(EmailAccount mailAccount);
+  String getSecurity(EmailAccount emailAccount);
 
-  String getProtocol(EmailAccount mailAccount);
+  String getProtocol(EmailAccount emailAccount);
 
-  String getSignature(EmailAccount mailAccount);
+  String getSignature(EmailAccount emailAccount);
 
-  int fetchEmails(EmailAccount mailAccount, boolean unseenOnly)
+  int fetchEmails(EmailAccount emailAccount, boolean unseenOnly)
       throws MessagingException, IOException;
 
   String getEncryptPassword(String password);

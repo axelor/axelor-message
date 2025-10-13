@@ -1,0 +1,9 @@
+title: Change the type of the parameter `isForTemporaryMessage` from `Boolean` to primitive `boolean`
+type: change
+description: |
+  The type of the parameter `isForTemporaryMessage` has changed from `Boolean` to primitive `boolean` in the following methods:
+
+  - MessageService.createMessage(String, long, String, String, EmailAddress, List<EmailAddress>, List<EmailAddress>, List<EmailAddress>, List<EmailAddress>, Set<MetaFile>, String, int, EmailAccount, String, Boolean)
+  - MessageService.sendMessage(Message, Boolean)
+  - TemplateMessageService.generateMessage(Model, Template, Boolean)
+  - TemplateMessageService.generateMessage(Long, String, String, Template, Boolean)

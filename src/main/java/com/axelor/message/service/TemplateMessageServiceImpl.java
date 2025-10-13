@@ -43,7 +43,6 @@ import com.axelor.text.StringTemplates;
 import com.axelor.text.Templates;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
@@ -51,6 +50,7 @@ import com.google.inject.persist.Transactional;
 import jakarta.mail.MessagingException;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +102,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   }
 
   @Override
-  public Message generateMessage(Model model, Template template, Boolean isTemporaryMessage)
+  public Message generateMessage(Model model, Template template, boolean isTemporaryMessage)
       throws ClassNotFoundException {
 
     this.modelObject = model;
@@ -125,7 +125,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   @Override
   @Transactional(rollbackOn = {Exception.class})
   public Message generateMessage(
-      Long objectId, String model, String tag, Template template, Boolean isForTemporaryEmail)
+      Long objectId, String model, String tag, Template template, boolean isForTemporaryEmail)
       throws ClassNotFoundException {
     Templates templates;
     Map<String, Object> templatesContext = Maps.newHashMap();
@@ -153,7 +153,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
         generateMessage(
             model, objectId, template, templates, templatesContext, isForTemporaryEmail);
 
-    if (Boolean.FALSE.equals(isForTemporaryEmail)) {
+    if (!isForTemporaryEmail) {
       log.debug("Saving message with meta files");
       message = saveMessageWithMetaFiles(template, message, templates, templatesContext);
       log.debug("Execute Post mail message actions");
@@ -244,7 +244,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
       Template template,
       Templates templates,
       Map<String, Object> templatesContext,
-      Boolean isForTemporaryEmail) {
+      boolean isForTemporaryEmail) {
 
     String content = "";
     String subject = "";
@@ -383,10 +383,11 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
 
     if (isJson) {
       templatesContext.put(tag, JPA.find(MetaJsonRecord.class, objectId));
-    } else {
-      Class<? extends Model> myClass = (Class<? extends Model>) Class.forName(model);
-      templatesContext.put(tag, JPA.find(myClass, objectId));
+      return templatesContext;
     }
+
+    Class<? extends Model> myClass = (Class<? extends Model>) Class.forName(model);
+    templatesContext.put(tag, JPA.find(myClass, objectId));
 
     return templatesContext;
   }
@@ -429,19 +430,17 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
    */
   protected List<EmailAddress> getEmailAddresses(String recipients) {
 
-    List<EmailAddress> emailAddressList = Lists.newArrayList();
     if (Strings.isNullOrEmpty(recipients)) {
-      return emailAddressList;
+      return Collections.emptyList();
     }
 
-    for (String recipient :
-        Splitter.onPattern(RECIPIENT_SEPARATOR)
-            .trimResults()
-            .omitEmptyStrings()
-            .splitToList(recipients)) {
-      emailAddressList.add(getMailAddress(recipient));
-    }
-    return emailAddressList;
+    return Splitter.onPattern(RECIPIENT_SEPARATOR)
+        .trimResults()
+        .omitEmptyStrings()
+        .splitToList(recipients)
+        .stream()
+        .map(this::getMailAddress)
+        .toList();
   }
 
   /**

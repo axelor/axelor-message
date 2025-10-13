@@ -131,28 +131,17 @@ public class GenerateMessageController {
     LOG.info("Applying language filter ...");
 
     Object languageObj = context.get("language");
-    String language = null;
+
+    String domain = "self.metaModel.fullName = '" + model + "' and self.isSystem != true";
     if (languageObj == null) {
       LOG.info("No selected language");
-    } else if (languageObj instanceof String) {
-      language = (String) languageObj;
+    } else if (languageObj instanceof String language) {
+      domain += " and self.language = '" + language + "'";
       LOG.info("Language selected : {}", language);
     } else {
       LOG.error("Language parse error");
     }
 
-    String domain;
-
-    if (language == null) {
-      domain = "self.metaModel.fullName = '" + model + "' and self.isSystem != true";
-    } else {
-      domain =
-          "self.metaModel.fullName = '"
-              + model
-              + "' and self.isSystem != true and self.language = '"
-              + language
-              + "'";
-    }
     LOG.debug("Applying filter {} on template", domain);
     response.setAttr("_xTemplate", "domain", domain);
   }
