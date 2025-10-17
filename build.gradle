@@ -38,8 +38,7 @@ dependencies {
   if (findProject(':modules:axelor-utils') != null) {
     implementation project(':modules:axelor-utils')
   } else {
-    // TODO use stable version when available
-    implementation 'com.axelor.addons:axelor-utils:4.0.+'
+    implementation 'com.axelor.addons:axelor-utils:4.0.0'
   }
 }
 
