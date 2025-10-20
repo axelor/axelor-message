@@ -35,6 +35,7 @@ axelor {
 }
 
 dependencies {
+  implementation 'jakarta.mail:jakarta.mail-api:2.1.5'
   implementation 'com.squareup.okhttp3:okhttp:5.2.1'
   implementation 'org.reflections:reflections:0.10.2'
   if (findProject(':modules:axelor-utils') != null) {
