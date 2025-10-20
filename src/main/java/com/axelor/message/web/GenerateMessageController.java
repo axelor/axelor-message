@@ -121,8 +121,8 @@ public class GenerateMessageController {
   }
 
   /**
-   * This method is used to update dummyField _xTemplate domain attribute in GenerateMessageWizard
-   * to filter template based on the selected language
+   * Update the domain attribute of the dummy field {@code _xTemplate} in {@code
+   * generate-message-wizard-form}, to filter the template based on the selected language.
    */
   public void templateDomain(ActionRequest request, ActionResponse response) {
     Context context = request.getContext();

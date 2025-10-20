@@ -423,7 +423,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   }
 
   /**
-   * This method is used to return a list of email addresses from recipients string
+   * Return a list of email addresses from the {@code recipients} string.
    *
    * @param recipients
    * @return
@@ -444,8 +444,7 @@ public class TemplateMessageServiceImpl implements TemplateMessageService {
   }
 
   /**
-   * This method is used to get EmailAddress by recipient string, or create it otherwise if it's not
-   * found
+   * Get {@link EmailAddress} by {@code recipient} string or create it if it's not found.
    *
    * @param recipient
    * @return
