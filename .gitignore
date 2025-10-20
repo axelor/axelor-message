@@ -16,9 +16,6 @@ out/
 *.iml
 *.jar
 
-# gradle
-.gradle
-
 # Visual Studio Code
 .vscode
 
