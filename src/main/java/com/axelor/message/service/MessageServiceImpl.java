@@ -109,10 +109,10 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
       EmailAccount emailAccount,
       String signature) {
 
-    emailAccount =
-        emailAccount != null
-            ? Beans.get(EmailAccountRepository.class).find(emailAccount.getId())
-            : emailAccount;
+    if (emailAccount != null) {
+      emailAccount = Beans.get(EmailAccountRepository.class).find(emailAccount.getId());
+    }
+
     Message message =
         createMessage(
             content,
@@ -174,10 +174,10 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
           signature);
     }
 
-    emailAccount =
-        emailAccount != null
-            ? Beans.get(EmailAccountRepository.class).find(emailAccount.getId())
-            : emailAccount;
+    if (emailAccount != null) {
+      emailAccount = Beans.get(EmailAccountRepository.class).find(emailAccount.getId());
+    }
+
     Message message =
         createMessage(
             content,
