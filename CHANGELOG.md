@@ -1,3 +1,49 @@
+## 4.0.0 (2025-10-20)
+
+#### Feature
+
+* Upgrade Axelor Open Platform to 8.0
+
+  <details>
+  
+  Read AOP migration guide to update your project.
+  
+  </details>
+
+#### Change
+
+* Upgrade `okhttp` to 5.2.1
+* Upgrade `axelor-utils` to 4.0.0
+* Change the type of the parameter `isForTemporaryMessage` from `Boolean` to primitive `boolean`
+
+  <details>
+  
+  The type of the parameter `isForTemporaryMessage` has changed from `Boolean` to primitive `boolean` in the following methods:
+  - `MessageService.createMessage(String, long, String, String, EmailAddress, List<EmailAddress>, List<EmailAddress>, List<EmailAddress>, List<EmailAddress>, Set<MetaFile>, String, int, EmailAccount, String, Boolean)`
+  - `MessageService.sendMessage(Message, Boolean)`
+  - `TemplateMessageService.generateMessage(Model, Template, Boolean)`
+  - `TemplateMessageService.generateMessage(Long, String, String, Template, Boolean)`
+  
+  </details>
+
+* Use React template instead of legacy angular
+
+#### Remove
+
+* Delete the deprecated class `IExceptionMessage`. Use `MessageExceptionMessage` instead.
+* Remove unreferenced constants
+
+  <details>
+  
+  The following constants have been removed from `MessageExceptionMessage`:
+  - `MAIL_ACCOUNT_4`
+  - `MESSAGE_1`
+  - `SET_EMAIL_TEMPLATE_MESSAGE`
+  - `SEND_EMAIL_EXCEPTION`
+  
+  </details>
+
+
 ## 3.3.0 (2025-10-10)
 
 #### Feature
