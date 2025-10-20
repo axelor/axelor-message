@@ -19,10 +19,9 @@ package com.axelor.message.service;
 
 import static com.axelor.common.StringUtils.isBlank;
 
-import com.axelor.auth.AuditableRunner;
+import com.axelor.concurrent.ContextAware;
 import com.axelor.db.Model;
 import com.axelor.db.Query;
-import com.axelor.db.tenants.TenantAware;
 import com.axelor.db.tenants.TenantResolver;
 import com.axelor.inject.Beans;
 import com.axelor.mail.MailAccount;
@@ -71,11 +70,8 @@ public class MailServiceMessageImpl extends MailServiceImpl {
   private final ExecutorService executor = Executors.newCachedThreadPool();
 
   private MailSender sender = null;
-
   private MailReader reader = null;
-
   private EmailAccount senderAccount = null;
-
   private EmailAccount readerAccount = null;
 
   protected final MailAccountService mailAccountService;
@@ -138,18 +134,19 @@ public class MailServiceMessageImpl extends MailServiceImpl {
     final EmailAccount emailAccount = mailAccountService.getDefaultReader();
     if (emailAccount == null) {
       super.fetch();
-    } else {
-      final MailReader reader = getMailReader(emailAccount);
-      final AuditableRunner runner = Beans.get(AuditableRunner.class);
-      runner.run(
-          () -> {
-            try {
-              fetch(reader);
-            } catch (Exception e) {
-              ExceptionHelper.error("Unable to fetch messages", e);
-            }
-          });
+      return;
     }
+
+    final MailReader mailReader = getMailReader(emailAccount);
+    Runnable job =
+        () -> {
+          try {
+            fetch(mailReader);
+          } catch (Exception e) {
+            ExceptionHelper.error("Unable to fetch messages", e);
+          }
+        };
+    ContextAware.of().build(job).run();
   }
 
   @Override
@@ -163,7 +160,7 @@ public class MailServiceMessageImpl extends MailServiceImpl {
     Preconditions.checkNotNull(message, "mail message can't be null");
 
     final Model related = findEntity(message);
-    final MailSender sender = getMailSender(emailAccount);
+    final MailSender mailSender = getMailSender(emailAccount);
 
     final Set<String> recipients = recipients(message, related);
     if (recipients.isEmpty()) {
@@ -171,7 +168,7 @@ public class MailServiceMessageImpl extends MailServiceImpl {
     }
 
     final MailMessageRepository messages = Beans.get(MailMessageRepository.class);
-    final MailBuilder builder = sender.compose().subject(getSubject(message, related));
+    final MailBuilder builder = mailSender.compose().subject(getSubject(message, related));
 
     for (String recipient : recipients) {
       builder.to(recipient);
@@ -203,27 +200,24 @@ public class MailServiceMessageImpl extends MailServiceImpl {
 
     Callable<Boolean> callable =
         () -> {
-          send(sender, email);
+          send(mailSender, email);
           return true;
         };
 
-    String tenantId = TenantResolver.currentTenantIdentifier();
-    String tenantHost = TenantResolver.currentTenantHost();
-
     // send email using a separate process to void thread blocking
+    Runnable runnable =
+        () -> {
+          try {
+            callable.call();
+          } catch (Exception e) {
+            throw new IllegalStateException(e);
+          }
+        };
     executor.submit(
-        () ->
-            new TenantAware( // Add Tenant Aware
-                    () -> {
-                      try {
-                        callable.call();
-                      } catch (Exception e) {
-                        throw new IllegalStateException(e);
-                      }
-                    })
-                .tenantHost(tenantHost)
-                .tenantId(tenantId)
-                .run());
+        ContextAware.of()
+            .withTenantId(TenantResolver.currentTenantIdentifier())
+            .withBaseUrl(TenantResolver.currentTenantHost())
+            .build(runnable));
   }
 
   protected MailSender getMailSender(EmailAccount emailAccount) {
