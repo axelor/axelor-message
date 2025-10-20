@@ -20,8 +20,8 @@ package com.axelor.message.service;
 import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
 import com.axelor.auth.db.repo.UserRepository;
+import com.axelor.concurrent.ContextAware;
 import com.axelor.db.JpaSupport;
-import com.axelor.db.tenants.TenantAware;
 import com.axelor.db.tenants.TenantResolver;
 import com.axelor.event.Observes;
 import com.axelor.events.ShutdownEvent;
@@ -106,22 +106,19 @@ public class SendMailQueueService extends JpaSupport {
           return true;
         };
 
-    String tenantId = TenantResolver.currentTenantIdentifier();
-    String tenantHost = TenantResolver.currentTenantHost();
-
+    Runnable job =
+        () -> {
+          try {
+            callable.call();
+          } catch (Exception e) {
+            throw new IllegalStateException(e);
+          }
+        };
     executor.submit(
-        () ->
-            new TenantAware(
-                    () -> {
-                      try {
-                        callable.call();
-                      } catch (Exception e) {
-                        throw new IllegalStateException(e);
-                      }
-                    })
-                .tenantHost(tenantHost)
-                .tenantId(tenantId)
-                .run());
+        ContextAware.of()
+            .withTenantId(TenantResolver.currentTenantIdentifier())
+            .withBaseUrl(TenantResolver.currentTenantHost())
+            .build(job));
   }
 
   /**
