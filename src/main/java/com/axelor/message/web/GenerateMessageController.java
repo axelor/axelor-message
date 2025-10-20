@@ -108,7 +108,7 @@ public class GenerateMessageController {
                 .find(Long.parseLong(templateContext.get("id").toString()));
       }
 
-      Long objectId = Long.parseLong(context.get("_objectId").toString());
+      long objectId = Long.parseLong(context.get("_objectId").toString());
       String model = (String) context.get("_templateContextModel");
       String tag = (String) context.get("_tag");
 
