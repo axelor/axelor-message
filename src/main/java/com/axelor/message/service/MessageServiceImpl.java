@@ -437,7 +437,6 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
   }
 
   @Override
-  @SuppressWarnings("deprecation")
   @Transactional(rollbackOn = {Exception.class})
   public Message sendSMS(Message message) throws IOException {
 
@@ -470,7 +469,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
 
     String data = JsonHelper.toJson(map);
 
-    RequestBody body = RequestBody.create(mediaType, data);
+    RequestBody body = RequestBody.create(data, mediaType);
     Request request =
         new Request.Builder()
             .url(appSettingsMessageService.sendingblueUrlSendsms())
