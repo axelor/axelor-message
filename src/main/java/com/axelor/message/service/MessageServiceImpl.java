@@ -463,7 +463,7 @@ public class MessageServiceImpl extends JpaSupport implements MessageService {
             "recipient",
             message.getToMobilePhone(),
             "content",
-            message.getContent().replaceAll("<\\/*\\w+>", ""),
+            message.getContent().replaceAll("</*\\w+>", ""),
             "type",
             "transactional");
 
