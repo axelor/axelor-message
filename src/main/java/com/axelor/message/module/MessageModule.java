@@ -19,7 +19,7 @@ package com.axelor.message.module;
 
 import com.axelor.app.AxelorModule;
 import com.axelor.mail.service.MailServiceImpl;
-import com.axelor.message.db.repo.EmailAddressRepo;
+import com.axelor.message.db.repo.EmailAddressMessageRepository;
 import com.axelor.message.db.repo.EmailAddressRepository;
 import com.axelor.message.db.repo.MessageManagementRepository;
 import com.axelor.message.db.repo.MessageRepository;
@@ -73,7 +73,7 @@ public class MessageModule extends AxelorModule {
     bind(MailMessageActionRegister.class).in(Singleton.class);
     bind(MessageActionRegister.class).in(Singleton.class);
     bind(TemplateService.class).to(TemplateServiceImpl.class);
-    bind(EmailAddressRepository.class).to(EmailAddressRepo.class);
+    bind(EmailAddressRepository.class).to(EmailAddressMessageRepository.class);
 
     // needed to use event notification methods
     bind(SendMailQueueService.class);

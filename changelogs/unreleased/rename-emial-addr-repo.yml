@@ -1,0 +1,2 @@
+title: Rename `EmailAddressRepo` to `EmailAddressMessageRepository`
+type: change
