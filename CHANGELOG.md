@@ -1,3 +1,20 @@
+## 3.0.3 (2026-01-19)
+
+#### Change
+
+* Refactor email validation to use `EmailHelper` from `axelor-utils`
+
+  <details>
+  
+  Refactored `EmailAddressRepo` to delegate email validation to `EmailHelper.isValidEmailAddress()`
+  from `axelor-utils` instead of maintaining a duplicate regex pattern.
+  
+  This ensures consistent email validation across all modules and centralizes the fix
+  for dashes in intermediate domain segments (e.g., user@hdf.my-company.fr).
+  
+  </details>
+
+
 ## 3.0.2 (2024-10-17)
 
 #### Fix
