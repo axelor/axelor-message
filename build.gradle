@@ -38,7 +38,7 @@ dependencies {
   if (findProject(":modules:axelor-utils") != null) {
     api project(":modules:axelor-utils")
   } else {
-    implementation "com.axelor.addons:axelor-utils:3.4.0"
+    implementation "com.axelor.addons:axelor-utils:3.4.6"
   }
   testImplementation 'org.awaitility:awaitility:4.2.0'
 }
