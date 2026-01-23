@@ -1,3 +1,21 @@
+## 3.2.5 (2026-01-23)
+
+#### Fix
+
+* Fix email validation for hyphens in domain segments
+
+  <details>
+  
+  Refactored `EmailAddressRepo` to delegate email validation to
+  `EmailHelper.isValidEmailAddress()` from `axelor-utils`.
+  
+  This fixes validation of emails with hyphens in intermediate domain
+  segments (e.g., user@mkt.egym-wellpass.com) which were incorrectly
+  rejected.
+  
+  </details>
+
+
 ## 3.2.4 (2026-01-19)
 
 #### Change
