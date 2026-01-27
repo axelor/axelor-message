@@ -2,10 +2,10 @@ package com.axelor.message.service.registry;
 
 import com.axelor.inject.Beans;
 import com.axelor.message.service.MailMessageAction;
+import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
-import jakarta.inject.Injector;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashSet;
 import java.util.Set;
