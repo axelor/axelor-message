@@ -59,6 +59,8 @@ build:
 spotless:
   extends: .global-env
   stage: test
+  needs:
+    - build
   cache:
     - *global_cache_pull
   allow_failure: true
@@ -72,6 +74,8 @@ spotless:
 test:
   extends: .global-env
   stage: test
+  needs:
+    - build
   cache:
     - *global_cache
   allow_failure: false
