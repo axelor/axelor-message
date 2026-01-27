@@ -4,7 +4,7 @@ import com.axelor.inject.Beans;
 import com.axelor.message.db.Message;
 import com.axelor.message.db.repo.MessageRepository;
 import com.axelor.message.service.registry.MessageActionRegister;
-import com.google.inject.Inject;
+import jakarta.inject.Inject;
 
 public class MessageActionServiceImpl implements MessageActionService {
   protected final MessageRepository messageRepository;

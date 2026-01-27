@@ -4,7 +4,7 @@ import com.axelor.db.Model;
 import com.axelor.inject.Beans;
 import com.axelor.mail.db.MailMessage;
 import com.axelor.message.service.registry.MailMessageActionRegister;
-import com.google.inject.Inject;
+import jakarta.inject.Inject;
 
 public class MailMessageActionServiceImpl implements MailMessageActionService {
   protected final MailMessageActionRegister mailMessageActionRegister;

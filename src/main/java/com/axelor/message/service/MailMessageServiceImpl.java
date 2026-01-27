@@ -25,8 +25,8 @@ import com.axelor.mail.MailConstants;
 import com.axelor.mail.db.MailFlags;
 import com.axelor.mail.db.MailFollower;
 import com.axelor.mail.db.repo.MailFollowerRepository;
-import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import jakarta.inject.Inject;
 
 public class MailMessageServiceImpl implements MailMessageService {
 
