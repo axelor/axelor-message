@@ -1,3 +1,32 @@
+## 4.0.3 (2026-01-27)
+
+#### Fix
+
+* Import `Injector` from `com.google.inject` instead of `jakarta.inject`
+
+## 4.0.2 (2026-01-27)
+
+#### Fix
+
+* Import @Inject from jakarta.inject instead of com.google.inject
+
+## 4.0.1 (2026-01-19)
+
+#### Change
+
+* Refactor email validation to use `EmailHelper` from `axelor-utils`
+
+  <details>
+  
+  Refactored `EmailAddressRepo` to delegate email validation to `EmailHelper.isValidEmailAddress()`
+  from `axelor-utils` instead of maintaining a duplicate regex pattern.
+  
+  This ensures consistent email validation across all modules and centralizes the fix
+  for dashes in intermediate domain segments (e.g., user@hdf.my-company.fr).
+  
+  </details>
+
+
 ## 4.0.0 (2025-10-20)
 
 #### Feature

@@ -4,7 +4,7 @@ import com.axelor.mail.db.MailMessage;
 import com.axelor.message.service.MailMessageCreator;
 import com.axelor.meta.loader.LoaderHelper;
 import com.axelor.utils.junit.BaseTest;
-import com.google.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

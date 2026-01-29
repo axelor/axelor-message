@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2025 Axelor (<http://axelor.com>).
+ * Copyright (C) 2026 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -40,8 +40,8 @@ import com.axelor.meta.db.MetaAttachment;
 import com.axelor.utils.helpers.ExceptionHelper;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import jakarta.inject.Inject;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
