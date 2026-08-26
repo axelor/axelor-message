@@ -1,6 +1,8 @@
+// All resolution goes through the Nexus group `maven-public`, which proxies both
+// Maven Central and the Gradle Plugin Portal. Declaring the public repositories
+// directly gets builds rate-limited (HTTP 429) on the shared CI runners.
 pluginManagement {
     repositories {
-        mavenCentral()
         maven {
             url = 'https://repository.axelor.com/nexus/repository/maven-public/'
             mavenContent {
@@ -15,7 +17,6 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        mavenCentral()
         maven {
             url = 'https://repository.axelor.com/nexus/repository/maven-public/'
         }
